@@ -69,6 +69,10 @@
                         publisher: "ETSI",
                         title: "ETSI EN 319 412-3 V1.2.1 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 3: Certificate profile for certificates issued to legal persons",
                 },
+                "OIDCVCI": {
+                        href: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html",
+                        title: "OpenID for Verifiable Credential Issuance",
+                },
                 "OWASP-TRANSPORT": {
                         href: "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet",
                         title: "Transport Layer Protection Cheatsheet",
@@ -99,7 +103,7 @@
 <section><h2>Participants</h2>
 
     <p>Here we introduce the actors of the reference use case we are going to have. There will be an Air Quality App
-    provider who wishes to offer this app in DOME and a given customer (e.g., integrator for a smart city) discovering
+    provider who wishes to offer this app in a Data Space and a given customer (e.g., integrator for a smart city) discovering
     and procuring the app.
     </p>
 
@@ -132,7 +136,7 @@
         <p>The X.509 certificate of the COO has the following contents in the <code>Subject</code> field (the example below is derived from a real certificate but with the identifiers modified to be an example):
         </p>
 
-        <pre><code>cn=56565656V Jesus Ruiz
+        <pre class='yaml'><code>cn=56565656V Jesus Ruiz
 serialNumber=56565656V
 givenName=Jesus
 sn=Ruiz
@@ -144,8 +148,8 @@ c=ES
         <p>The above set of fields bind the legal identity of the COO with the identity of the business:
         </p>
         <ul>
-            <li id='list_105.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
-            <li id='list_105.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
+            <li id='list_108.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
+            <li id='list_108.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
         </ul>
 
         <p>Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
@@ -168,7 +172,7 @@ c=ES
         <p>In our case, the entry for RealTruth in the TL includes a `&ltTSPService&gt` entry, and inside it the `&ltServiceDigitalIdentity&gt` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
         </p>
 
-        <pre><code>2.5.4.97 = VATDE-170173453
+        <pre class='yaml'><code>2.5.4.97 = VATDE-170173453
 CN = DRV QC 11 MA CA 2017ca
 OU = QC 11 Mitarbeiter CA
 O = Deutsche Rentenversicherung Westfalen
@@ -183,10 +187,10 @@ C = DE</code></pre>
         <p>The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
         </p>
         <ul>
-            <li id='list_141.1'>The data concerning the business name or corporate name of the organisation.            </li>
-            <li id='list_141.2'>The data relating to the constitution and legal status of the subscriber.            </li>
-            <li id='list_141.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>            </li>
-            <li id='list_141.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.            </li>
+            <li id='list_144.1'>The data concerning the business name or corporate name of the organisation.            </li>
+            <li id='list_144.2'>The data relating to the constitution and legal status of the subscriber.            </li>
+            <li id='list_144.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>            </li>
+            <li id='list_144.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.            </li>
         </ul>
 
         <p>In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
@@ -211,80 +215,10 @@ C = DE</code></pre>
 
     <p>In this example the LEARCredential will be generated using the certificate of the COO.
     </p>
-    <p>The credential will be generated with an application that the COO will use as VC Issuer and that allows the employee to receive the credential using his credential wallet, using OIDC4VCI to achieve compliance with the EUDI Wallet ARF.
+    <p>The credential will be generated with an application that the COO will use as VC Issuer and that allows the employee to receive the credential using his credential wallet, using OIDCVCI to achieve compliance with the EUDI Wallet ARF.
     </p>
     <p>The application enables the COO to specify the information required to create the LEARCredential, specifying the employee information and the specific type of LEARCredential. In general, there may be different instances of LEARCredentials for different purposes. One employee can have more than one LEARCredential, each having different delegation of powers for different environments.
     </p>
-    <p>An example of LEARCredential is shown below (do not take this as a recommendation, it is just an example based on a real-world onboarding use case):
-    </p>
-
-    <pre class='json'><code>{
-    &#34;@context&#34;: [
-        &#34;https://www.w3.org/2018/credentials/v1&#34;,
-        &#34;https://www.dome-project.com/2022/credentials/learcredential/v1&#34;
-    ],
-    &#34;id&#34;: &#34;urn:did:elsi:25159389-8dd17b796ac0&#34;,
-    &#34;type&#34;: [&#34;VerifiableCredential&#34;, &#34;LEARCredential&#34;],
-    &#34;issuer&#34;: {
-        &#34;id&#34;: &#34;did:elsi:VATES-12345678&#34;
-    },
-    &#34;issuanceDate&#34;: &#34;2022-03-22T14:00:00Z&#34;,
-    &#34;validFrom&#34;: &#34;2022-03-22T14:00:00Z&#34;,
-    &#34;expirationDate&#34;: &#34;2023-03-22T14:00:00Z&#34;,
-    &#34;credentialSubject&#34;: {
-        &#34;id&#34;: &#34;did:peer:99ab5bca41bb45b78d242a46f0157b7d&#34;,
-        &#34;title&#34;: &#34;Mr.&#34;,
-        &#34;first_name&#34;: &#34;John&#34;,
-        &#34;last_name&#34;: &#34;Doe&#34;,
-        &#34;gender: &#34;M&#34;,
-        &#34;postal_address&#34;: &#34;&#34;,
-        &#34;email&#34;: &#34;johndoe@goodair.com&#34;,
-        &#34;telephone&#34;: &#34;&#34;,
-        &#34;fax&#34;: &#34;&#34;,
-        &#34;mobile_phone&#34;: &#34;+34787426623&#34;,
-        &#34;legalRepresentative&#34;: {
-            &#34;cn&#34;: &#34;56565656V Jesus Ruiz&#34;,
-            &#34;serialNumber&#34;: &#34;56565656V&#34;,
-            &#34;organizationIdentifier&#34;: &#34;VATES-12345678&#34;,
-            &#34;o&#34;: &#34;GoodAir&#34;,
-            &#34;c&#34;: &#34;ES&#34;
-        },
-        &#34;verificationMethod&#34;: [
-            {
-                &#34;id&#34;: &#34;did:peer:99ab5bca41bb45b78d242a46f0157b7d#key1&#34;,
-                &#34;type&#34;: &#34;JwsVerificationKey2020&#34;,
-                &#34;controller&#34;: &#34;did:peer:99ab5bca41bb45b78d242a46f0157b7d&#34;,
-                &#34;publicKeyJwk&#34;: {
-                &#34;kid&#34;: &#34;key1&#34;,
-                &#34;kty&#34;: &#34;EC&#34;,
-                &#34;crv&#34;: &#34;P-256&#34;,
-                &#34;alg&#34;: &#34;ES256&#34;
-                &#34;x&#34;: &#34;lJtvoA5_XptBvcfcrvtGCvXd9bLymmfBSSdNJf5mogo&#34;,
-                &#34;y&#34;: &#34;fSc4gZX2R3QKKfHvS3m2vGSVSN8Xc04qsquyfEM55Z0&#34;
-                }
-            }
-        ],
-        &#34;rolesAndDuties&#34;: [
-            {
-                &#34;type&#34;: &#34;LEARCredential&#34;,
-                &#34;id&#34;: &#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;
-            }
-        ]
-    }
-}</code></pre>
-
-    <p>In the above example the <code>credentialSubject</code> includes several sections.
-    </p>
-
-    <aside class='note' title="Attributes for natural and legal persons">
-        <p>The attributes for natural persons and legal persons are derived from the <a href="https://ec.europa.eu/digital-building-blocks/wikis/download/attachments/467109280/eidas_saml_attribute_profile_v1.0_2.pdf?version=1&modificationDate=1639417533738&api=v2">eIDAS SAML Attribute Profile (eIDAS Technical Sub-group, 22 June 2015)</a>.
-        </p>
-        <p>All attributes for the eIDAS minimum data sets can be derived from the <a href="https://ec.europa.eu/isa2/solutions/core-vocabularies_en/">ISA Core Vocabulary</a> and <a href="https://joinup.ec.europa.eu/collection/semic-support-centre/specifications">https://joinup.ec.europa.eu/collection/semic-support-centre/specifications</a>.
-        </p>
-        <p>In the case of natural persons refer to the <a href="https://joinup.ec.europa.eu/asset/core_person/asset_release/core-person-vocabulary">Core Person Vocabulary</a> and in the case of legal persons refer to definitions for <a href="https://joinup.ec.europa.eu/asset/core_business/asset_release/core-business-vocabulary">Core Business Vocabulary</a>.
-        </p>
-    </aside>
-
 
     <section><h2>Claims identifying the employee</h2>
 
@@ -300,6 +234,24 @@ C = DE</code></pre>
 
         </figure>
 
+        <p>From the above form we can derive the following claims:
+        </p>
+
+        <pre class='json'><code>{
+    "id": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+    "title": "Mr.",
+    "first_name": "John",
+    "last_name": "Doe",
+    "gender": "M",
+    "postal_address": "",
+    "email": "johndoe@goodair.com",
+    "telephone": "",
+    "fax": "",
+    "mobile_phone": "+34787426623"
+}</code></pre>
+
+        <p>Where the <code>id</code> field is the `did:key` identifier assigned to the employee when issuing the credential, for privacy reasons. This is explained in more detail below.
+        </p>
     </section>
 
 
@@ -307,6 +259,25 @@ C = DE</code></pre>
 
         <p>This section identifies the natural person (the COO) who is a legal representative of the legal person (GoodAir) and that is nominating the employee identified in the credential.
         </p>
+
+        <pre class='json'><code>"legalRepresentative": {
+    "cn": "56565656V Jesus Ruiz",
+    "serialNumber": "56565656V",
+    "organizationIdentifier": "VATES-12345678",
+    "o": "GoodAir",
+    "c": "ES"
+}</code></pre>
+
+
+        <aside class='note' title="Attributes for natural and legal persons">
+            <p>The attributes for natural persons and legal persons are derived from the <a href="https://ec.europa.eu/digital-building-blocks/wikis/download/attachments/467109280/eidas_saml_attribute_profile_v1.0_2.pdf?version=1&modificationDate=1639417533738&api=v2">eIDAS SAML Attribute Profile (eIDAS Technical Sub-group, 22 June 2015)</a>.
+            </p>
+            <p>All attributes for the eIDAS minimum data sets can be derived from the <a href="https://ec.europa.eu/isa2/solutions/core-vocabularies_en/">ISA Core Vocabulary</a> and <a href="https://joinup.ec.europa.eu/collection/semic-support-centre/specifications">https://joinup.ec.europa.eu/collection/semic-support-centre/specifications</a>.
+            </p>
+            <p>In the case of natural persons refer to the <a href="https://joinup.ec.europa.eu/asset/core_person/asset_release/core-person-vocabulary">Core Person Vocabulary</a> and in the case of legal persons refer to definitions for <a href="https://joinup.ec.europa.eu/asset/core_business/asset_release/core-business-vocabulary">Core Business Vocabulary</a>.
+            </p>
+        </aside>
+
     </section>
 
 
@@ -314,17 +285,27 @@ C = DE</code></pre>
 
         <p>The <code>rolesAndDuties</code> object points to an externally hosted object with the roles and duties of the LEAR. This external object can be either a machine-interpretable definition of the roles and duties in the credential, or just an external definition of the roles and duties in natural language. The ideal approach is the first option, expressing the semantics with a proper machine-readable language, because this will allow automatic access control at the granularity of the individual sentences of that expression language. The <code>rolesAndDuties</code> object can also have the definition embedded into it, instead of having a pointer to an external object.
         </p>
-            <p>For illustration, the following figure shows an external object with some of the roles and duties in our LEAR example, in natural language.
+        <p>For illustration, the following figure shows an external object with some of the roles and duties in our LEAR example, in natural language.
+        </p>
+
+        <figure id='lear-appointment-letter-2'>
+            <p><img src="images/lear-appointment-letter-2.png" alt="" />
             </p>
 
-            <figure id='lear-appointment-letter-2'>
-                <p><img src="images/lear-appointment-letter-2.png" alt="" />
-                </p>
+            <figcaption>LEAR roles and duties.
+            </figcaption>
 
-                <figcaption>LEAR roles and duties.
-                </figcaption>
+        </figure>
 
-            </figure>
+        <p>A simplistic implementation of the object inside the credential could be:
+        </p>
+
+        <pre class='json'><code>"rolesAndDuties": [
+    {
+        "type": "LEARCredential",
+        "id": "https://www.dome-project.com/lear/v1/6484994n4r9e990494"
+    }
+]</code></pre>
 
     </section>
 
@@ -334,6 +315,539 @@ C = DE</code></pre>
         <p>The <code>verificationMethod</code> contains a public key that corresponds to a keypair that was generated during the LEARCredential issuance process, where the private key was generated by the wallet of the employee and it was always under his control.
         </p>
         <p>This private key controlled by the employee can be used to sign challenges from Relying Parties that receive the credential to prove that the person sending the credential is the same person that is identified in the <code>credentialSubject</code> object of the LEARCredential.
+        </p>
+        <p>An example could be:
+        </p>
+
+        <pre class='json'><code>"verificationMethod": [
+    {
+        "id": "did:peer:99ab5bca41bb45b78d242a46f0157b7d#key1",
+        "type": "JwsVerificationKey2020",
+        "controller": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+        "publicKeyJwk": {
+        "kid": "key1",
+        "kty": "EC",
+        "crv": "P-256",
+        "alg": "ES256"
+        "x": "lJtvoA5_XptBvcfcrvtGCvXd9bLymmfBSSdNJf5mogo",
+        "y": "fSc4gZX2R3QKKfHvS3m2vGSVSN8Xc04qsquyfEM55Z0"
+        }
+    }
+]</code></pre>
+
+        <p>In this example, the signatures performed with the private key can not be JAdES-compliant ([[ETSI-JADES]]), but if the LEARCredential is attached to any other credential that is signed with this private key, then they can be traced up to the eIDAS certificate of the COO and so the chain of responsibility can be determined..
+        </p>
+    </section>
+
+
+    <section><h2>Assembling the pieces together</h2>
+
+        <p>With the above values for the example, the complete LEARCredential would become something like this:
+        </p>
+
+        <pre class='json'><code>{
+    "@context": [
+        "https://www.w3.org/2018/credentials/v1",
+        "https://www.dome-project.com/2022/credentials/learcredential/v1"
+    ],
+    "id": "urn:did:elsi:25159389-8dd17b796ac0",
+    "type": ["VerifiableCredential", "LEARCredential"],
+    "issuer": {
+        "id": "did:elsi:VATES-12345678"
+    },
+    "issuanceDate": "2022-03-22T14:00:00Z",
+    "validFrom": "2022-03-22T14:00:00Z",
+    "expirationDate": "2023-03-22T14:00:00Z",
+    "credentialSubject": {
+        "id": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+        "title": "Mr.",
+        "first_name": "John",
+        "last_name": "Doe",
+        "gender": "M",
+        "postal_address": "",
+        "email": "johndoe@goodair.com",
+        "telephone": "",
+        "fax": "",
+        "mobile_phone": "+34787426623",
+        "legalRepresentative": {
+            "cn": "56565656V Jesus Ruiz",
+            "serialNumber": "56565656V",
+            "organizationIdentifier": "VATES-12345678",
+            "o": "GoodAir",
+            "c": "ES"
+        },
+        "verificationMethod": [
+            {
+                "id": "did:peer:99ab5bca41bb45b78d242a46f0157b7d#key1",
+                "type": "JwsVerificationKey2020",
+                "controller": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+                "publicKeyJwk": {
+                "kid": "key1",
+                "kty": "EC",
+                "crv": "P-256",
+                "alg": "ES256"
+                "x": "lJtvoA5_XptBvcfcrvtGCvXd9bLymmfBSSdNJf5mogo",
+                "y": "fSc4gZX2R3QKKfHvS3m2vGSVSN8Xc04qsquyfEM55Z0"
+                }
+            }
+        ],
+        "rolesAndDuties": [
+            {
+                "type": "LEARCredential",
+                "id": "https://www.dome-project.com/lear/v1/6484994n4r9e990494"
+            }
+        ]
+    }
+}</code></pre>
+
+    </section>
+
+</section>
+
+
+<section><h2>Issuing the LEARCredential</h2>
+
+
+    <section><h2>Overview</h2>
+
+
+        <figure id='iss-overview'>
+            <p><img src="images/issuance/issuance_background.svg" alt="" />
+            </p>
+
+            <figcaption>Overview of participants.
+            </figcaption>
+
+        </figure>
+
+        <p><b>End user</b>
+        </p>
+        <p>This profile is valid for both natural and juridical persons.
+        </p>
+        <p><b>Wallet</b>
+        </p>
+        <p>Web application with a wallet backend. Private key management and most sensitive operations are performed in a backend server, operated by an entity trusted by the end user. Other profiles will support native and PWA mobile applications, for end users.
+        </p>
+        <p>This type of wallet supports natural persons, juridical persons and natural persons who are legal entity representatives of juridical persons. For juridical persons the wallet is usually called an `enterprise wallet` but we will use here just the term <code>wallet</code> unless the distinction is required.
+        </p>
+        <p>In this profile we assume that the wallet is not previously registered with the Issuer and that the wallet does not expose public endpoints that are called by the Issuer, even if the wallet has a backend server that could implement those endpoints. That makes the wallet implementations in this profile to be very similar in interactions to a full mobile implementation, making migration to a full mobile implementation easier.
+        </p>
+        <p>In other words, from the point of view of the Issuer, the wallet in this profile is almost indistinguishable from a full mobile wallet.
+        </p>
+        <p><b>User Laptop</b>
+        </p>
+        <p>For clarity of exposition, we assume in this profile that the End User starts the interactions with the Issuer with an internet browser (user agent) in her laptop. However, there is nothing in the interactions which limits those interactions to a laptop form factor and the End User can interact with any internet browser in any device (mobile, tablet, kiosk).
+        </p>
+        <p><b>Issuer</b>
+        </p>
+        <p>In this profile we assume that the Issuer is composed of two components:
+        </p>
+        <ul>
+            <li id='list_363.1'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
+            <li id='list_363.2'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
+        </ul>
+
+        <p>The Issuer backend and the Authorization server could be implemented as a single component in a real use case, but we assume here that they are separated to make the profile more general.
+        </p>
+        <p><b>Authentication of End User and previous Issuer-End User relationship</b>
+        </p>
+        <p>We assume that the Issuer and End User have a previous relationship and that the Issuer has performed the KYC required by regulation and needed to be able to issue Verifiable Credentials attesting some attributes about the End User. We assume that there is an existing trusted authentication mechanism (not necessarily related to Verifiable Credentials) that the End User employs to access protected resources from the Issuer. For example, the user is an employee or a customer of the Issuer, or the Issuer is a Local Administration and the End User is a citizen living in that city.
+        </p>
+    </section>
+
+
+    <section><h2>Authentication</h2>
+
+
+        <figure id='iss-authentication'>
+            <p><img src="images/issuance/issuance_authentication.svg" alt="" />
+            </p>
+
+            <figcaption>Issuance authentication.
+            </figcaption>
+
+        </figure>
+
+        <p>Before requesting a new credential, the End User has to authenticate with the Issuer with whatever mechanism is already implemented by the Issuer. This profile does not require that it is based on OIDC, Verifiable Credentials or any other specific mechanism. However, the Issuer may implement the authentication mechanism using Verifiable Credentials and OIDCVP described later in this document.
+        </p>
+        <p>The level of assurance (LoA) of this authentication mechanism is one of the factors that will determine the confidence that the Verifiers can have on the credentials received by them from a given Issuer.
+        </p>
+    </section>
+
+
+    <section><h2>Credential Offer</h2>
+
+
+        <figure id='iss-credentialoffer'>
+            <p><img src="images/issuance/issuance_credentialoffer.svg" alt="" />
+            </p>
+
+            <figcaption>Credential offer.
+            </figcaption>
+
+        </figure>
+
+        <p>In this profile the wallet does not have to implement the Credential Offer Endpoint described in section 4 of [[OIDCVCI]].
+        </p>
+        <p>Instead, the Credential Issuer renders a QR code containing a reference to the Credential Offer that can be scanned by the End-User using a Wallet, as described in section 4.1 of [[OIDCVCI]].
+        </p>
+        <p>According to the spec, the Credential Offer object is a JSON object containing the Credential Offer parameters and can be sent by value or by reference. To avoid problems with the size of the QR travelling in the URL, this profile requires that the QR contains the <code>credential_offer_uri</code>, which is a URL using the <code>https</code> scheme referencing a resource containing a JSON object with the Credential Offer parameters. The <code>credential_offer_uri</code> endpoint should be implemented by the Issuer backend.
+        </p>
+
+        <section><h2>Credential Offer Parameters</h2>
+
+            <p>This profile restricts the options available in section 4.1.1 of [[OIDCVCI]]. The profile defines a Credential Offer object containing the following parameters:
+            </p>
+            <ul>
+                <li id='list_405.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
+                <li id='list_405.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                 </li>
+                <li id='list_405.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                </li>
+            </ul>
+
+            <p>The grant object contains the following values:
+            </p>
+            <ul>
+                <li id='list_414.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
+                <li id='list_414.2'><code>user_pin_required</code>: RECOMMENDED. Boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. If a PIN is required, a PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
+            </ul>
+
+            <p>The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("UniversityDegree"):
+            </p>
+
+            <pre class='json'><code>{
+    "credential_issuer": "https://credential-issuer.example.com",
+    "credentials": [
+        "UniversityDegree"
+    ],
+    "grants": {
+        "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
+            "pre-authorized_code": "adhjhdjajkdkhjhdj",
+            "user_pin_required": true
+        }
+    }
+}</code></pre>
+
+        </section>
+
+
+        <section><h2>Contents of the QR code</h2>
+
+            <p>Below is a non-normative example of the Credential Offer displayed by the Credential Issuer as a QR code when the Credential Offer is passed by reference, as required in this profile:
+            </p>
+
+            <pre class='http'><code>https://credential-issuer.example.com/credential-offer?
+credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j</code></pre>
+
+            <p>The Issuer MUST make sure that every Credential Offer URI is unique for all credential offers created.
+            </p>
+        </section>
+
+    </section>
+
+
+    <section><h2>Credential Issuer Metadata</h2>
+
+        <p>The Wallet backend retrieves the Credential Issuer's configuration using the Credential Issuer Identifier that was received in the Credential Offer.
+        </p>
+        <p>A Credential Issuer is identified in this context by a case sensitive URL using the https scheme that contains scheme, host and, optionally, port number and path components, but no query or fragment components. No DID is used in this context.
+        </p>
+        <p>Credential Issuers MUST make a JSON document available at the path formed by concatenating the string `/.well-known/openid-credential-issuer` to the Credential Issuer Identifier. If the Credential Issuer value contains a path component, any terminating / MUST be removed before appending `/.well-known/openid-credential-issuer`.
+        </p>
+        <p><code>openid-credential-issuer</code> MUST point to a JSON document compliant with this specification and MUST be returned using the `application/json` content type.
+        </p>
+        <p>The retrieval of the Credential Issuer configuration is illustrated below.
+        </p>
+
+        <figure id='iss-issuermetadata'>
+            <p><img src="images/issuance/issuance_issuermetadata.svg" alt="" />
+            </p>
+
+            <figcaption>Issuer metadata.
+            </figcaption>
+
+        </figure>
+
+
+        <section><h2>Credential Issuer Metadata Parameters</h2>
+
+            <p>The object contained in <code>openid-credential-issuer</code> contains the following:
+            </p>
+            <ul>
+                <li id='list_467.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
+                <li id='list_467.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
+                <li id='list_467.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
+            </ul>
+
+            <p>TODO: define a global directory of credentials supported to eliminate requirement for each individual Issuer to publish its own list.
+            </p>
+            <p>This profile does not make use of the following parameters:
+            </p>
+            <ul>
+                <li id='list_478.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
+                <li id='list_478.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
+                <li id='list_478.3'><code>display</code> parameter.                </li>
+            </ul>
+
+        </section>
+
+    </section>
+
+
+    <section><h2>OAuth 2.0 Authorization Server Metadata</h2>
+
+        <p>This specification also defines a new OAuth 2.0 Authorization Server metadata [RFC8414] parameter to publish whether the AS that the Credential Issuer relies on for authorization, supports anonymous Token Requests with the Pre-authorized Grant Type. It is defined as follows:
+        </p>
+        <ul>
+            <li id='list_490.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
+        </ul>
+
+    </section>
+
+
+    <section><h2>Access Token</h2>
+
+
+        <figure id='issuance_accesstoken'>
+            <p><img src="images/issuance/issuance_accesstoken.svg" alt="" />
+            </p>
+
+            <figcaption>Access Token.
+            </figcaption>
+
+        </figure>
+
+        <p>The Wallet invokes the Token Endpoint implemented by the Authorization Server, which issues an Access Token and, optionally, a Refresh Token in exchange for the Pre-authorized Code that the wallet obtained in the Credential Offer.
+        </p>
+
+        <section><h2>Token Request</h2>
+
+            <p>After the wallet receives the Credential Issuer Metadata, a Token Request is made as defined in Section 4.1.3 of [RFC6749].
+            </p>
+            <p>The following are the extension parameters to the Token Request used in a Pre-Authorized Code Flow as used in this profile:
+            </p>
+            <ul>
+                <li id='list_509.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
+                <li id='list_509.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
+            </ul>
+
+            <p>In this profile the Wallet does not have to authenticate when using the Token Endpoint, because we are using the Pre-Authorized Code Grant Type, given the level of trust between the Issuer and the End User and that authentication was already performed at the beginning of the flow.
+            </p>
+            <p>Below is a non-normative example of a Token Request:
+            </p>
+
+            <pre class='http'><code>POST /token HTTP/1.1
+Host: server.example.com
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code
+&pre-authorized_code=SplxlOBeZQQYbYS6WxSbIA
+&user_pin=493536</code></pre>
+
+        </section>
+
+
+        <section><h2>Successful Token Response</h2>
+
+            <p>Token Responses are made as defined in [RFC6749].
+            </p>
+            <p>In addition to the response parameters defined in [RFC6749], the Authorization Server returns the following parameters:
+            </p>
+            <ul>
+                <li id='list_534.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_534.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+            </ul>
+
+            <p>Below is a non-normative example of a Token Response:
+            </p>
+
+            <pre class='http'><code>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+    "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
+    "token_type": "bearer",
+    "expires_in": 86400,
+    "c_nonce": "tZignsnFbp",
+    "c_nonce_expires_in": 86400
+}</code></pre>
+
+        </section>
+
+
+        <section><h2>Token Error Response</h2>
+
+            <p>If the Token Request is invalid or unauthorized, the Authorization Server constructs the error response as defined in section 6.3 of [[OIDCVCI]].
+            </p>
+        </section>
+
+    </section>
+
+
+    <section><h2>Request and receive Credential</h2>
+
+
+        <figure id='issuance_requestcredential'>
+            <p><img src="images/issuance/issuance_requestcredential.svg" alt="" />
+            </p>
+
+            <figcaption>Request and receive Credential.
+            </figcaption>
+
+        </figure>
+
+        <p>The Wallet backend invokes the Credential Endpoint, which issues a Credential as approved by the End-User upon presentation of a valid Access Token representing this approval.
+        </p>
+        <p>Communication with the Credential Endpoint MUST utilize TLS.
+        </p>
+        <p>The client can request issuance of a Credential of a certain type multiple times, e.g., to associate the Credential with different public keys/Decentralized Identifiers (DIDs) or to refresh a certain Credential.
+        </p>
+        <p>If the Access Token is valid for requesting issuance of multiple Credentials, it is at the client's discretion to decide the order in which to request issuance of multiple Credentials requested in the Authorization Request.
+        </p>
+
+        <section><h2>Binding the Issued Credential to the identifier of the End-User possessing that Credential</h2>
+
+            <p>The Issued Credential MUST be cryptographically bound to the identifier of the End-User who possesses the Credential. Cryptographic binding allows the Verifier to verify during the presentation of a Credential that the End-User presenting a Credential is the same End-User to whom that Credential was issued.
+            </p>
+            <p>The Wallet has to provide proof of control alongside key material (proof that did).
+            </p>
+        </section>
+
+
+        <section><h2>Credential Request</h2>
+
+            <p>The Wallet backend makes a Credential Request to the Credential Endpoint by sending the following parameters in the entity-body of an HTTP POST request using the `application/json` media type.
+            </p>
+            <ul>
+                <li id='list_586.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_586.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
+            </ul>
+
+            <p>The proof element MUST incorporate a c_nonce value generated by the Credential Issuer and the Credential Issuer Identifier (audience) to allow the Credential Issuer to detect replay. The way that data is incorporated depends on the proof type. In a JWT, for example, the c_nonce is conveyd in the nonce claims whereas the audience is conveyed in the aud claim. In a Linked Data proof, for example, the c_nonce is included as the challenge element in the proof object and the Credential Issuer (the intended audience) is included as the domain element.
+            </p>
+
+            <section><h2>Proof Type</h2>
+
+                <p>This specification defines the following values for proof_type:
+                </p>
+                <p><code>jwt</code>: objects of this type contain a single jwt element with a JWS [RFC7515] as proof of possession. The JWT MUST contain the following elements:
+                </p>
+                    <ul>
+                        <li id='list_599.1'>in the JOSE Header,                        <div>
+                            <ul>
+                                <li id='list_602.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [RFC8725].                                </li>
+                                <li id='list_602.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
+                                <li id='list_602.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
+                            </ul>
+
+                        </div>
+                        </li>
+                        <li id='list_599.2'>in the JWT body,                        <div>
+                            <ul>
+                                <li id='list_611.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
+                                <li id='list_611.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [RFC7519].                                </li>
+                                <li id='list_611.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
+                            </ul>
+
+                        </div>
+                        </li>
+                    </ul>
+
+                <p>The Credential Issuer MUST validate that the proof is actually signed by a key identified in the JOSE Header.
+                </p>
+                <p>Below is a non-normative example of a proof parameter (dots in the middle of jwt for display purposes only):
+                </p>
+
+                <pre class='json'><code>{
+    "proof_type": "jwt",
+    "jwt": "eyJraWQiOiJkaWQ6ZXhhb....aZKPxgihac0aW9EkL1nOzM"
+}</code></pre>
+
+                <p>where the JWT looks like this:
+                </p>
+
+                <pre class='json'><code>{
+    "typ": "openid4vci-proof+jwt",
+    "alg": "ES256",
+    "kid":"did:example:ebfeb1f712ebc6f1c276e12ec21/keys/1"
+}
+
+{
+    "iss": "s6BhdRkqt3",
+    "aud": "https://server.example.com",
+    "iat": 1659145924,
+    "nonce": "tZignsnFbp"
+}</code></pre>
+
+            </section>
+
+        </section>
+
+
+        <section><h2>Credential Response</h2>
+
+            <p>This profile restricts Credential Response to be Synchronous and Deferred response is not used. The Credential Issuer MUST be able to immediately issue a requested Credential and send it to the Client.
+            </p>
+            <p>The following claims are used in the Credential Response:
+            </p>
+            <ul>
+                <li id='list_650.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_650.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
+                <li id='list_650.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_650.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+            </ul>
+
+            <p>Below is a non-normative example of a Credential Response:
+            </p>
+
+            <pre class='http'><code>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+    "format": "jwt_vc_json",
+    "credential" : "LUpixVCWJk0eOt4CXQe1NXK....WZwmhmn9OQp6YxX0a2L",
+    "c_nonce": "fGFF7UkhLa",
+    "c_nonce_expires_in": 86400
+}</code></pre>
+
+        </section>
+
+
+        <section><h2>Credential Error Response</h2>
+
+            <p>When the Credential Request is invalid or unauthorized, the Credential Issuer constructs the error response as defined in section 7.3.1 of OIDCVCI.
+            </p>
+        </section>
+
+
+        <section><h2>Credential Issuer Provided Nonce</h2>
+
+            <p>Upon receiving a Credential Request, the Credential Issuer MUST require the Wallet to send a proof of possession of the key material it wants a Credential to be bound to. This proof MUST incorporate a nonce generated by the Credential Issuer. The Credential Issuer will provide the client with a nonce in an error response to any Credential Request not including such a proof or including an invalid proof.
+            </p>
+            <p>Below is a non-normative example of a Credential Response with the Credential Issuer requesting a Wallet to provide in a subsequent Credential Request a proof that is bound to a <code>c_nonce</code>:
+            </p>
+
+            <pre class='http'><code>HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+    "error": "invalid_or_missing_proof",
+    "error_description":
+        "Credential Issuer requires proof to be bound to a Credential Issuer provided nonce.",
+    "c_nonce": "8YE9hCnyV2",
+    "c_nonce_expires_in": 86400
+}</code></pre>
+
+        </section>
+
+    </section>
+
+
+    <section><h2>Credentials Supported in the ecosystem</h2>
+
+        <p>The credentials which are global in the ecosystem have to be registered in the [Trusted Schemas Registry](trusted_schemas.md)
         </p>
     </section>
 
