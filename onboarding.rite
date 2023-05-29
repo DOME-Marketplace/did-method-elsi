@@ -25,41 +25,57 @@ og_description: >
 og_site_name: DID:ELSI Method
 
 localBiblio:
-   "ETSI-CERTOVERVIEW":
-      title: "ETSI EN 319 412-1 V1.4.2 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 1: Overview and common data structures"
-      href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941201/01.04.02_20/en_31941201v010402a.pdf"
-      date: "2020-07"
-      publisher: "ETSI"
-   "ETSI-LEGALPERSON":
-      title: "ETSI EN 319 412-3 V1.2.1 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 3: Certificate profile for certificates issued to legal persons"
-      href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941203/01.02.01_60/en_31941203v010201p.pdf"
-      date: "2020-07"
-      publisher: "ETSI"
-   "ETSI-JADES":
-      title: "ETSI TS 119 182-1 V1.1.1 (2021-03) - Electronic Signatures and Infrastructures (ESI); JAdES digital signatures; Part 1: Building blocks and JAdES baseline signatures"
-      href: "https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf"
-      date: "2021-03"
-      publisher: "ETSI"
-   "DEP-DSS":
-      title: "Algorithm for Validation of qualified and advanced signatures and seals"
-      href: "https://ec.europa.eu/digital-building-blocks/wikis/display/DIGITAL/Qualified+electronic+signature+-+QES+validation+algorithm"
-      date: "2019-10"
-      publisher: "European Commission"
-   "DID-PRIMER":
-      title: "DID Primer"
-      href: "https://github.com/WebOfTrustInfo/rebooting-the-web-of-trust-fall2017/blob/master/topics-and-advance-readings/did-primer.md"
-      publisher: "Rebooting the Web of Trust 2017"
-   "DID-DNS":
-      title: "The Decentralized Identifier (DID) in the DNS"
-      href: "https://tools.ietf.org/html/draft-mayrhofer-did-dns-01"
-      status: "Internet Draft"
-      publisher: "IETF"
-   "OWASP-TRANSPORT":
-      title: "Transport Layer Protection Cheatsheet"
-      href: "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
-   "OIDCVCI":
-      title: "OpenID for Verifiable Credential Issuance"
-      href: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html"
+    "ETSI-CERTOVERVIEW":
+        title: "ETSI EN 319 412-1 V1.4.2 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 1: Overview and common data structures"
+        href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941201/01.04.02_20/en_31941201v010402a.pdf"
+        date: "2020-07"
+        publisher: "ETSI"
+    "ETSI-LEGALPERSON":
+        title: "ETSI EN 319 412-3 V1.2.1 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 3: Certificate profile for certificates issued to legal persons"
+        href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941203/01.02.01_60/en_31941203v010201p.pdf"
+        date: "2020-07"
+        publisher: "ETSI"
+    "ETSI-JADES":
+        title: "ETSI TS 119 182-1 V1.1.1 (2021-03) - Electronic Signatures and Infrastructures (ESI); JAdES digital signatures; Part 1: Building blocks and JAdES baseline signatures"
+        href: "https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf"
+        date: "2021-03"
+        publisher: "ETSI"
+    "DEP-DSS":
+        title: "Algorithm for Validation of qualified and advanced signatures and seals"
+        href: "https://ec.europa.eu/digital-building-blocks/wikis/display/DIGITAL/Qualified+electronic+signature+-+QES+validation+algorithm"
+        date: "2019-10"
+        publisher: "European Commission"
+    "DID-PRIMER":
+        title: "DID Primer"
+        href: "https://github.com/WebOfTrustInfo/rebooting-the-web-of-trust-fall2017/blob/master/topics-and-advance-readings/did-primer.md"
+        publisher: "Rebooting the Web of Trust 2017"
+    "DID-DNS":
+        title: "The Decentralized Identifier (DID) in the DNS"
+        href: "https://tools.ietf.org/html/draft-mayrhofer-did-dns-01"
+        status: "Internet Draft"
+        publisher: "IETF"
+    "OWASP-TRANSPORT":
+        title: "Transport Layer Protection Cheatsheet"
+        href: "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
+    "OIDCVCI":
+        title: "OpenID for Verifiable Credential Issuance"
+        href: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html"
+    "RFC6749":
+        title: "The OAuth 2.0 Authorization Framework"
+        href: "https://www.rfc-editor.org/rfc/rfc6749.html"
+    "RFC8414":
+        title: "OAuth 2.0 Authorization Server Metadata"
+        href: "https://www.rfc-editor.org/rfc/rfc8414"
+    "RFC7515":
+        title: "JSON Web Signature (JWS)"
+        href: "https://www.rfc-editor.org/rfc/rfc7515"
+    "RFC8725":
+        title: "JSON Web Token Best Current Practices"
+        href: "https://www.rfc-editor.org/rfc/rfc8725"
+    "RFC7519":
+        title: "JSON Web Token (JWT)"
+        href: "https://www.rfc-editor.org/rfc/rfc7519"
+
 ---
 
 <section #abstract>
@@ -332,6 +348,10 @@ localBiblio:
 
         In this example we use what we call a <i>profile</i> of the [[OIDCVCI]] protocol. The standard is very flexible, and we restrict the different options available in the standard and implement a set of the options with given values that are adequate for our use case, without impacting flexibility in practice.
 
+        The following figure describes the main components that interact in the issuance of a credential in this profile.
+
+        The description of the issuance process is general enough to be used for many types of credentials, but the text includes notes describing the concrete application of the process to the case of the LEARCredential.
+
         <figure #iss-overview>
             <img src="images/issuance/issuance_background.svg" alt="" />
 
@@ -360,10 +380,10 @@ localBiblio:
         In this profile we assume that the Issuer is composed of two components:
 
         <ul>
-            - Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.
             - Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.
+            - Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.
 
-        The Issuer backend and the Authorization server could be implemented as a single component in a real use case, but we assume here that they are separated to make the profile more general.
+        The Issuer backend and the Authorization server could be implemented as a single component in a real use case, but we assume here that they are separated to make the profile more general, especially for big entities and also when using Trust Service Providers for cloud signature and credential issuance, for example.
 
         <b>Authentication of End User and previous Issuer-End User relationship</b>
 
@@ -378,9 +398,14 @@ localBiblio:
             <figcaption>Issuance authentication.
 
 
-        Before requesting a new credential, the End User has to authenticate with the Issuer with whatever mechanism is already implemented by the Issuer. This profile does not require that it is based on OIDC, Verifiable Credentials or any other specific mechanism. However, the Issuer may implement the authentication mechanism using Verifiable Credentials and OIDCVP described later in this document.
+        Before requesting a new credential, the End User has to authenticate with the Issuer with whatever mechanism is already implemented by the Issuer. This profile does not require that it is based on OIDC, Verifiable Credentials or any other specific mechanism.
 
         The level of assurance (LoA) of this authentication mechanism is one of the factors that will determine the confidence that the Verifiers can have on the credentials received by them from a given Issuer.
+
+        <x-note>LEARCredential
+            In the case of the LEARCredential, the End User (John Doe) is an employee of GoodAir and in order to receive the credential John first has to authenticate into the company systems using whatever mechanism GoodAir uses for employee authentication.
+            
+            Being a modern company, GoodAir uses Verifiable Credentials IAM but this is not a requirement for the issuance of the LEARCredential.
 
 
     <section>Credential Offer
@@ -404,28 +429,33 @@ localBiblio:
             <ul>
                 - `credential_issuer`: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.
 
-                - `credentials`: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the `credentials_supported` metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the `credentials_supported` Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer. 
+                - `credentials`: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the `credentials_supported` metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the `credentials_supported` Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.
+
+                    <x-note>LEARCredential
+                        The only credential being offered in our case is the LEARCredential, so this is the credential schema that should be specified here. The LEARCredential is a credential known globally to the SmartCityDS ecosystem, so its schema should be published and be available in the Trusted Credential Schemas List.
 
                 - `grants`: REQUIRED. A JSON object indicating to the Wallet the Grant Type `pre-authorized_code`. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.
+
+                    In other scenarios like when the wallet is a native mobile application and the user interacts with the Issuer exclusively with the mobile (without the laptop), then the Authorization Code Flow has to be used. This can be described in detail in a different profile.
 
             The grant object contains the following values:
 
             <ul>
                 - `pre-authorized_code`: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.
 
-                - `user_pin_required`: RECOMMENDED. Boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. If a PIN is required, a PIN value MUST be sent in the `user_pin` parameter with the respective Token Request.
+                - `user_pin_required`: REQUIRED. The OIDCVCI standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the `user_pin` parameter with the respective Token Request.
 
-            The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("UniversityDegree"):
+            The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("LEARCredential"):
 
             <x-code .json>
                 {
                     "credential_issuer": "https://credential-issuer.example.com",
                     "credentials": [
-                        "UniversityDegree"
+                        "LEARCredential"
                     ],
                     "grants": {
                         "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
-                            "pre-authorized_code": "adhjhdjajkdkhjhdj",
+                            "pre-authorized_code": "asju68jgtyk9ikkew",
                             "user_pin_required": true
                         }
                     }
@@ -440,7 +470,14 @@ localBiblio:
                 https://credential-issuer.example.com/credential-offer?
                 credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j
 
-            The Issuer MUST make sure that every Credential Offer URI is unique for all credential offers created.
+            Which in plain text would be:
+
+            <x-code .http>
+                https://credential-issuer.example.com/credential-offer?
+                credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j
+
+
+            To increase security, the Issuer MUST make sure that every Credential Offer URI is unique for all credential offers created. This is the purpose of the nonce (`5j349k3e3n23j`) at the end of the url in the example. Issuers can implement whatever mechanism they wish, as far as it is transparent to the wallet.
 
     <section>Credential Issuer Metadata
 
@@ -484,7 +521,7 @@ localBiblio:
 
     <section>OAuth 2.0 Authorization Server Metadata
 
-        This specification also defines a new OAuth 2.0 Authorization Server metadata [RFC8414] parameter to publish whether the AS that the Credential Issuer relies on for authorization, supports anonymous Token Requests with the Pre-authorized Grant Type. It is defined as follows:
+        This specification also defines a new OAuth 2.0 Authorization Server metadata [[RFC8414]] parameter to publish whether the AS that the Credential Issuer relies on for authorization, supports anonymous Token Requests with the Pre-authorized Grant Type. It is defined as follows:
 
         <ul>
             - `pre-authorized_grant_anonymous_access_supported`: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.
@@ -501,7 +538,7 @@ localBiblio:
 
         <section>Token Request
 
-            After the wallet receives the Credential Issuer Metadata, a Token Request is made as defined in Section 4.1.3 of [RFC6749].
+            After the wallet receives the Credential Issuer Metadata, a Token Request is made as defined in Section 4.1.3 of [[RFC6749]].
 
             The following are the extension parameters to the Token Request used in a Pre-Authorized Code Flow as used in this profile:
 
@@ -526,9 +563,9 @@ localBiblio:
 
         <section>Successful Token Response
 
-            Token Responses are made as defined in [RFC6749].
+            Token Responses are made as defined in [[RFC6749]].
 
-            In addition to the response parameters defined in [RFC6749], the Authorization Server returns the following parameters:
+            In addition to the response parameters defined in [[RFC6749]], the Authorization Server returns the following parameters:
 
             <ul>
                 - `c_nonce`: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.
@@ -599,7 +636,7 @@ localBiblio:
                         - in the JOSE Header,
 
                             <ul>
-                                - `typ`: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [RFC8725].
+                                - `typ`: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].
 
                                 - `alg`: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).
 
@@ -610,7 +647,7 @@ localBiblio:
                             <ul>
                                 - `aud`: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.
 
-                                - `iat`: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [RFC7519].
+                                - `iat`: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].
 
                                 - `nonce`: REQUIRED (string). The value type of this claim MUST be a string, where the value is the `c_nonce` provided by the Credential Issuer.
 
@@ -692,10 +729,6 @@ localBiblio:
                     "c_nonce_expires_in": 86400
                 }
 
-
-    <section>Credentials Supported in the ecosystem
-
-        The credentials which are global in the ecosystem have to be registered in the [Trusted Schemas Registry](trusted_schemas.md)
 
 
 <section id="references">
