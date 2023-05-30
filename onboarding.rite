@@ -84,8 +84,72 @@ localBiblio:
 <section>Participants
 
     Here we introduce the actors of the reference use case we are going to have. There will be an Air Quality App
-    provider who wishes to offer this app in a Data Space and a given customer (e.g., integrator for a smart city) discovering
-    and procuring the app.
+    provider who wishes to offer this app in a Data Space and a given customer (e.g., integrator for a smart city) discovering and procuring the app.
+
+    <x-diagram .d2>
+        shape: sequence_diagram
+
+        registry: Business\nRegistry
+        registry.shape: cylinder
+
+        tsp: Trust\nService\nProvider
+
+        registry -> tsp: Provide trusted data
+
+
+    <x-diagram .d2>
+        direction: right
+
+        eIDAS {
+            Spain TL {
+                TSP1 {
+                    Seal.shape: circle
+                    Seal: Cert\nfor Seal
+                    Sign.shape: circle
+                    Sign: Cert\nfor Sign
+                }
+                TSP2 {
+                    S3.shape: circle
+                    S3: Cert\nfor Sign
+                    S4.shape: circle
+                    S4: Cert\nfor Seal
+                }
+            }
+
+            Other countries {
+
+            }
+
+            Germany TL {
+                TSP1 {
+                    S1.shape: circle
+                    S1: Cert\nfor Sign
+                    S2.shape: circle
+                    S2: Cert\nfor Seal
+                }
+                TSP2 {
+                    S3.shape: circle
+                    S3: Cert\nfor Sign
+                    S4.shape: circle
+                    S4: Cert\nfor Seal
+                }
+            }
+
+        }
+
+
+        GoodAir {
+            CEO
+            COO
+            Employee
+
+        }
+
+        eIDAS.Spain TL.TSP1.Seal -> GoodAir
+        eIDAS.Spain TL.TSP1.Sign -> GoodAir.COO
+
+        GoodAir.COO -> GoodAir.Employee: LEARCredential
+
 
     <section>SmartCityDS: an instance of a Data Space for Smart Cities
 
