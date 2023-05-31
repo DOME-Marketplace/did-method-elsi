@@ -83,50 +83,55 @@ localBiblio:
     
 <section>Participants
 
-    Here we introduce the actors of the reference use case we are going to have. There will be an Air Quality App
-    provider who wishes to offer this app in a Data Space and a given customer (e.g., integrator for a smart city) discovering and procuring the app.
+    Here we introduce the actors of the reference use case we are going to have. The main actors are marked in yellow in the following diagram.
+    
+    RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
 
-    <x-diagram .d2>
-        shape: sequence_diagram
+    RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
 
-        registry: Business\nRegistry
-        registry.shape: cylinder
-
-        tsp: Trust\nService\nProvider
-
-        registry -> tsp: Provide trusted data
+    The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
 
 
     <x-diagram .d2>
-        direction: right
-
-        eIDAS {
-            Spain TL {
-                TSP1 {
-                    Seal.shape: circle
-                    Seal: Cert\nfor Seal
-                    Sign.shape: circle
-                    Sign: Cert\nfor Sign
+        classes: {
+            participant: {
+                style: {
+                    fill: "yellow"
                 }
-                TSP2 {
+            }
+        }
+
+        eIDAS: eIDAS Trust Framework {
+
+            DE_TL: Germany Trusted List {
+                RealTruth: RealTruth TSP {
+
+                    Seal: Service\nCertificate\nfor seal
+                    Seal.shape: circle
+
+                    Sign: Service\ncertificate\nfor signature
+                    Sign.shape: circle
+
+                }
+                RealTruth.class: participant
+
+                Other TSPs {
                     S3.shape: circle
                     S3: Cert\nfor Sign
                     S4.shape: circle
                     S4: Cert\nfor Seal
                 }
             }
+            DE_TL.style.fill: transparent
 
-            Other countries {
-
-            }
-
-            Germany TL {
+            SP_TL: Spain Trusted List {
                 TSP1 {
                     S1.shape: circle
                     S1: Cert\nfor Sign
                     S2.shape: circle
                     S2: Cert\nfor Seal
                 }
+
                 TSP2 {
                     S3.shape: circle
                     S3: Cert\nfor Sign
@@ -134,19 +139,23 @@ localBiblio:
                     S4: Cert\nfor Seal
                 }
             }
+            SP_TL.style.fill: transparent
 
+            Other countries {
+
+            }
         }
+        eIDAS.style.fill: transparent
 
 
         GoodAir {
-            CEO
             COO
             Employee
-
         }
+        GoodAir.class: participant
 
-        eIDAS.Spain TL.TSP1.Seal -> GoodAir
-        eIDAS.Spain TL.TSP1.Sign -> GoodAir.COO
+        eIDAS.DE_TL.RealTruth.Seal -> GoodAir: Issue Cert for Seals
+        eIDAS.DE_TL.RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures
 
         GoodAir.COO -> GoodAir.Employee: LEARCredential
 
@@ -193,7 +202,7 @@ localBiblio:
 
     <section>RealTruth: a TSP (Trust Service Provider)
 
-        RealTruth is an EU TSP,  which appears in the TL (Trusted List) maintained by the German Government (<https://tl.bundesnetzagentur.de/TL-DE.XML>).
+        RealTruth is an EU TSP, which appears in the TL (Trusted List) maintained by the <a href="https://tl.bundesnetzagentur.de/TL-DE.XML">German Government</a>.
         
         RealTruth is a TSP based in Germany but operates in most of the countries of the EU and so being able to provide Trust Services across many countries, including Spain.
 
@@ -226,6 +235,35 @@ localBiblio:
                 - The data relating to the constitution and legal status of the subscriber.
                 - <b>The data concerning the extent and validity of the powers of representation of the applicant.</b>
                 - The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
+
+        The TSP (RealTruth in this case) performs the verifications against `Authentic Sources`.
+
+        <blockquote>
+            Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
+            
+            The Authentic Sources in scope of Annex VI of the [eIDAS2] legislative proposal are sources for attributes on address, age, gender, civil status, family composition, nationality, education and training qualifications titles and licences, professional qualifications titles and licences, public permits and licences, financial and company data.
+            
+            Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
+            
+            Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
+
+        <x-diagram .d2>
+            shape: sequence_diagram
+
+            COO: COO of GoodAir { shape: person }
+            TSP: Trust\nService\nProvider
+            registry: Authentic\nSources { shape: cylinder }
+
+            COO -> TSP: Request a\ncertificate for signatures
+
+            Verification {
+                TSP."Data about the legal status of the company and powers of representation of the applicant"
+                TSP <-> registry: Verify trusted data
+
+            }
+            
+
+            TSP -> COO: Provide certificate for signature
 
 
         In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).

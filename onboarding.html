@@ -122,139 +122,40 @@
 
 <section><h2>Participants</h2>
 
-    <p>Here we introduce the actors of the reference use case we are going to have. There will be an Air Quality App
-    provider who wishes to offer this app in a Data Space and a given customer (e.g., integrator for a smart city) discovering and procuring the app.
+    <p>Here we introduce the actors of the reference use case we are going to have. The main actors are marked in yellow in the following diagram.
+    </p>
+    <p>RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
+    </p>
+    <p>RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
+    </p>
+    <p>The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
     </p>
 <!-- Original D2 diagram definition
-    shape: sequence_diagram
-    registry: Business\nRegistry
-    registry.shape: cylinder
-    tsp: Trust\nService\nProvider
-    registry -> tsp: Provide trusted data
- -->
-
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 481 476"><svg id="d2-svg" class="d2-829111676" width="481" height="476" viewBox="-89 -49 481 476"><rect x="-89.000000" y="-49.000000" width="481.000000" height="476.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-829111676 .text {
-	font-family: "d2-829111676-font-regular";
-}
-@font-face {
-	font-family: d2-829111676-font-regular;
-	src: url("data:application/font-woff;base64,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");
-}
-.d2-829111676 .text-italic {
-	font-family: "d2-829111676-font-italic";
-}
-@font-face {
-	font-family: d2-829111676-font-italic;
-	src: url("data:application/font-woff;base64,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");
-}]]></style><style type="text/css"><![CDATA[.shape {
-  shape-rendering: geometricPrecision;
-  stroke-linejoin: round;
-}
-.connection {
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.blend {
-  mix-blend-mode: multiply;
-  opacity: 0.5;
-}
-
-		.d2-829111676 .fill-N1{fill:#0A0F25;}
-		.d2-829111676 .fill-N2{fill:#676C7E;}
-		.d2-829111676 .fill-N3{fill:#9499AB;}
-		.d2-829111676 .fill-N4{fill:#CFD2DD;}
-		.d2-829111676 .fill-N5{fill:#DEE1EB;}
-		.d2-829111676 .fill-N6{fill:#EEF1F8;}
-		.d2-829111676 .fill-N7{fill:#FFFFFF;}
-		.d2-829111676 .fill-B1{fill:#0D32B2;}
-		.d2-829111676 .fill-B2{fill:#0D32B2;}
-		.d2-829111676 .fill-B3{fill:#E3E9FD;}
-		.d2-829111676 .fill-B4{fill:#E3E9FD;}
-		.d2-829111676 .fill-B5{fill:#EDF0FD;}
-		.d2-829111676 .fill-B6{fill:#F7F8FE;}
-		.d2-829111676 .fill-AA2{fill:#4A6FF3;}
-		.d2-829111676 .fill-AA4{fill:#EDF0FD;}
-		.d2-829111676 .fill-AA5{fill:#F7F8FE;}
-		.d2-829111676 .fill-AB4{fill:#EDF0FD;}
-		.d2-829111676 .fill-AB5{fill:#F7F8FE;}
-		.d2-829111676 .stroke-N1{stroke:#0A0F25;}
-		.d2-829111676 .stroke-N2{stroke:#676C7E;}
-		.d2-829111676 .stroke-N3{stroke:#9499AB;}
-		.d2-829111676 .stroke-N4{stroke:#CFD2DD;}
-		.d2-829111676 .stroke-N5{stroke:#DEE1EB;}
-		.d2-829111676 .stroke-N6{stroke:#EEF1F8;}
-		.d2-829111676 .stroke-N7{stroke:#FFFFFF;}
-		.d2-829111676 .stroke-B1{stroke:#0D32B2;}
-		.d2-829111676 .stroke-B2{stroke:#0D32B2;}
-		.d2-829111676 .stroke-B3{stroke:#E3E9FD;}
-		.d2-829111676 .stroke-B4{stroke:#E3E9FD;}
-		.d2-829111676 .stroke-B5{stroke:#EDF0FD;}
-		.d2-829111676 .stroke-B6{stroke:#F7F8FE;}
-		.d2-829111676 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-829111676 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-829111676 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-829111676 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-829111676 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-829111676 .background-color-N1{background-color:#0A0F25;}
-		.d2-829111676 .background-color-N2{background-color:#676C7E;}
-		.d2-829111676 .background-color-N3{background-color:#9499AB;}
-		.d2-829111676 .background-color-N4{background-color:#CFD2DD;}
-		.d2-829111676 .background-color-N5{background-color:#DEE1EB;}
-		.d2-829111676 .background-color-N6{background-color:#EEF1F8;}
-		.d2-829111676 .background-color-N7{background-color:#FFFFFF;}
-		.d2-829111676 .background-color-B1{background-color:#0D32B2;}
-		.d2-829111676 .background-color-B2{background-color:#0D32B2;}
-		.d2-829111676 .background-color-B3{background-color:#E3E9FD;}
-		.d2-829111676 .background-color-B4{background-color:#E3E9FD;}
-		.d2-829111676 .background-color-B5{background-color:#EDF0FD;}
-		.d2-829111676 .background-color-B6{background-color:#F7F8FE;}
-		.d2-829111676 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-829111676 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-829111676 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-829111676 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-829111676 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-829111676 .color-N1{color:#0A0F25;}
-		.d2-829111676 .color-N2{color:#676C7E;}
-		.d2-829111676 .color-N3{color:#9499AB;}
-		.d2-829111676 .color-N4{color:#CFD2DD;}
-		.d2-829111676 .color-N5{color:#DEE1EB;}
-		.d2-829111676 .color-N6{color:#EEF1F8;}
-		.d2-829111676 .color-N7{color:#FFFFFF;}
-		.d2-829111676 .color-B1{color:#0D32B2;}
-		.d2-829111676 .color-B2{color:#0D32B2;}
-		.d2-829111676 .color-B3{color:#E3E9FD;}
-		.d2-829111676 .color-B4{color:#E3E9FD;}
-		.d2-829111676 .color-B5{color:#EDF0FD;}
-		.d2-829111676 .color-B6{color:#F7F8FE;}
-		.d2-829111676 .color-AA2{color:#4A6FF3;}
-		.d2-829111676 .color-AA4{color:#EDF0FD;}
-		.d2-829111676 .color-AA5{color:#F7F8FE;}
-		.d2-829111676 .color-AB4{color:#EDF0FD;}
-		.d2-829111676 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="registry"><g class="shape" ><path d="M 12 76 C 12 52 59 52 64 52 C 69 52 116 52 116 76 V 162 C 116 186 69 186 64 186 C 59 186 12 186 12 162 V 76 Z" class=" stroke-B1 fill-B5" style="stroke-width:2;" /><path d="M 12 76 C 12 100 59 100 64 100 C 69 100 116 100 116 76" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="64.000000" y="128.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="64.000000" dy="0.000000">Business</tspan><tspan x="64.000000" dy="18.500000">Registry</tspan></text></g><g id="tsp"><g class="shape" ><rect x="188.000000" y="88.000000" width="103.000000" height="98.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="239.500000" y="126.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="239.500000" dy="0.000000">Trust</tspan><tspan x="239.500000" dy="17.666667">Service</tspan><tspan x="239.500000" dy="17.666667">Provider</tspan></text></g><g id="(registry -- )[0]"><path d="M 64.000000 188.000000 L 64.000000 325.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-829111676)" /></g><g id="(tsp -- )[0]"><path d="M 239.500000 188.000000 L 239.500000 325.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-829111676)" /></g><g id="(registry -&gt; tsp)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 66.000000 256.000000 L 235.500000 256.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-829111676)" /><text x="151.500000" y="262.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Provide trusted data</text></g><mask id="d2-829111676" maskUnits="userSpaceOnUse" x="-89" y="-49" width="481" height="476">
-<rect x="-89" y="-49" width="481" height="476" fill="white"></rect>
-<rect x="84.000000" y="246.000000" width="135" height="21" fill="black"></rect>
-</mask></svg></svg>
-<!-- Original D2 diagram definition
-    direction: right
-    eIDAS {
-        Spain TL {
-            TSP1 {
-                Seal.shape: circle
-                Seal: Cert\nfor Seal
-                Sign.shape: circle
-                Sign: Cert\nfor Sign
+    classes: {
+        participant: {
+            style: {
+                fill: "yellow"
             }
-            TSP2 {
+        }
+    }
+    eIDAS: eIDAS Trust Framework {
+        DE_TL: Germany Trusted List {
+            RealTruth: RealTruth TSP {
+                Seal: Service\nCertificate\nfor seal
+                Seal.shape: circle
+                Sign: Service\ncertificate\nfor signature
+                Sign.shape: circle
+            }
+            RealTruth.class: participant
+            Other TSPs {
                 S3.shape: circle
                 S3: Cert\nfor Sign
                 S4.shape: circle
                 S4: Cert\nfor Seal
             }
         }
-        Other countries {
-        }
-        Germany TL {
+        DE_TL.style.fill: transparent
+        SP_TL: Spain Trusted List {
             TSP1 {
                 S1.shape: circle
                 S1: Cert\nfor Sign
@@ -268,38 +169,42 @@
                 S4: Cert\nfor Seal
             }
         }
+        SP_TL.style.fill: transparent
+        Other countries {
+        }
     }
+    eIDAS.style.fill: transparent
     GoodAir {
-        CEO
         COO
         Employee
     }
-    eIDAS.Spain TL.TSP1.Seal -> GoodAir
-    eIDAS.Spain TL.TSP1.Sign -> GoodAir.COO
+    GoodAir.class: participant
+    eIDAS.DE_TL.RealTruth.Seal -> GoodAir: Issue Cert for Seals
+    eIDAS.DE_TL.RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures
     GoodAir.COO -> GoodAir.Employee: LEARCredential
  -->
 
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1496 2169"><svg id="d2-svg" class="d2-1155566548" width="1496" height="2169" viewBox="-101 -100 1496 2169"><rect x="-101.000000" y="-100.000000" width="1496.000000" height="2169.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-1155566548 .text {
-	font-family: "d2-1155566548-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 2128 1128"><svg id="d2-svg" class="d2-3300851763" width="2128" height="1128" viewBox="-101 -100 2128 1128"><rect x="-101.000000" y="-100.000000" width="2128.000000" height="1128.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-3300851763 .text {
+	font-family: "d2-3300851763-font-regular";
 }
 @font-face {
-	font-family: d2-1155566548-font-regular;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-3300851763-font-regular;
+	src: url("data:application/font-woff;base64,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");
 }
-.d2-1155566548 .text-bold {
-	font-family: "d2-1155566548-font-bold";
-}
-@font-face {
-	font-family: d2-1155566548-font-bold;
-	src: url("data:application/font-woff;base64,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");
-}
-.d2-1155566548 .text-italic {
-	font-family: "d2-1155566548-font-italic";
+.d2-3300851763 .text-bold {
+	font-family: "d2-3300851763-font-bold";
 }
 @font-face {
-	font-family: d2-1155566548-font-italic;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-3300851763-font-bold;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-3300851763 .text-italic {
+	font-family: "d2-3300851763-font-italic";
+}
+@font-face {
+	font-family: d2-3300851763-font-italic;
+	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
   stroke-linejoin: round;
@@ -313,80 +218,82 @@
   opacity: 0.5;
 }
 
-		.d2-1155566548 .fill-N1{fill:#0A0F25;}
-		.d2-1155566548 .fill-N2{fill:#676C7E;}
-		.d2-1155566548 .fill-N3{fill:#9499AB;}
-		.d2-1155566548 .fill-N4{fill:#CFD2DD;}
-		.d2-1155566548 .fill-N5{fill:#DEE1EB;}
-		.d2-1155566548 .fill-N6{fill:#EEF1F8;}
-		.d2-1155566548 .fill-N7{fill:#FFFFFF;}
-		.d2-1155566548 .fill-B1{fill:#0D32B2;}
-		.d2-1155566548 .fill-B2{fill:#0D32B2;}
-		.d2-1155566548 .fill-B3{fill:#E3E9FD;}
-		.d2-1155566548 .fill-B4{fill:#E3E9FD;}
-		.d2-1155566548 .fill-B5{fill:#EDF0FD;}
-		.d2-1155566548 .fill-B6{fill:#F7F8FE;}
-		.d2-1155566548 .fill-AA2{fill:#4A6FF3;}
-		.d2-1155566548 .fill-AA4{fill:#EDF0FD;}
-		.d2-1155566548 .fill-AA5{fill:#F7F8FE;}
-		.d2-1155566548 .fill-AB4{fill:#EDF0FD;}
-		.d2-1155566548 .fill-AB5{fill:#F7F8FE;}
-		.d2-1155566548 .stroke-N1{stroke:#0A0F25;}
-		.d2-1155566548 .stroke-N2{stroke:#676C7E;}
-		.d2-1155566548 .stroke-N3{stroke:#9499AB;}
-		.d2-1155566548 .stroke-N4{stroke:#CFD2DD;}
-		.d2-1155566548 .stroke-N5{stroke:#DEE1EB;}
-		.d2-1155566548 .stroke-N6{stroke:#EEF1F8;}
-		.d2-1155566548 .stroke-N7{stroke:#FFFFFF;}
-		.d2-1155566548 .stroke-B1{stroke:#0D32B2;}
-		.d2-1155566548 .stroke-B2{stroke:#0D32B2;}
-		.d2-1155566548 .stroke-B3{stroke:#E3E9FD;}
-		.d2-1155566548 .stroke-B4{stroke:#E3E9FD;}
-		.d2-1155566548 .stroke-B5{stroke:#EDF0FD;}
-		.d2-1155566548 .stroke-B6{stroke:#F7F8FE;}
-		.d2-1155566548 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-1155566548 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-1155566548 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-1155566548 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-1155566548 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-1155566548 .background-color-N1{background-color:#0A0F25;}
-		.d2-1155566548 .background-color-N2{background-color:#676C7E;}
-		.d2-1155566548 .background-color-N3{background-color:#9499AB;}
-		.d2-1155566548 .background-color-N4{background-color:#CFD2DD;}
-		.d2-1155566548 .background-color-N5{background-color:#DEE1EB;}
-		.d2-1155566548 .background-color-N6{background-color:#EEF1F8;}
-		.d2-1155566548 .background-color-N7{background-color:#FFFFFF;}
-		.d2-1155566548 .background-color-B1{background-color:#0D32B2;}
-		.d2-1155566548 .background-color-B2{background-color:#0D32B2;}
-		.d2-1155566548 .background-color-B3{background-color:#E3E9FD;}
-		.d2-1155566548 .background-color-B4{background-color:#E3E9FD;}
-		.d2-1155566548 .background-color-B5{background-color:#EDF0FD;}
-		.d2-1155566548 .background-color-B6{background-color:#F7F8FE;}
-		.d2-1155566548 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-1155566548 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-1155566548 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-1155566548 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-1155566548 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-1155566548 .color-N1{color:#0A0F25;}
-		.d2-1155566548 .color-N2{color:#676C7E;}
-		.d2-1155566548 .color-N3{color:#9499AB;}
-		.d2-1155566548 .color-N4{color:#CFD2DD;}
-		.d2-1155566548 .color-N5{color:#DEE1EB;}
-		.d2-1155566548 .color-N6{color:#EEF1F8;}
-		.d2-1155566548 .color-N7{color:#FFFFFF;}
-		.d2-1155566548 .color-B1{color:#0D32B2;}
-		.d2-1155566548 .color-B2{color:#0D32B2;}
-		.d2-1155566548 .color-B3{color:#E3E9FD;}
-		.d2-1155566548 .color-B4{color:#E3E9FD;}
-		.d2-1155566548 .color-B5{color:#EDF0FD;}
-		.d2-1155566548 .color-B6{color:#F7F8FE;}
-		.d2-1155566548 .color-AA2{color:#4A6FF3;}
-		.d2-1155566548 .color-AA4{color:#EDF0FD;}
-		.d2-1155566548 .color-AA5{color:#F7F8FE;}
-		.d2-1155566548 .color-AB4{color:#EDF0FD;}
-		.d2-1155566548 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="eIDAS"><g class="shape" ><rect x="0.000000" y="41.000000" width="579.000000" height="1927.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="289.500000" y="28.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">eIDAS</text></g><g id="GoodAir"><g class="shape" ><rect x="720.000000" y="163.000000" width="574.000000" height="287.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="1007.000000" y="150.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">GoodAir</text></g><g id="eIDAS.Spain TL"><g class="shape" ><rect x="71.000000" y="117.000000" width="438.000000" height="826.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="290.000000" y="105.000000" class="text fill-N1" style="text-anchor:middle;font-size:24px">Spain TL</text></g><g id="eIDAS.Other countries"><g class="shape" ><rect x="212.000000" y="984.000000" width="156.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="290.000000" y="1022.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Other countries</text></g><g id="eIDAS.Germany TL"><g class="shape" ><rect x="71.000000" y="1126.000000" width="438.000000" height="801.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="290.000000" y="1114.000000" class="text fill-N1" style="text-anchor:middle;font-size:24px">Germany TL</text></g><g id="GoodAir.CEO"><g class="shape" ><rect x="792.000000" y="231.000000" width="75.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="829.500000" y="269.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">CEO</text></g><g id="GoodAir.COO"><g class="shape" ><rect x="791.000000" y="364.000000" width="77.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="829.500000" y="402.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">COO</text></g><g id="GoodAir.Employee"><g class="shape" ><rect x="1110.000000" y="364.000000" width="114.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="1167.000000" y="402.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Employee</text></g><g id="eIDAS.Spain TL.TSP1"><g class="shape" ><rect x="141.000000" y="191.000000" width="297.000000" height="321.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="289.500000" y="180.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP1</text></g><g id="eIDAS.Spain TL.TSP2"><g class="shape" ><rect x="141.000000" y="604.000000" width="297.000000" height="296.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="289.500000" y="593.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP2</text></g><g id="eIDAS.Germany TL.TSP1"><g class="shape" ><rect x="141.000000" y="1200.000000" width="297.000000" height="296.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="289.500000" y="1189.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP1</text></g><g id="eIDAS.Germany TL.TSP2"><g class="shape" ><rect x="141.000000" y="1588.000000" width="297.000000" height="296.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="289.500000" y="1577.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP2</text></g><g id="eIDAS.Spain TL.TSP1.Seal"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="298.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="296.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.Spain TL.TSP1.Sign"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="431.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="429.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.Spain TL.TSP2.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="686.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="684.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.Spain TL.TSP2.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="819.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="817.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.Germany TL.TSP1.S1"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="1282.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="1280.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.Germany TL.TSP1.S2"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="1415.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="1413.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.Germany TL.TSP2.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="1670.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="1668.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.Germany TL.TSP2.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="289.500000" cy="1803.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="289.500000" y="1801.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="289.500000" dy="0.000000">Cert</tspan><tspan x="289.500000" dy="18.500000">for Seal</tspan></text></g><g id="(eIDAS.Spain TL.TSP1.Seal -&gt; GoodAir)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 347.724832 296.987599 C 419.600000 254.800000 452.100000 244.000000 473.250000 244.000000 C 494.400000 244.000000 522.600000 244.000000 543.750000 244.000000 C 564.900000 244.000000 663.700000 244.000000 716.500000 244.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1155566548)" /></g><g id="(eIDAS.Spain TL.TSP1.Sign -&gt; GoodAir.COO)[0]"><path d="M 344.999993 414.005263 C 419.000000 414.200000 452.100000 414.250000 473.250000 414.250000 C 494.400000 414.250000 522.600000 414.250000 543.750000 414.250000 C 564.900000 414.250000 593.100000 414.250000 614.250000 414.250000 C 635.400000 414.250000 734.100000 414.250000 786.500000 414.250000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1155566548)" /></g><g id="GoodAir.(COO -&gt; Employee)[0]"><path d="M 870.500000 397.500000 C 964.500000 397.500000 1012.700000 397.500000 1105.500000 397.500000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1155566548)" /><text x="989.500000" y="403.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">LEARCredential</text></g><mask id="d2-1155566548" maskUnits="userSpaceOnUse" x="-101" y="-100" width="1496" height="2169">
-<rect x="-101" y="-100" width="1496" height="2169" fill="white"></rect>
-<rect x="939.000000" y="387.000000" width="101" height="21" fill="black"></rect>
+		.d2-3300851763 .fill-N1{fill:#0A0F25;}
+		.d2-3300851763 .fill-N2{fill:#676C7E;}
+		.d2-3300851763 .fill-N3{fill:#9499AB;}
+		.d2-3300851763 .fill-N4{fill:#CFD2DD;}
+		.d2-3300851763 .fill-N5{fill:#DEE1EB;}
+		.d2-3300851763 .fill-N6{fill:#EEF1F8;}
+		.d2-3300851763 .fill-N7{fill:#FFFFFF;}
+		.d2-3300851763 .fill-B1{fill:#0D32B2;}
+		.d2-3300851763 .fill-B2{fill:#0D32B2;}
+		.d2-3300851763 .fill-B3{fill:#E3E9FD;}
+		.d2-3300851763 .fill-B4{fill:#E3E9FD;}
+		.d2-3300851763 .fill-B5{fill:#EDF0FD;}
+		.d2-3300851763 .fill-B6{fill:#F7F8FE;}
+		.d2-3300851763 .fill-AA2{fill:#4A6FF3;}
+		.d2-3300851763 .fill-AA4{fill:#EDF0FD;}
+		.d2-3300851763 .fill-AA5{fill:#F7F8FE;}
+		.d2-3300851763 .fill-AB4{fill:#EDF0FD;}
+		.d2-3300851763 .fill-AB5{fill:#F7F8FE;}
+		.d2-3300851763 .stroke-N1{stroke:#0A0F25;}
+		.d2-3300851763 .stroke-N2{stroke:#676C7E;}
+		.d2-3300851763 .stroke-N3{stroke:#9499AB;}
+		.d2-3300851763 .stroke-N4{stroke:#CFD2DD;}
+		.d2-3300851763 .stroke-N5{stroke:#DEE1EB;}
+		.d2-3300851763 .stroke-N6{stroke:#EEF1F8;}
+		.d2-3300851763 .stroke-N7{stroke:#FFFFFF;}
+		.d2-3300851763 .stroke-B1{stroke:#0D32B2;}
+		.d2-3300851763 .stroke-B2{stroke:#0D32B2;}
+		.d2-3300851763 .stroke-B3{stroke:#E3E9FD;}
+		.d2-3300851763 .stroke-B4{stroke:#E3E9FD;}
+		.d2-3300851763 .stroke-B5{stroke:#EDF0FD;}
+		.d2-3300851763 .stroke-B6{stroke:#F7F8FE;}
+		.d2-3300851763 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-3300851763 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-3300851763 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-3300851763 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-3300851763 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-3300851763 .background-color-N1{background-color:#0A0F25;}
+		.d2-3300851763 .background-color-N2{background-color:#676C7E;}
+		.d2-3300851763 .background-color-N3{background-color:#9499AB;}
+		.d2-3300851763 .background-color-N4{background-color:#CFD2DD;}
+		.d2-3300851763 .background-color-N5{background-color:#DEE1EB;}
+		.d2-3300851763 .background-color-N6{background-color:#EEF1F8;}
+		.d2-3300851763 .background-color-N7{background-color:#FFFFFF;}
+		.d2-3300851763 .background-color-B1{background-color:#0D32B2;}
+		.d2-3300851763 .background-color-B2{background-color:#0D32B2;}
+		.d2-3300851763 .background-color-B3{background-color:#E3E9FD;}
+		.d2-3300851763 .background-color-B4{background-color:#E3E9FD;}
+		.d2-3300851763 .background-color-B5{background-color:#EDF0FD;}
+		.d2-3300851763 .background-color-B6{background-color:#F7F8FE;}
+		.d2-3300851763 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-3300851763 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-3300851763 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-3300851763 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-3300851763 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-3300851763 .color-N1{color:#0A0F25;}
+		.d2-3300851763 .color-N2{color:#676C7E;}
+		.d2-3300851763 .color-N3{color:#9499AB;}
+		.d2-3300851763 .color-N4{color:#CFD2DD;}
+		.d2-3300851763 .color-N5{color:#DEE1EB;}
+		.d2-3300851763 .color-N6{color:#EEF1F8;}
+		.d2-3300851763 .color-N7{color:#FFFFFF;}
+		.d2-3300851763 .color-B1{color:#0D32B2;}
+		.d2-3300851763 .color-B2{color:#0D32B2;}
+		.d2-3300851763 .color-B3{color:#E3E9FD;}
+		.d2-3300851763 .color-B4{color:#E3E9FD;}
+		.d2-3300851763 .color-B5{color:#EDF0FD;}
+		.d2-3300851763 .color-B6{color:#F7F8FE;}
+		.d2-3300851763 .color-AA2{color:#4A6FF3;}
+		.d2-3300851763 .color-AA4{color:#EDF0FD;}
+		.d2-3300851763 .color-AA5{color:#F7F8FE;}
+		.d2-3300851763 .color-AB4{color:#EDF0FD;}
+		.d2-3300851763 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="eIDAS"><g class="shape" ><rect x="0.000000" y="41.000000" width="1926.000000" height="412.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="963.000000" y="28.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">eIDAS Trust Framework</text></g><g id="GoodAir" class="participant"><g class="shape" ><rect x="81.000000" y="615.000000" width="333.000000" height="312.000000" fill="yellow" class=" stroke-B1" style="stroke-width:2;" /></g><text x="247.500000" y="602.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">GoodAir</text></g><g id="eIDAS.DE_TL"><g class="shape" ><rect x="20.000000" y="106.000000" width="858.000000" height="317.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="449.000000" y="94.000000" class="text fill-N1" style="text-anchor:middle;font-size:24px">Germany Trusted List</text></g><g id="eIDAS.SP_TL"><g class="shape" ><rect x="1114.000000" y="106.000000" width="792.000000" height="317.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="1510.000000" y="94.000000" class="text fill-N1" style="text-anchor:middle;font-size:24px">Spain Trusted List</text></g><g id="eIDAS.Other countries"><g class="shape" ><rect x="918.000000" y="214.000000" width="156.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="996.000000" y="252.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Other countries</text></g><g id="GoodAir.COO"><g class="shape" ><rect x="214.000000" y="644.000000" width="77.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="252.500000" y="682.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">COO</text></g><g id="GoodAir.Employee"><g class="shape" ><rect x="196.000000" y="831.000000" width="114.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="253.000000" y="869.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Employee</text></g><g id="eIDAS.DE_TL.RealTruth" class="participant"><g class="shape" ><rect x="40.000000" y="169.000000" width="432.000000" height="222.000000" fill="yellow" class=" stroke-B1" style="stroke-width:2;" /></g><text x="256.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">RealTruth TSP</text></g><g id="eIDAS.DE_TL.Other TSPs"><g class="shape" ><rect x="492.000000" y="169.000000" width="366.000000" height="222.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="675.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">Other TSPs</text></g><g id="eIDAS.SP_TL.TSP1"><g class="shape" ><rect x="1134.000000" y="169.000000" width="366.000000" height="222.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="1317.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP1</text></g><g id="eIDAS.SP_TL.TSP2"><g class="shape" ><rect x="1520.000000" y="169.000000" width="366.000000" height="222.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="1703.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP2</text></g><g id="eIDAS.DE_TL.RealTruth.Seal"><g class="shape" ><ellipse rx="69.500000" ry="69.500000" cx="149.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="149.500000" y="270.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="149.500000" dy="0.000000">Service</tspan><tspan x="149.500000" dy="17.666667">Certificate</tspan><tspan x="149.500000" dy="17.666667">for seal</tspan></text></g><g id="eIDAS.DE_TL.RealTruth.Sign"><g class="shape" ><ellipse rx="76.500000" ry="76.500000" cx="355.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="355.500000" y="270.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="355.500000" dy="0.000000">Service</tspan><tspan x="355.500000" dy="17.666667">certificate</tspan><tspan x="355.500000" dy="17.666667">for signature</tspan></text></g><g id="eIDAS.DE_TL.Other TSPs.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="588.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="588.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="588.500000" dy="0.000000">Cert</tspan><tspan x="588.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.DE_TL.Other TSPs.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="761.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="761.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="761.500000" dy="0.000000">Cert</tspan><tspan x="761.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.SP_TL.TSP1.S1"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1230.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1230.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1230.500000" dy="0.000000">Cert</tspan><tspan x="1230.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.SP_TL.TSP1.S2"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1403.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1403.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1403.500000" dy="0.000000">Cert</tspan><tspan x="1403.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.SP_TL.TSP2.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1616.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1616.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1616.500000" dy="0.000000">Cert</tspan><tspan x="1616.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.SP_TL.TSP2.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1789.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1789.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1789.500000" dy="0.000000">Cert</tspan><tspan x="1789.500000" dy="18.500000">for Seal</tspan></text></g><g id="(eIDAS.DE_TL.RealTruth.Seal -&gt; GoodAir)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 149.671202 351.972788 C 149.600000 352.400000 149.500000 363.000000 149.500000 378.000000 C 149.500000 393.000000 149.500000 413.000000 149.500000 428.000000 C 149.500000 443.000000 149.500000 533.900000 149.500000 611.500000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3300851763)" /><text x="150.000000" y="488.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Issue Cert for Seals</text></g><g id="(eIDAS.DE_TL.RealTruth.Sign -&gt; GoodAir.COO)[0]"><path d="M 355.751931 355.015444 C 355.600000 353.800000 355.500000 363.000000 355.500000 378.000000 C 355.500000 393.000000 355.500000 413.000000 355.500000 428.000000 C 355.500000 443.000000 355.500000 465.100000 355.500000 483.250000 C 355.500000 501.400000 342.500000 588.500000 293.170180 643.521722" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3300851763)" /><text x="354.000000" y="514.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Issue Cert for Signatures</text></g><g id="GoodAir.(COO -&gt; Employee)[0]"><path d="M 252.500000 712.500000 C 252.500000 758.900000 252.500000 783.200000 252.500000 828.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3300851763)" /><text x="252.500000" y="777.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">LEARCredential</text></g><mask id="d2-3300851763" maskUnits="userSpaceOnUse" x="-101" y="-100" width="2128" height="1128">
+<rect x="-101" y="-100" width="2128" height="1128" fill="white"></rect>
+<rect x="88.000000" y="472.000000" width="124" height="21" fill="black"></rect>
+<rect x="274.000000" y="498.000000" width="160" height="21" fill="black"></rect>
+<rect x="202.000000" y="761.000000" width="101" height="21" fill="black"></rect>
 </mask></svg></svg>
 
     <section><h2>SmartCityDS: an instance of a Data Space for Smart Cities</h2>
@@ -430,8 +337,8 @@ c=ES
         <p>The above set of fields bind the legal identity of the COO with the identity of the business:
         </p>
         <ul>
-            <li id='list_188.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
-            <li id='list_188.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
+            <li id='list_197.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
+            <li id='list_197.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
         </ul>
 
         <p>Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
@@ -441,7 +348,7 @@ c=ES
 
     <section><h2>RealTruth: a TSP (Trust Service Provider)</h2>
 
-        <p>RealTruth is an EU TSP,  which appears in the TL (Trusted List) maintained by the German Government (<https://tl.bundesnetzagentur.de/TL-DE.XML>).
+        <p>RealTruth is an EU TSP, which appears in the TL (Trusted List) maintained by the <a href="https://tl.bundesnetzagentur.de/TL-DE.XML">German Government</a>.
         </p>
         <p>RealTruth is a TSP based in Germany but operates in most of the countries of the EU and so being able to provide Trust Services across many countries, including Spain.
         </p>
@@ -471,14 +378,146 @@ C = DE</code></pre>
             <p>The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
             </p>
             <ul>
-                <li id='list_224.1'>The data concerning the business name or corporate name of the organisation.                </li>
-                <li id='list_224.2'>The data relating to the constitution and legal status of the subscriber.                </li>
-                <li id='list_224.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
-                <li id='list_224.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
+                <li id='list_233.1'>The data concerning the business name or corporate name of the organisation.                </li>
+                <li id='list_233.2'>The data relating to the constitution and legal status of the subscriber.                </li>
+                <li id='list_233.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
+                <li id='list_233.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
             </ul>
 
         </blockquote>
 
+        <p>The TSP (RealTruth in this case) performs the verifications against `Authentic Sources`.
+        </p>
+
+        <blockquote>
+            <p>Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
+            </p>
+            <p>The Authentic Sources in scope of Annex VI of the [eIDAS2] legislative proposal are sources for attributes on address, age, gender, civil status, family composition, nationality, education and training qualifications titles and licences, professional qualifications titles and licences, public permits and licences, financial and company data.
+            </p>
+            <p>Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
+            </p>
+            <p>Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
+            </p>
+        </blockquote>
+
+<!-- Original D2 diagram definition
+    shape: sequence_diagram
+    COO: COO of GoodAir { shape: person }
+    TSP: Trust\nService\nProvider
+    registry: Authentic\nSources { shape: cylinder }
+    COO -> TSP: Request a\ncertificate for signatures
+    Verification {
+        TSP."Data about the legal status of the company and powers of representation of the applicant"
+        TSP <-> registry: Verify trusted data
+    }
+    TSP -> COO: Provide certificate for signature
+ -->
+
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1037 816"><svg id="d2-svg" class="d2-1640409044" width="1037" height="816" viewBox="-89 -49 1037 816"><rect x="-89.000000" y="-49.000000" width="1037.000000" height="816.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-1640409044 .text {
+	font-family: "d2-1640409044-font-regular";
+}
+@font-face {
+	font-family: d2-1640409044-font-regular;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-1640409044 .text-italic {
+	font-family: "d2-1640409044-font-italic";
+}
+@font-face {
+	font-family: d2-1640409044-font-italic;
+	src: url("data:application/font-woff;base64,d09GRgABAAAAAA7oAAoAAAAAF5QAARhRAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAAA9AAAAGAAAABgW1SVeGNtYXAAAAFUAAAAkwAAALgDbgM/Z2x5ZgAAAegAAAhdAAAMJBHy5nZoZWFkAAAKSAAAADYAAAA2G7Ur2mhoZWEAAAqAAAAAJAAAACQLeAjIaG10eAAACqQAAACQAAAAkEJ3BMhsb2NhAAALNAAAAEoAAABKOTg2Vm1heHAAAAuAAAAAIAAAACAAPAD2bmFtZQAAC6AAAAMmAAAIMgntVzNwb3N0AAAOyAAAACAAAAAg/8YAMgADAeEBkAAFAAACigJY//EASwKKAlgARAFeADIBIwAAAgsFAwMEAwkCBCAAAHcAAAADAAAAAAAAAABBREJPAAEAIP//Au7/BgAAA9gBESAAAZMAAAAAAeYClAAAACAAA3icbMw7TsIAHIDxX22tr6r1Vd9aj2I06agxprujCTvhENwDwgxsBI7CSf6Eznzjb/iQSCUoZIaolFK52rtPjW+/Wv/6BhF0/qHx5UfrT2/rsY5VLGMR85jFNCYxjlF33VViTyqzL3fg0JFjJwqnzpwrXbh05dqNyq079x48evLsxavaGxsAAAD//wEAAP//+YoemwB4nHxWbWwbdxl//v+73DWJ82KfX2IntmP/z2fH8Uvis31xHNtJnBcntpvmxVlo3pqu6drRdWFd1o626lqkMSY6UqkCgSoVCYE29Vu7fdiXTgIkIkYQSAUNAR9YRzq1SBtRNI2JnNGdU8cJgi+nkyU/z+/3e37P7zmoAh4An8U3gYJqaAAdGABEzkFRoiQREyW63YRlJTfHsfw1tH7tR3T66N89P/6Xz04PX30n+49jd/DNnTPotfkrV+TZN5aXn3nyRPaiPz4BAMDFDwHQH/AaVIMWgGNFtyC4CcMgJHLETdiH3b+ooWto2iLKv0EnjubGdZ+eRq+urISf74o9J4/jtZ2VjQ0ABLHiNvbjW2AHqHIKQiScxGLIaGIFgTjrsUFvNIqhqGRiGOTMnop2HL2c6xpvinJRoXuxn3eOxj3pVsLPa9IXDudvnh+WvG2t7sSJCz3x+Uhrc8juV7ACAcBRFSunKCCGjAY9wxC3GIpGI2GBEPKtb37neuH2i9PThUvp556N4rVvv3r+3eXeqe8vzZ9W+JZwxvEtcKo4/wdMiUgixTDI98rljtmr4/Fxs8RJnuTxQZ7kUnyMc71R99sYv6C5ceHwzfNDZbDdC9Gmxvd65U9sLhVvT3EbL+Bb0Aitld2MBn09doeSWMFc6orsZ1cD06tDo8vhwPTL6cgzSefoYeU5ovnBpeza6uDAxcnsjdXBdM/x1djSavz4avexV8qa+PEa1IK+UhNCcWLoqSjvz700enXqdLhvcfn5XGYZr41OH3muU/4SDR8Zi4lQruPGa1AHxr06LEeofZXenfvG2clzk2dekgaeXTiRzRzDa0OTs2e18kNklB+jwsRQNFjSWVPcRjK+BV4Ak1NwS6qwkbDgdivmiEbLqjOMQW80mYwq7kfpFU/MWpB6xv2unDcemYvHj9lF81DAFbF28rlgOH5S093d3h4a6OJDxoBlRApNhMKegK3N3tEsBI3+lmGpezYMCOYBcASvAauwIZKDJdTPVu/XoQ/rPljF+XR6514J5wQA7lN5g0iJnNFoEqNRiRPR9fhYc9UhijZHLO9Nye/gNflm5IVo5MUwOrOzUtLMXdxGX6It0CvqmfbcJEoiRSTCMG7FS2Vr3evN+UYXRHdCS3PJpdQhmszohDHeZwi18OmIvVMzWxh6dU70OBKyJeMK9gaCfxKc3pH5UCpR6mcvbqPP8ToYlERQVCUs4USWFVU597mKYVmj8bE7oaX0qbfybiPmp/xq+wifjtg62pzjJKAXNR5HAq/fP2ZtPzqttO71jsyLyYTX9UhwAgJXcRvdRVvQso/d3tR2N/qjsRO+/FLE12P0c4K1Yzoa626NGp2WvObk/MC5QtBp7jAZBlbS/UMWbUjvKmuH3RVc9rT7/+J166hGIb+2q95h10H13K2L93e6DsqHVS4foC2wgKuyn+pyB1NOJ0pUo0Rh+Mn0aX92rkPqs2mq5F9Wt6a91pjJZh3/YRFTujYSWdA8vzS4MuELHAm1iPWpIy6zVjTYkau2qa6l014ABO0A6Dp+ACbVgylc6XqWFVlCtRdStX2NDYcTFq+uuaZZ62g7pD2uebaA3o5VjY9O1tVKbE2ofTIpzyiaoSKPttAW2CFQuVWSxDBkv/sYhtqn3p3OacK3DHqSo/VmYSqYONI+MtcpJLUUlzrJnYuRcWe7sbOF9Im24F8Ea8TkzPWeEnzThfTLXwspfqQWTyJHu/d3grNtaKYjHi/tjh0AfYTXwawmxp4PWYpwiowKTcr+Vr6jkW6b8CUjh5K5HprOtGQCg3j9SYIE+7rsvPxr5NM31WW9AfntYlGpCV/hu1hQEhoYIJlSL19xG77C66BTmEfCEqeQNOh3x/ZCH3MxfxkhLcWwqMaoSWnN+Os7N9hqSodwnKbLePFjtKVkkoK3BNe0C5rZh7qSwFKKpYVJobuzKjjjSkRpOplP0PSwIeMbVPgMGTPtg2hzhO+UPD6xr0tr01dy2nvb0wxtQVMlhoOSKR3bJgL7FFM7HBRsL4f+jLagAayV3i4FQuk0lhb2wdiCb3QhNLboyy54/eNiNKQ8NKdmB88VAqVnb//KQP9wemWgf0j9PviiKKLP0VZpT9kKxPWYqAnEcvsyp+bNFEO5CgF1XUNCD4d19p9WZs4Gvtdr9+8uq/3UbYR2Q0f41OV4ykdUc1XtWSUpYXDA3/vdjRwOG3bNBCrz9c3bleGwcfu8ECzH604eof3hWprLJbQFjRVzMbHC03nU0tac32xobrTwOXsCbc77EtUDh1JxeQNQ8d/FbXQZbYH74K07eOqUS1c6dD/pnDd3mHoFb6KtKxDzjfgCoy0BTnQIndHWZLhjQhP2CHZPgFjcdkuyrb3Pxds8eovfbhN0zh6ff8ClYO4pbqMZfKacz1FJSRlRTZaKfH6/N0yj2HBtju9rvqi5HKNanPWWWm1jUJPyN1jqkC5W9frrSfmxTmez1VRJbINSu6u4jT5Dm8puP629t3HcbkTfKW9DxjrsG8wpR80zpemXtHYOReUHnFmxKZqRLaNELO1gHAD9DW3+9729NpzjaYamtTz3vby8gzblRyRL+BEemWVL6b9DAPhXaBMcB/6790YRqvT9ylKnSa4RIUQ3NDe+ltVijOh6S+OVzF8X69VfrQ2voE35Y+eA0zngRLaKNwuqIRmezxD5C0DFnxeD6CHaBAsAq85WDdx9yOsxU9Nab9bpXH1m3WROUL4atC7dd3Pyx+Z45vcsG6tOhAh6JH/myBOScyLtzj+DeV85k2ADbQKl+o6yL+WPo02VMIJhnIW7+C7UAnDqDEpBdYGzEZPeSnDWZDQ7mozm1v8AAAD//wEAAP//R7J+nAAAAAABAAAAARhRapWVSV8PPPUAAQPoAAAAANhdoMwAAAAA3WYvN/69/t0IHQPJAAIAAwACAAAAAAAAAAEAAAPY/u8AAAhA/r39vAgdA+gAwv/RAAAAAAAAAAAAAAAkAnQAJADIAAAB/v/LAiYAOQJQACMCTAA5AnkAPAImACMCKwAjAfoADAH+AF0B8ABSAhkAJwIYAB8BswAlAhcAJwHhACUBGgArAhMAAQILAB8A7QAfAPgALAMfAB8CDQAfAgMAJwIX//YCGQAnAVYAHwGS//wBRQA8AhAAOAHAADsCwwBGAcD/wgDtAB8AAABHAAAALgAuAFIAhACmANwBDgEyAVoBmgGuAcwCBAI8AmoCogLcAwQDTAN2A4IDpAPmBBAEPgR4BLIE0AUMBToFZgWEBb4F7gX8BhIAAAABAAAAJACMAAwAZgAHAAEAAAAAAAAAAAAAAAAABAADeJyclNtOG1cUhj8H2216uqhQRG7QvkylZEyjECXhypSgjIpw6nF6kKpKgz0+iPHMyDOYkifodd+ib5GrPkafoup1tX8vgx1FQSAE/Hv2OvxrrX9tYJP/2KBWvwv83ZwbrrHd/NnwHb5oHhneYL/5meE6Dxv/GG4waLw13ORBo2v4E97V/zT8KU/qvxm+y1b90PDnPK5vGv5yw/Gv4a94wrsFrsEz/jBcY4vC8B02+dXwBvewmLU699gx3OBrtg032QZ6TKhImZAxwjFkwogzZiSURCTMmDAkYYAjpE1Kpa8ZsZBj9MGvMREVM2JFHFPhSIlIiSkZW8S38sp5rYxDnWZ216ZiTMyJPE6JyXDkjMjJSDhVnIqKghe0aFHSF9+CipKAkgkpATkzRrTocMgRPcZMKHEcKpJnFpEzpOKcWPmdWfjO9EnIKI3VGRkD8XTil8g75AhHh0K2q5GP1iI8xPGjvD23XLbfEujXrTBbz7tkEzNXP1N1JdXNuSY41q3P2+YH4YoXuFv1Z53J9T0a6H+lyCecaf4DTSoTkwzntmgTSUGRu49jX+eQSB35iZAer+jwhp7Obbp0aXNMj5CX8u3QxfEdHY45kEcovLg7lGKO+QXH94Sy8bET689iYgm/U5i6S3GcqY4phXrumQeqNVGFN5+w36F8TR2lfPraI2/pNL9MexYzMlUUYjhVL5faKK1/A1PEVLX42V7d+22Y2+4tt/iCXDvs1brg5Ce3YHTdVIP3NHOun4CYATknsuiTM6VFxYV4vybmjBTHgbr3SltS0b708XkupJKEqRiEZIozo9Df2HQTGff+mu6dvSUD+Xump5dV3SaLU6+uZvRG3VveRdblZGUCLZtqvqKmvrhmpv1EO7XKP5Jvqdct5xGh4i52+0OvwA7P2WWPsbL0dTO/vPOvhLfYUwdOSWQ1lKZ9DY8J2CXgKbvs8pyn7/VyycYZH7fGZzV/mwP26bB3bTUL2w77vFyL9vHMf4ntjupxPLo8Pbv1NB/cQLXfaN+u3s2uJuenMbdoV9txTMzUc3FbqzW5+wT/AwAA//8BAAD//3KhUUAAAAADAAD/9QAA/84AMgAAAAAAAAAAAAAAAAAAAAAAAAAA");
+}]]></style><style type="text/css"><![CDATA[.shape {
+  shape-rendering: geometricPrecision;
+  stroke-linejoin: round;
+}
+.connection {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.blend {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+		.d2-1640409044 .fill-N1{fill:#0A0F25;}
+		.d2-1640409044 .fill-N2{fill:#676C7E;}
+		.d2-1640409044 .fill-N3{fill:#9499AB;}
+		.d2-1640409044 .fill-N4{fill:#CFD2DD;}
+		.d2-1640409044 .fill-N5{fill:#DEE1EB;}
+		.d2-1640409044 .fill-N6{fill:#EEF1F8;}
+		.d2-1640409044 .fill-N7{fill:#FFFFFF;}
+		.d2-1640409044 .fill-B1{fill:#0D32B2;}
+		.d2-1640409044 .fill-B2{fill:#0D32B2;}
+		.d2-1640409044 .fill-B3{fill:#E3E9FD;}
+		.d2-1640409044 .fill-B4{fill:#E3E9FD;}
+		.d2-1640409044 .fill-B5{fill:#EDF0FD;}
+		.d2-1640409044 .fill-B6{fill:#F7F8FE;}
+		.d2-1640409044 .fill-AA2{fill:#4A6FF3;}
+		.d2-1640409044 .fill-AA4{fill:#EDF0FD;}
+		.d2-1640409044 .fill-AA5{fill:#F7F8FE;}
+		.d2-1640409044 .fill-AB4{fill:#EDF0FD;}
+		.d2-1640409044 .fill-AB5{fill:#F7F8FE;}
+		.d2-1640409044 .stroke-N1{stroke:#0A0F25;}
+		.d2-1640409044 .stroke-N2{stroke:#676C7E;}
+		.d2-1640409044 .stroke-N3{stroke:#9499AB;}
+		.d2-1640409044 .stroke-N4{stroke:#CFD2DD;}
+		.d2-1640409044 .stroke-N5{stroke:#DEE1EB;}
+		.d2-1640409044 .stroke-N6{stroke:#EEF1F8;}
+		.d2-1640409044 .stroke-N7{stroke:#FFFFFF;}
+		.d2-1640409044 .stroke-B1{stroke:#0D32B2;}
+		.d2-1640409044 .stroke-B2{stroke:#0D32B2;}
+		.d2-1640409044 .stroke-B3{stroke:#E3E9FD;}
+		.d2-1640409044 .stroke-B4{stroke:#E3E9FD;}
+		.d2-1640409044 .stroke-B5{stroke:#EDF0FD;}
+		.d2-1640409044 .stroke-B6{stroke:#F7F8FE;}
+		.d2-1640409044 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-1640409044 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-1640409044 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-1640409044 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-1640409044 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-1640409044 .background-color-N1{background-color:#0A0F25;}
+		.d2-1640409044 .background-color-N2{background-color:#676C7E;}
+		.d2-1640409044 .background-color-N3{background-color:#9499AB;}
+		.d2-1640409044 .background-color-N4{background-color:#CFD2DD;}
+		.d2-1640409044 .background-color-N5{background-color:#DEE1EB;}
+		.d2-1640409044 .background-color-N6{background-color:#EEF1F8;}
+		.d2-1640409044 .background-color-N7{background-color:#FFFFFF;}
+		.d2-1640409044 .background-color-B1{background-color:#0D32B2;}
+		.d2-1640409044 .background-color-B2{background-color:#0D32B2;}
+		.d2-1640409044 .background-color-B3{background-color:#E3E9FD;}
+		.d2-1640409044 .background-color-B4{background-color:#E3E9FD;}
+		.d2-1640409044 .background-color-B5{background-color:#EDF0FD;}
+		.d2-1640409044 .background-color-B6{background-color:#F7F8FE;}
+		.d2-1640409044 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-1640409044 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-1640409044 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-1640409044 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-1640409044 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-1640409044 .color-N1{color:#0A0F25;}
+		.d2-1640409044 .color-N2{color:#676C7E;}
+		.d2-1640409044 .color-N3{color:#9499AB;}
+		.d2-1640409044 .color-N4{color:#CFD2DD;}
+		.d2-1640409044 .color-N5{color:#DEE1EB;}
+		.d2-1640409044 .color-N6{color:#EEF1F8;}
+		.d2-1640409044 .color-N7{color:#FFFFFF;}
+		.d2-1640409044 .color-B1{color:#0D32B2;}
+		.d2-1640409044 .color-B2{color:#0D32B2;}
+		.d2-1640409044 .color-B3{color:#E3E9FD;}
+		.d2-1640409044 .color-B4{color:#E3E9FD;}
+		.d2-1640409044 .color-B5{color:#EDF0FD;}
+		.d2-1640409044 .color-B6{color:#F7F8FE;}
+		.d2-1640409044 .color-AA2{color:#4A6FF3;}
+		.d2-1640409044 .color-AA4{color:#EDF0FD;}
+		.d2-1640409044 .color-AA5{color:#F7F8FE;}
+		.d2-1640409044 .color-AB4{color:#EDF0FD;}
+		.d2-1640409044 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="COO"><g class="shape" ><path d="M 132 165 H 12 V 164 C 12 150 25 138 46 132 C 34 127 28 120 28 111 C 28 97 47 85 72 85 C 96 85 116 97 116 111 C 116 119 109 127 98 132 C 119 138 132 150 132 164 V 165 H 132 Z" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="72.000000" y="186.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">COO of GoodAir</text></g><g id="TSP"><g class="shape" ><rect x="381.000000" y="88.000000" width="103.000000" height="98.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="432.500000" y="126.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="432.500000" dy="0.000000">Trust</tspan><tspan x="432.500000" dy="17.666667">Service</tspan><tspan x="432.500000" dy="17.666667">Provider</tspan></text></g><g id="registry"><g class="shape" ><path d="M 737 76 C 737 52 787 52 792 52 C 798 52 847 52 847 76 V 162 C 847 186 798 186 792 186 C 787 186 737 186 737 162 V 76 Z" class=" stroke-B1 fill-B5" style="stroke-width:2;" /><path d="M 737 76 C 737 100 787 100 792 100 C 798 100 847 100 847 76" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="792.000000" y="128.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="792.000000" dy="0.000000">Authentic</tspan><tspan x="792.000000" dy="18.500000">Sources</tspan></text></g><g id="(COO -- )[0]"><path d="M 72.000000 193.000000 L 72.000000 665.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1640409044)" /></g><g id="(TSP -- )[0]"><path d="M 432.500000 188.000000 L 432.500000 665.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1640409044)" /></g><g id="(registry -- )[0]"><path d="M 792.000000 188.000000 L 792.000000 665.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1640409044)" /></g><g id="Verification"><g class="shape blend" ><rect x="72.000000" y="325.000000" width="759.000000" height="202.000000" class=" stroke-B1 fill-N5" style="stroke-width:0;" /></g><rect x="77.000000" y="330.000000" width="76.000000" height="21.000000" class=" fill-N5" /><text x="115.000000" y="346.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Verification</text></g><g id="(COO -&gt; TSP)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 74.000000 263.000000 L 428.500000 263.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1640409044)" /><text x="252.500000" y="261.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px"><tspan x="252.500000" dy="0.000000">Request a</tspan><tspan x="252.500000" dy="18.500000">certificate for signatures</tspan></text></g><g id="(TSP &lt;-&gt; registry)[0]"><marker id="mk-2451250203" markerWidth="10.000000" markerHeight="12.000000" refX="3.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="10.000000,0.000000 0.000000,6.000000 10.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 436.500000 512.000000 L 788.000000 512.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-start="url(#mk-2451250203)" marker-end="url(#mk-3488378134)" mask="url(#d2-1640409044)" /><text x="612.500000" y="518.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Verify trusted data</text></g><g id="(TSP -&gt; COO)[0]"><path d="M 430.500000 589.000000 L 76.000000 589.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-1640409044)" /><text x="252.500000" y="595.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Provide certificate for signature</text></g><g id="TSP.Data about the legal status of the company and powers of representation of the applicant"><g class="shape" ><path d="M 113 369 H 731 C 732 369 733 369 734 370 L 751 386 C 752 387 752 388 752 389 V 435 C 752 435 752 435 752 435 H 113 C 112 435 112 435 112 435 V 370 C 112 369 112 369 113 369 Z" class=" stroke-B1 fill-N7" style="stroke-width:2;" /><path d="M 751 435 H 113 C 112 435 112 435 112 434 V 370 C 112 369 112 369 113 369 H 730 C 731 369 731 369 731 370 V 387 C 731 388 732 389 733 389 H 751 C 752 389 752 389 752 390 V 434 C 751 435 752 435 751 435 Z" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="432.000000" y="407.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Data about the legal status of the company and powers of representation of the applicant</text></g><mask id="d2-1640409044" maskUnits="userSpaceOnUse" x="-89" y="-49" width="1037" height="816">
+<rect x="-89" y="-49" width="1037" height="816" fill="white"></rect>
+<rect x="77.000000" y="330.000000" width="76" height="16" fill="black"></rect>
+<rect x="172.000000" y="245.000000" width="161" height="37" fill="black"></rect>
+<rect x="552.000000" y="502.000000" width="121" height="21" fill="black"></rect>
+<rect x="149.000000" y="579.000000" width="207" height="21" fill="black"></rect>
+</mask></svg></svg>
         <p>In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
         </p>
     </section>
@@ -735,8 +774,8 @@ C = DE</code></pre>
         <p>In this profile we assume that the Issuer is composed of two components:
         </p>
         <ul>
-            <li id='list_446.1'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
-            <li id='list_446.2'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
+            <li id='list_484.1'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
+            <li id='list_484.2'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
         </ul>
 
         <p>The Issuer backend and the Authorization server could be implemented as a single component in a real use case, but we assume here that they are separated to make the profile more general, especially for big entities and also when using Trust Service Providers for cloud signature and credential issuance, for example.
@@ -799,8 +838,8 @@ C = DE</code></pre>
             <p>This profile restricts the options available in section 4.1.1 of [[OIDCVCI]]. The profile defines a Credential Offer object containing the following parameters:
             </p>
             <ul>
-                <li id='list_493.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
-                <li id='list_493.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                <div>
+                <li id='list_531.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
+                <li id='list_531.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                <div>
 
                     <aside class='note' title='LEARCredential'>
                         <p>The only credential being offered in our case is the LEARCredential, so this is the credential schema that should be specified here. The LEARCredential is a credential known globally to the SmartCityDS ecosystem, so its schema should be published and be available in the Trusted Credential Schemas List.
@@ -809,7 +848,7 @@ C = DE</code></pre>
 
                 </div>
                 </li>
-                <li id='list_493.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                <div>
+                <li id='list_531.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                <div>
                     <p>In other scenarios like when the wallet is a native mobile application and the user interacts with the Issuer exclusively with the mobile (without the laptop), then the Authorization Code Flow has to be used. This can be described in detail in a different profile.
                     </p>
                 </div>
@@ -819,8 +858,8 @@ C = DE</code></pre>
             <p>The grant object contains the following values:
             </p>
             <ul>
-                <li id='list_507.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
-                <li id='list_507.2'><code>user_pin_required</code>: REQUIRED. The OIDCVCI standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
+                <li id='list_545.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
+                <li id='list_545.2'><code>user_pin_required</code>: REQUIRED. The OIDCVCI standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
             </ul>
 
             <p>The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("LEARCredential"):
@@ -891,9 +930,9 @@ credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</
             <p>The object contained in <code>openid-credential-issuer</code> contains the following:
             </p>
             <ul>
-                <li id='list_567.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
-                <li id='list_567.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
-                <li id='list_567.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
+                <li id='list_605.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
+                <li id='list_605.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
+                <li id='list_605.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
             </ul>
 
             <p>TODO: define a global directory of credentials supported to eliminate requirement for each individual Issuer to publish its own list.
@@ -901,9 +940,9 @@ credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</
             <p>This profile does not make use of the following parameters:
             </p>
             <ul>
-                <li id='list_578.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
-                <li id='list_578.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
-                <li id='list_578.3'><code>display</code> parameter.                </li>
+                <li id='list_616.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
+                <li id='list_616.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
+                <li id='list_616.3'><code>display</code> parameter.                </li>
             </ul>
 
         </section>
@@ -916,7 +955,7 @@ credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</
         <p>This specification also defines a new OAuth 2.0 Authorization Server metadata [[RFC8414]] parameter to publish whether the AS that the Credential Issuer relies on for authorization, supports anonymous Token Requests with the Pre-authorized Grant Type. It is defined as follows:
         </p>
         <ul>
-            <li id='list_590.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
+            <li id='list_628.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
         </ul>
 
     </section>
@@ -944,8 +983,8 @@ credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</
             <p>The following are the extension parameters to the Token Request used in a Pre-Authorized Code Flow as used in this profile:
             </p>
             <ul>
-                <li id='list_609.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
-                <li id='list_609.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
+                <li id='list_647.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
+                <li id='list_647.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
             </ul>
 
             <p>In this profile the Wallet does not have to authenticate when using the Token Endpoint, because we are using the Pre-Authorized Code Grant Type, given the level of trust between the Issuer and the End User and that authentication was already performed at the beginning of the flow.
@@ -971,8 +1010,8 @@ grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code
             <p>In addition to the response parameters defined in [[RFC6749]], the Authorization Server returns the following parameters:
             </p>
             <ul>
-                <li id='list_634.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
-                <li id='list_634.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+                <li id='list_672.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_672.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
             </ul>
 
             <p>Below is a non-normative example of a Token Response:
@@ -1037,8 +1076,8 @@ Cache-Control: no-store
             <p>The Wallet backend makes a Credential Request to the Credential Endpoint by sending the following parameters in the entity-body of an HTTP POST request using the `application/json` media type.
             </p>
             <ul>
-                <li id='list_686.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
-                <li id='list_686.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
+                <li id='list_724.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_724.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
             </ul>
 
             <p>The proof element MUST incorporate a c_nonce value generated by the Credential Issuer and the Credential Issuer Identifier (audience) to allow the Credential Issuer to detect replay. The way that data is incorporated depends on the proof type. In a JWT, for example, the c_nonce is conveyd in the nonce claims whereas the audience is conveyed in the aud claim. In a Linked Data proof, for example, the c_nonce is included as the challenge element in the proof object and the Credential Issuer (the intended audience) is included as the domain element.
@@ -1051,20 +1090,20 @@ Cache-Control: no-store
                 <p><code>jwt</code>: objects of this type contain a single jwt element with a JWS [RFC7515] as proof of possession. The JWT MUST contain the following elements:
                 </p>
                     <ul>
-                        <li id='list_699.1'>in the JOSE Header,                        <div>
+                        <li id='list_737.1'>in the JOSE Header,                        <div>
                             <ul>
-                                <li id='list_702.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].                                </li>
-                                <li id='list_702.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
-                                <li id='list_702.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
+                                <li id='list_740.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].                                </li>
+                                <li id='list_740.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
+                                <li id='list_740.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
                             </ul>
 
                         </div>
                         </li>
-                        <li id='list_699.2'>in the JWT body,                        <div>
+                        <li id='list_737.2'>in the JWT body,                        <div>
                             <ul>
-                                <li id='list_711.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
-                                <li id='list_711.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].                                </li>
-                                <li id='list_711.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
+                                <li id='list_749.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
+                                <li id='list_749.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].                                </li>
+                                <li id='list_749.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
                             </ul>
 
                         </div>
@@ -1109,10 +1148,10 @@ Cache-Control: no-store
             <p>The following claims are used in the Credential Response:
             </p>
             <ul>
-                <li id='list_750.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
-                <li id='list_750.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
-                <li id='list_750.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
-                <li id='list_750.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+                <li id='list_788.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_788.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
+                <li id='list_788.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_788.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
             </ul>
 
             <p>Below is a non-normative example of a Credential Response:
