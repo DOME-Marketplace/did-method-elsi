@@ -160,13 +160,13 @@ localBiblio:
         GoodAir.COO -> GoodAir.Employee: LEARCredential
 
 
-    <section>SmartCityDS: an instance of a Data Space for Smart Cities
+    <section>DOME: an instance of a Data Space for Smart Cities
 
-        SmartCityDS is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also acta as data and service providers for other entities in the Data Space.
+        DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
 
-        The SmartCityDS Data Space has an onboarding service that allows external entities to perform onboarding in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by SmartCityDS is composed from a series of Trust Frameworks, some managed internally using a governance model of SmartCityDS and some others managed externally but by trusted entities. At the root of the Trust Framework of SmartCityDS is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
+        The DOME Data Space has an onboarding service that allows external entities to perform onboarding in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
 
-        In order to participate in SmartCityDS, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both).
+        In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both).
 
     <section #participant>GoodAir: the company that wants will perform the onboarding process
 
@@ -272,7 +272,7 @@ localBiblio:
 
         This is an employee of the central administration department of GoodAir, who is going to be formally nominated to manage the onboarding process of GoodAir in the Data Space and some other operations in the Data Space once GoodAir is onboarded.. In particular, this employee is going to be nominated as a LEAR (Legal Entity Appointed Representative).
 
-        As it name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decisions. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating on him the capabilities to perform onboarding in the SmartCityDS and some other associated tasks. That means that John Doe will not be empowered to perform other actions like onboarding on other Data Spaces or signing contracts or invoices on behalf of GoodAir.
+        As its name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decision. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating to him the capabilities to perform onboarding in the DOME and some other associated tasks. That means that John Doe will not be empowered to perform other actions like onboarding on other Data Spaces or signing contracts or invoices on behalf of GoodAir.
 
         To perform the nomination, the COO of GoodAir (a legal representative of GoodAir) will issue a special credential to John Doe and will sign the credential with his certificate for signatures as legal representative of GoodAir. The details are described later in this document.
 
@@ -282,7 +282,7 @@ localBiblio:
 
     The credential will be generated with an application that the COO will use as VC Issuer and that allows the employee to receive the credential using his credential wallet, using OIDCVCI to achieve compliance with the EUDI Wallet ARF.
 
-    The application enables the COO to specify the information required to create the LEARCredential, specifying the employee information and the specific type of LEARCredential. In general, there may be different instances of LEARCredentials for different purposes. One employee can have more than one LEARCredential, each having different delegation of powers for different environments.
+    The application enables the COO to specify the information required to create the LEARCredential, specifying the employee information and the specific type of LEARCredential. In general, there may be different instances of LEARCredentials for different purposes. One employee can have more than one LEARCredential, each having a different delegation of powers for different environments.
 
     <section>Claims identifying the employee
 
@@ -534,7 +534,7 @@ localBiblio:
                 - `credentials`: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the `credentials_supported` metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the `credentials_supported` Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.
 
                     <x-note>LEARCredential
-                        The only credential being offered in our case is the LEARCredential, so this is the credential schema that should be specified here. The LEARCredential is a credential known globally to the SmartCityDS ecosystem, so its schema should be published and be available in the Trusted Credential Schemas List.
+                        The only credential being offered in our case is the LEARCredential, so this is the credential schema that should be specified here. The LEARCredential is a credential known globally to the DOME ecosystem, so its schema should be published and be available in the Trusted Credential Schemas List.
 
                 - `grants`: REQUIRED. A JSON object indicating to the Wallet the Grant Type `pre-authorized_code`. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.
 
@@ -830,6 +830,321 @@ localBiblio:
                     "c_nonce": "8YE9hCnyV2",
                     "c_nonce_expires_in": 86400
                 }
+
+<section>Authenticating with the LEARCredential
+
+    <section>The LEARCredential as a VerifiableID
+
+        DOME has an onboarding service that enables automatic self-onboarding of legal entities. In DOME when an entity (a
+        legal person or a natural person acting on behalf of a legal person) wants to perform an action on a protected
+        resource, we use Verifiable Credentials to perform authentication of the entity and then access control based on the
+        content of the Verifiable Credential(s) presented by that entity, and possibly additional authorisation information
+        that the Relying Party considers relevant for controlling access to the protected resource (for example, the
+        contractual status of the resource, time of the day or other context information).
+
+        Not all types of Verifiable Credentials can be used for authentication, so for the purpose of this discussion we use the
+        same taxonomy as <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
+
+        <figure #vc_taxonomy>
+            <img src="images/login_in_DOME/verifiable_data_model.png" alt="" />
+
+            <figcaption>Request and receive Credential.
+
+        The full explanation is in the EBSI site, but for our purposes an example is enough.
+
+        In the case of a Diploma as a Verifiable Credential (a Verifiable Diploma), it is a Verifiable Attestation which indicates that the subject has certain skills or has achieved certain learning outcomes through formal or non-formal learning context. However, as in the case with normal Diplomas in paper of PDF format, this credential can be presented by anyone that holds the credential. In other words, the credential binds the identity of the subject with the claims inside the credential, but does not bind the identity of the holder of the credential with the identity of the subject of the credential, which requires a special mechanism in the issuance process.
+
+        Instead, <b>a `VerifiableID` is a special form of a Verifiable Credential that a natural or legal person can use in an electronic identification process as evidence of whom he/she/it is</b> (comparable with a passport, physical IDcard, driving licence, social security card, member-card…).
+        
+        In general, in an authentication and access control process, the entity willing to perform an action has to present (in a Verifiable Presentation) a VerifiableID and possibly one or more additional Verifiable Attestations. Of course, if the VerifiableID already contains all the information required by the Relying Party, then only one credential is required in the process.
+
+        Most Verifiable Credentials will be issued as Verifiable Attestations, acting as efficient machine-processable and verifiable equivalent to their analog counterparts. Their purpose is to attest some attributes about the subject of the credential and not act as a mechanism for online authentication.
+
+        VerifiableIDs can be of different types and be issued by different entities with different levels of assurance (in eIDAS terminology). They are issued with the purpose of serving as authentication mechanisms in online processes. In the near future, VerifiableIDs of the highest level of assurance (LoA High) will be issued to citizens and businesses by their governments under eIDAS2.
+
+        But <b>any entity can issue VerifiableIDs</b>, though the acceptance by Relying Parties can not be ensured because it is the Relying Party the only one deciding if it trusts on the issuer and its process for generating the VerifiableID.
+        
+        DOME will make use of the future eIDAS2 VerifiableIDs when they are available and when they make sense in the context of DOME. But DOME defines some specific types of VerifiableIDs that are derived from eIDAS certificates for signatures/seals using the regulated standards for signatures, achieving a level of assurance that provides an acceptable level of legal certainty and reduced risk of repudiation.
+        
+        An example is the LEARCredential described in a section above, which has the same level of legal certainty as any document signed with the same certificates (like a contract or an invoice).
+
+        Similarly, a Product provider (like GoodAir) who decides to use the DOME Trust and IAM framework or a compatible one for managing access to associated services by customers of their products will typically define specific types of VerifiableIDs if the standard ones in DOME or the existing and widely accepted ones are not suitable for the provider. In general, if a provider can use an existing and already used VerifiableID then it will facilitate potential customers access to its product because issuers of the VerifiableID do not have to modify or adapt their existing issuing processes.
+
+
+
+
+    <section>The login process
+
+        <section>Starting the Self-Issued OpenID Provider (SIOP) flow
+
+            <x-diagram .d2>
+                shape: sequence_diagram
+
+                user: John\nDoe { shape: person }
+                laptop: John's\nLaptop
+                mobile: Webapp\nin mobile
+
+                portal: DOM\nwebserver
+                verifier: VC Verifier
+
+                user -> laptop: (1) Access DOM portal            
+                laptop -> portal: (1) Access DOM
+                portal -> laptop: (2) HTTP 302 (redirect)
+                laptop -> verifier: (3) Login page
+                verifier -> mobile: (4) Scan QR code
+                mobile -> verifier: (4) /authentication-requests
+
+
+            <ul style="list-style-type: none">
+                -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
+
+                -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+
+                -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
+
+                -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
+
+        <section>Authentication Request
+
+            <x-diagram .d2>
+                shape: sequence_diagram
+
+                user: John\nDoe { shape: person }
+                laptop: John's\nLaptop
+                mobile: Webapp\nin mobile
+
+                portal: DOM\nwebserver
+                verifier: VC Verifier
+
+            <ul style="list-style-type: none">
+    
+            This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request. As a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in https://openid.net/specs/openid-connect-self-issued-v2-1_0.html.
+
+
+        The Authentication Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by Packet Delivery company. The decoded contents of the JWT may be:
+        openid://?
+        response_type=id_token
+        &response_mode=post
+        &client_id=did:elsi:EU.EORI.NLPACKETDEL
+        &redirect_uri=https%3A%2F%2Fidp-pdc.fiware.io%2Fsiop_sessions
+        &scope=openid%20profile
+        &state=af0ifjsldkj
+        &nonce=n-0S6_WzA2Mj
+        &registration=%7B%22subject_syntax_types_supported%22:%5B%22did%22%5D,
+            %22id_token_signing_alg_values_supported%22:%5B%22RS256%22%5D%7
+
+
+
+        The Authentication Request is returned to the customer wallet acting as SIOP. The SIOP flow uses a new response mode post which is used to request the SIOP to deliver the result of the authentication process to a certain endpoint. The parameter response_mode is used to carry this value.
+        This endpoint where the SIOP shall deliver the authentication result is defined in the standard parameter redirect_uri.
+        In this step the customer verifies that the Packet Delivery company is a trusted entity belonging to the ecosystem, by resolving the DID of the Packet Delivery company which is received in the client_id parameter of the Authentication Request. 
+        To resolve a DID, the wallet sends a GET request to the /api/did/v1/identifiers/did:elsi:EU.EORI.NLPACKETDEL endpoint of one of several trusted servers implementing the Universal Resolver functionality. The Universal Resolver includes a blockchain node, and there may be as many as needed. Its mission is to resolve DIDs using the blockchain and return the associated DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the Data Space ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The Universal Resolver server must be operated by a trusted entity for the customer. There may be as many nodes as needed operated by different entities. At least one of those trusted entities has to be configured in the wallet of the user.
+        The wallet receives the DID Document of Packet Delivery company, with trusted information about the company, including the Public Key associated with the Private Key that Packet Delivery company uses to digitally sign tokens. For example:
+        {
+        "payload": {
+            "@context": [
+            "https://www.w3.org/ns/did/v1",
+            "https://w3id.org/security/v1"
+            ],
+            "id": "did:elsi:EU.EORI.NLPACKETDEL",
+            "verificationMethod": [
+            {
+                "id": "did:elsi:EU.EORI.NLPACKETDEL#key-verification",
+                "type": "JwsVerificationKey2020",
+                "controller": "did:elsi:EU.EORI.NLPACKETDEL",
+                "publicKeyJwk": {
+                "kid": "key-verification",
+                "kty": "EC",
+                "crv": "secp256k1",
+                "x": "V8XptJkb5wplYkExcTF4nkyYVp7t5H5d5C4UPqCCM9c",
+                "y": "kn3nSPxIIvd9iaG0N4v14ceuo8E4PcLXhhGeDzCE7VM"
+                }
+            }
+            ],
+            "service": [
+            {
+                "id": "did:elsi:EU.EORI.NLPACKETDEL#info",
+                "type": "EntityCommercialInfo",
+                "serviceEndpoint": "https://packetdelivery.com/info",
+                "name": "Packet Delivery co."
+            },
+            {
+                "id": "did:elsi:EU.EORI.NLPACKETDEL#sms",
+                "type": "SecureMessagingService",
+                "serviceEndpoint": "https://packetdelivery.com/api"
+            }
+            ],
+            "anchors": [
+            {
+                "id": "redt.alastria",
+                "resolution": "UniversalResolver",
+                "domain": "packetdelivery.ala",
+                "ethereumAddress": "0xbcB9b29eeb28f36fd84f1CfF98C3F1887D831d78"
+            }
+            ],
+            "created": "2021-11-14T13:02:37Z",
+            "updated": "2021-11-14T13:02:37Z"
+        }
+        }
+
+
+        The DID Document includes one or more public keys inside the “verificationMethod” array. The keys are identified by the “id” field in each element of the array. The customer wallet uses the kid field that was received in the Authentication Request (in the protected header of the JWT) to select the corresponding Public Key and verify the signature of the JWT. It also verifies that the top-level “id” field in the DID Document ("did:elsi:EU.EORI.NLPACKETDEL") is equal to the client_id parameter of the Authentication Request.
+        The customer wallet creates an Authentication Response to be posted in the redirect_uri specified by Packet Delivery company in step 5. The contents of the Authentication Response are described below. 
+        The SIOP sends the authentication response to the endpoint passed in the redirect_uri authentication request parameter using a HTTP POST request using "application/x-www-form-urlencoded" encoding. The response contains an ID Token and a VP (Verifiable Presentation) token as defined in https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0.html.
+        POST /siop_sessions HTTP/1.1
+        Host: client.example.com
+        Content-Type: application/x-www-form-urlencoded
+
+        id_token=eyJ0 ... NiJ9.eyJ1c ... I6IjIifX0.DeWt4Qu ... ZXso
+        &vp_token=...
+        &state=af0ifjsldkj
+
+
+        The decoded id_token would be:
+        {
+        "iss": "https://self-issued.me/v2",
+        "aud": "did:elsi:EU.EORI.NLPACKETDEL",
+        "iat": 1615910538,
+        "exp": 1615911138,
+        "sub": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+        "auth_time": 1615910535,
+        "nonce": "n-0S6_WzA2Mj"
+        }
+
+
+        The sub claim is did:peer:99ab5bca41bb45b78d242a46f0157b7d which is the DID of the user and that is not registered in any blockchain or centralized repository. It must be the same as the DID included in the VP that was issued by the Happy Pets company when onboarding the customer and which travels in the authentication response.
+        The vp_token includes the Verifiable Presentation, which can be in two formats: jwt_vp (JWT encoded) or ldp_vp (JSON-LD encoded). The following example is using the JWT encoding:
+        {
+            "format":"jwt_vp",
+            "presentation":
+            "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImRpZDpleGFtcGxlOmFiZmUxM2Y3MTIxMjA0
+            MzFjMjc2ZTEyZWNhYiNrZXlzLTEifQ.eyJzdWIiOiJkaWQ6ZXhhbXBsZTplYmZlYjFmNzEyZWJjNmYxY
+            zI3NmUxMmVjMjEiLCJqdGkiOiJodHRwOi8vZXhhbXBsZS5lZHUvY3JlZGVudGlhbHMvMzczMiIsImlzc
+            yI6Imh0dHBzOi8vZXhhbXBsZS5jb20va2V5cy9mb28uandrIiwibmJmIjoxNTQxNDkzNzI0LCJpYXQiO
+            jE1NDE0OTM3MjQsImV4cCI6MTU3MzAyOTcyMywibm9uY2UiOiI2NjAhNjM0NUZTZXIiLCJ2YyI6eyJAY
+            29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIsImh0dHBzOi8vd
+            3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL2V4YW1wbGVzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZ
+            UNyZWRlbnRpYWwiLCJVbml2ZXJzaXR5RGVncmVlQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjd
+            CI6eyJkZWdyZWUiOnsidHlwZSI6IkJhY2hlbG9yRGVncmVlIiwibmFtZSI6IjxzcGFuIGxhbmc9J2ZyL
+            UNBJz5CYWNjYWxhdXLDqWF0IGVuIG11c2lxdWVzIG51bcOpcmlxdWVzPC9zcGFuPiJ9fX19.KLJo5GAy
+            BND3LDTn9H7FQokEsUEi8jKwXhGvoN3JtRa51xrNDgXDb0cq1UTYB-rK4Ft9YVmR1NI_ZOF8oGc_7wAp
+            8PHbF2HaWodQIoOBxxT-4WNqAxft7ET6lkH-4S6Ux3rSGAmczMohEEf8eCeN-jC8WekdPl6zKZQj0YPB
+            1rx6X0-xlFBs7cl6Wt8rfBP_tZ9YgVWrQmUWypSioc0MUyiphmyEbLZagTyPlUyflGlEdqrZAv6eSe6R
+            txJy6M1-lD7a5HTzanYTWBPAUHDZGyGKXdJw-W_x0IWChBzI8t3kpG253fg6V3tPgHeKXE94fz_QpYfg
+            --7kLsyBAfQGbg"
+        }
+
+
+        Which decoded could be:
+
+        {
+        "@context": ["https://www.w3.org/2018/credentials/v1"],
+        "type": ["VerifiablePresentation"],
+        "verifiableCredential": [
+            {
+            "@context": [
+                "https://www.w3.org/2018/credentials/v1",
+                "https://happypets.fiware.io/2022/credentials/employee/v1"
+            ],
+            "id": "https://happypets.fiware.io/credentials/25159389-8dd17b796ac0",
+            "type": ["VerifiableCredential", "CustomerCredential"],
+            "issuer": {
+                "id": "did:elsi:EU.EORI.NLHAPPYPETS"
+            },
+            "issuanceDate": "2022-03-22T14:00:00Z",
+            "validFrom": "2022-03-22T14:00:00Z",
+            "expirationDate": "2023-03-22T14:00:00Z",
+            "credentialSubject": {
+                "id": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+                "verificationMethod": [
+                {
+                    "id": "did:peer:99ab5bca41bb45b78d242a46f0157b7d#key1",
+                    "type": "JwsVerificationKey2020",
+                    "controller": "did:peer:99ab5bca41bb45b78d242a46f0157b7d",
+                    "publicKeyJwk": {
+                    "kid": "key1",
+                    "kty": "EC",
+                    "crv": "P-256",
+                    "x": "lJtvoA5_XptBvcfcrvtGCvXd9bLymmfBSSdNJf5mogo",
+                    "y": "fSc4gZX2R3QKKfHvS3m2vGSVSN8Xc04qsquyfEM55Z0"
+                    }
+                }
+                ],
+                "roles": [
+                {
+                    "target": "did:elsi:EU.EORI.NLPACKETDEL",
+                    "names": ["P.Info.gold"] // Or P.Info.standard
+                }
+                ],
+                "name": "Jane Doe",
+                "given_name": "Jane",
+                "family_name": "Doe",
+                "preferred_username": "j.doe",
+                "email": "janedoe@packetdelivery.com"
+            }
+            }
+        ]
+        }
+
+
+        Packet Delivery company uses its own blockchain node implementing the Universal Resolver functionality to resolve the DID of Happy Pets, which is inside the Verifiable Credential received in the Verifiable Presentation. This DID can be found in the “issuer” field of the “verifiableCredential” structure above.
+        Resolution is performed sending a GET request to the Universal Resolver: /api/did/v1/identifiers/did:elsi:EU.EORI.NLHAPPYPETS
+        Packet Delivery could use a Universal Resolver operated by a different entity, but this would reduce the level of trust compared to using its own server directly connected to the blockchain network.
+        Packet Delivery receives the DID Document of Happy Pets with trusted information about the company, including the Public Key associated to the Private Key that Happy Pets used to digitally sign the Verifiable Credential that the customer has just sent inside a Verifiable Presentation as part of the authentication flow. Using the Public Key and the DID inside the DID Document, it can verify the signature of the Verifiable Credential and that Happy Pets is a trusted entity in the ecosystem.
+        The above is just for verification of the Verifiable Credential. In addition, Packet Delivery company can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the customer and not by a malicious agent. To do so, it uses the Public Key of the customer in the “verificationMethod” of the “credentialSubject” structure. That public key is cryptographically bound to the customer DID during the onboarding process that Happy Pets performed with the customer.
+        Once all verifications have been performed, Packet Delivery company creates an Access Token for the customer so she can use it to access services in Packet Delivery company in the future.
+        The wallet (SIOP) receives a successful reply to the POST request.
+        The Packet Delivery company proxy notifies the Packet Delivery portal that the customer is successfully authenticated, and the portal can display the services available to that customer. The browser of the user receives the Access Token created by Packet Delivery to enable it to request services without going through the previous authentication process. The Access Token is a standard OAuth access token that includes the information that Packet Delivery requires for accessing its services.
+        At this point the Happy Pets customer is logged in on the Packet Delivery company portal/app and is presented with the possible services provided, including the option to change the PTA of its delivery orders.
+        At this moment, the Packet Delivery company knows the following:
+        Happy Pets is a participant in the Data Space and that it is a Trusted Issuer of EmployeeCredentials because this info is in the DID Document retrieved in step 13. Maintenance of this information is performed by the Trusted Anchor entity(or entities) managing the Trusted Participants List and Trusted Issuers List.
+        Happy Pets says that the user is a customer. This info is inside the Verifiable Credential that is digitally signed by Happy Pets. 
+        The category of the customer (and associated policies) with regards to the services offered by Packet Delivery company. This information is also in the Verifiable Credential presented by the customer.
+        The Happy Pets customer is presented with the possible services provided by Packet Delivery, including the option to change the PTA of its delivery orders.
+        Happy Pets customer searches for his packet delivery order and is presented its details. He now requests a change of the PTA of this order on the Packet Delivery company portal/app.
+        Packet Delivery company portal/app sends a request to Packet Delivery company proxy, in order to change the PTA of the delivery order. The request contains the Access Token generated in step 15, with information about the authorisation registry to retrieve policies from.
+
+        > Authorization: Bearer IIeD...NIQ   // Bearer JWT
+        > Content-Type: application/json
+
+        PATCH https://umbrella.fiware.io/ngsi-ld/v1/entities/urn:ngsi-ld:DELIVERYORDER:001/attrs/pta
+
+        > Payload
+        {
+        "value": "<new PTA>",
+        "type": "Property"
+        }
+
+        Decoded Bearer JWT payload:
+        {
+        "iss": "EU.EORI.NLHAPPYPETS",  // Issuer: Happy Pets
+        "sub": "419404e1-07ce-4d80-9e8a-eca94vde0003de", // Customer pseudonym
+        "jti": "d8a7fd7465754a4a9117ee28f5b7fb60",
+        "iat": 1591966224,
+        "exp": 1591966254,
+        "aud": "EU.EORI.NLHAPPYPETS",
+        "authorisationRegistry": {  // AR to retrieve policies from
+            "url": "https://ar.packetdelivery.com",
+            "identifier": "EU.EORI.NLHAPPYPETS",
+            "delegation_endpoint": "https://ar.packetdelivery.com/delegation",
+        }
+        }
+
+
+        Packet Delivery company proxy received the request of step 19 for changing the PTA of a delivery order. The Access Token received from the customer ensures that she was assigned the delegation evidence with a policy for updating the PTA attribute of this specific delivery order (called issuance at user level). Furthermore, since in this scenario the required customer policy was issued by a 3rd party (Happy Pets), the proxy has to check whether Happy Pets itself is allowed to delegate this policy. In general, the rule would be that the proxy needs to check the existence of valid policies through the chain of issuers, until itself (in this case the Packet Delivery company) is the issuer. In this scenario, the proxy will check policies at two different levels: issued at organizational level (from Packet Delivery company to Happy Pets) and issued at user level (from Happy Pets to customer). The Verifiable Credential takes care of the user level policies.
+        At first, the Packet Delivery company proxy validates the JWT which is part of the authorization header of the PATCH request.
+
+
+        In order to check whether Happy Pets is allowed to delegate the policy to its customers, the proxy will check at the Packet Delivery company Authorisation Registry whether this policy exists. The proxy sends a request to the /delegation endpoint of the Packet Delivery company Authorization Registry.
+        The proxy receives the delegation evidence policy issued from Packet Delivery company to Happy Pets.
+        Having received the delegation information from the Packet Delivery company Authorization Registry, the proxy (or more precisely, the PDP) can now evaluate whether the contained organizational policy allows for updating the PTA attribute, and therefore whether Happy Pets is allowed to delegate the access to its customers. If the proxy received a valid policy, access would be granted on an organizational level. 
+        If the requested delegation evidence can not be found or the returned policy contains the Deny rule, the change of the PTA would be denied by the Packet Delivery company proxy and an error would be returned to the Packet Delivery company portal/app, also presented to the Happy Pets customer. The following steps would be omitted.
+        As described in the previous steps, the PDP evaluated that a change of the PTA of the specific delivery order is granted, both on organizational level and user level. As a result, the request for changing the PTA is forwarded by the Packet Delivery company proxy to the Packet Delivery company Context Broker which holds the information of the packet delivery order. The PTA of the packet delivery order is changed and the Context Broker returns a successful response with HTTP code 204. The Context Broker response is returned to the Packet Delivery company portal, in response to the request of step 26.
+        The successful change of the PTA is presented to the Happy Pets customer.
+
+
+
+
 
 
 
