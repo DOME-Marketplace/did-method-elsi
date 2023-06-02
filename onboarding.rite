@@ -871,8 +871,6 @@ localBiblio:
         Similarly, a Product provider (like GoodAir) who decides to use the DOME Trust and IAM framework or a compatible one for managing access to associated services by customers of their products will typically define specific types of VerifiableIDs if the standard ones in DOME or the existing and widely accepted ones are not suitable for the provider. In general, if a provider can use an existing and already used VerifiableID then it will facilitate potential customers access to its product because issuers of the VerifiableID do not have to modify or adapt their existing issuing processes.
 
 
-
-
     <section>The login process
 
         <section>Starting the Self-Issued OpenID Provider (SIOP) flow
@@ -887,22 +885,24 @@ localBiblio:
                 portal: DOM\nwebserver
                 verifier: VC Verifier
 
-                user -> laptop: (1) Access DOM portal            
+                user -> laptop: (1) Access DOM portal
                 laptop -> portal: (1) Access DOM
+                # -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
+
                 portal -> laptop: (2) HTTP 302 (redirect)
+                # -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+                # -+ Esta es una linea añadida a la anterior
+                # -+ Esta es una linea añadida a la anterior
+                # -+ Esta es una linea añadida a la anterior
+                # -+ Esta es una linea añadida a la anterior
+
                 laptop -> verifier: (3) Login page
+                # -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
+
                 verifier -> mobile: (4) Scan QR code
                 mobile -> verifier: (4) /authentication-requests
-
-
-            <ul style="list-style-type: none">
-                -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
-
-                -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-
-                -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
-
-                -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
+                # -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
+             
 
         <section>Authentication Request
 
