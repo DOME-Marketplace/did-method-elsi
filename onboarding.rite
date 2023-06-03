@@ -878,29 +878,48 @@ localBiblio:
             <x-diagram .d2>
                 shape: sequence_diagram
 
-                user: John\nDoe { shape: person }
-                laptop: John's\nLaptop
-                mobile: Webapp\nin mobile
+                user: John Doe {
+                    icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+                }
 
-                portal: DOM\nwebserver
-                verifier: VC Verifier
+                mobile: Webapp {
+                    icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
+                }
 
-                user -> laptop: (1) Access DOM portal
-                laptop -> portal: (1) Access DOM
+                browser: Laptop {
+                    icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+                }
+
+                portal: Portal {
+                    icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
+                }
+
+                verifier: VC Verifier {
+                    icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
+                }
+
+                # ==================================================
+
+                user -> browser: (1) Access DOM portal {
+                    style.stroke-dash: 5
+                }
+
+                browser -> portal.t: (1) Access DOM
                 # -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
 
-                portal -> laptop: (2) HTTP 302 (redirect)
-                # -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-                # -+ Esta es una linea añadida a la anterior
-                # -+ Esta es una linea añadida a la anterior
-                # -+ Esta es una linea añadida a la anterior
-                # -+ Esta es una linea añadida a la anterior
+                portal.t -> browser.t: (2) HTTP 302 (redirect)
+                # -(Large definition.) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+                # -+ This is additional content. This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request.
 
-                laptop -> verifier: (3) Login page
+                browser.t -> verifier.t: (3) Access Login page
+                verifier.t -> browser: Display QR code
                 # -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
 
-                verifier -> mobile: (4) Scan QR code
-                mobile -> verifier: (4) /authentication-requests
+                user -> mobile.t: Start QR scan {
+                    style.stroke-dash: 5
+                }
+                browser -> mobile.t: (4) Scan QR code
+                mobile.t -> verifier: (4) /authentication-requests
                 # -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
              
 
@@ -909,12 +928,27 @@ localBiblio:
             <x-diagram .d2>
                 shape: sequence_diagram
 
-                user: John\nDoe { shape: person }
-                laptop: John's\nLaptop
-                mobile: Webapp\nin mobile
+                user: John Doe {
+                    icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+                }
 
-                portal: DOM\nwebserver
-                verifier: VC Verifier
+                mobile: Webapp {
+                    icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
+                }
+
+                browser: Laptop {
+                    icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+                }
+
+                portal: Portal {
+                    icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
+                }
+
+                verifier: VC Verifier {
+                    icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
+                }
+
+                # ==================================================
 
             <ul style="list-style-type: none">
     

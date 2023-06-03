@@ -325,6 +325,16 @@
         <p>The X.509 certificate of the COO has the following contents in the <code>Subject</code> field (the example below is derived from a real certificate but with the identifiers modified to be an example):
         </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#1c01ce">cn=56565656V Jesus Ruiz</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">serialNumber=56565656V</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">givenName=Jesus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">sn=Ruiz</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">2.5.4.97</span><span style="color:#1c01ce">=VATES-12345678</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">o=GoodAir</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">c=ES</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">2.5.4.13</span><span style="color:#1c01ce">=Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021</span>
+</span></span></code></pre>
+
         <pre class='yaml'><code>cn=56565656V Jesus Ruiz
 serialNumber=56565656V
 givenName=Jesus
@@ -360,6 +370,13 @@ c=ES
         </p>
         <p>In our case, the entry for RealTruth in the TL includes a `&ltTSPService&gt` entry, and inside it the `&ltServiceDigitalIdentity&gt` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
         </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#1c01ce">2.5.4.97</span> <span style="color:#1c01ce">= VATDE-170173453</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">CN = DRV QC 11 MA CA 2017ca</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">OU = QC 11 Mitarbeiter CA</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">O = Deutsche Rentenversicherung Westfalen</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">C = DE</span>
+</span></span></code></pre>
 
         <pre class='yaml'><code>2.5.4.97 = VATDE-170173453
 CN = DRV QC 11 MA CA 2017ca
@@ -562,6 +579,19 @@ C = DE</code></pre>
         <p>From the above form we can derive the following claims:
         </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
+
         <pre class='json'><code>{
     "title": "Mr.",
     "first_name": "John",
@@ -598,6 +628,11 @@ C = DE</code></pre>
         <p>An example could be:
         </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d#key1&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
+
         <pre class='json'><code>{
     "id": "did:key:99ab5bca41bb45b78d242a46f0157b7d#key1"
 }</code></pre>
@@ -606,6 +641,20 @@ C = DE</code></pre>
         </p>
         <p>With the DID for the employee, the set of claims identifying him would be then:
         </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
 
         <pre class='json'><code>{
     "id": "did:key:99ab5bca41bb45b78d242a46f0157b7d",
@@ -627,6 +676,15 @@ C = DE</code></pre>
 
         <p>This section identifies the natural person (the COO) who is a legal representative of the legal person (GoodAir) and that is nominating the employee identified in the credential.
         </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#c41a16">&#34;legalRepresentative&#34;</span><span style="color:#000">:</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;cn&#34;</span>: <span style="color:#c41a16">&#34;56565656V Jesus Ruiz&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;serialNumber&#34;</span>: <span style="color:#c41a16">&#34;56565656V&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;organizationIdentifier&#34;</span>: <span style="color:#c41a16">&#34;VATES-12345678&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;o&#34;</span>: <span style="color:#c41a16">&#34;GoodAir&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;c&#34;</span>: <span style="color:#c41a16">&#34;ES&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
 
         <pre class='json'><code>"legalRepresentative": {
     "cn": "56565656V Jesus Ruiz",
@@ -668,6 +726,14 @@ C = DE</code></pre>
         <p>A simplistic implementation of the object inside the credential could be:
         </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#c41a16">&#34;rolesAndDuties&#34;</span><span style="color:#000">:</span> [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;type&#34;</span>: <span style="color:#c41a16">&#34;LEARCredential&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    ]
+</span></span></code></pre>
+
         <pre class='json'><code>"rolesAndDuties": [
     {
         "type": "LEARCredential",
@@ -684,6 +750,47 @@ C = DE</code></pre>
 
         <p>With the above values for the example, the complete LEARCredential would become something like this:
         </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;@context&#34;</span>: [
+</span></span><span style="display:flex;"><span>            <span style="color:#c41a16">&#34;https://www.w3.org/2018/credentials/v1&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#c41a16">&#34;https://www.dome-project.com/2022/credentials/learcredential/v1&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;urn:did:elsi:25159389-8dd17b796ac0&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;type&#34;</span>: [<span style="color:#c41a16">&#34;VerifiableCredential&#34;</span>, <span style="color:#c41a16">&#34;LEARCredential&#34;</span>],
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;issuer&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:elsi:VATES-12345678&#34;</span>
+</span></span><span style="display:flex;"><span>        },
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;issuanceDate&#34;</span>: <span style="color:#c41a16">&#34;2022-03-22T14:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;validFrom&#34;</span>: <span style="color:#c41a16">&#34;2022-03-22T14:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;expirationDate&#34;</span>: <span style="color:#c41a16">&#34;2023-03-22T14:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;credentialSubject&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;legalRepresentative&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;cn&#34;</span>: <span style="color:#c41a16">&#34;56565656V Jesus Ruiz&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;serialNumber&#34;</span>: <span style="color:#c41a16">&#34;56565656V&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;organizationIdentifier&#34;</span>: <span style="color:#c41a16">&#34;VATES-12345678&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;o&#34;</span>: <span style="color:#c41a16">&#34;GoodAir&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;c&#34;</span>: <span style="color:#c41a16">&#34;ES&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;rolesAndDuties&#34;</span>: [
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">&#34;type&#34;</span>: <span style="color:#c41a16">&#34;LEARCredential&#34;</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
 
         <pre class='json'><code>{
     "@context": [
@@ -865,6 +972,20 @@ C = DE</code></pre>
             <p>The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("LEARCredential"):
             </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;credential_issuer&#34;</span>: <span style="color:#c41a16">&#34;https://credential-issuer.example.com&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;credentials&#34;</span>: [
+</span></span><span style="display:flex;"><span>            <span style="color:#c41a16">&#34;LEARCredential&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;grants&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;urn:ietf:params:oauth:grant-type:pre-authorized_code&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;pre-authorized_code&#34;</span>: <span style="color:#c41a16">&#34;asju68jgtyk9ikkew&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;user_pin_required&#34;</span>: <span style="color:#a90d91">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
+
             <pre class='json'><code>{
     "credential_issuer": "https://credential-issuer.example.com",
     "credentials": [
@@ -886,11 +1007,19 @@ C = DE</code></pre>
             <p>Below is a non-normative example of the Credential Offer displayed by the Credential Issuer as a QR code when the Credential Offer is passed by reference, as required in this profile:
             </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    https://credential-issuer.example.com/credential-offer?
+</span></span></span><span style="display:flex;"><span><span style="color:#000">    credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j
+</span></span></span></code></pre>
+
             <pre class='http'><code>https://credential-issuer.example.com/credential-offer?
 credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j</code></pre>
 
             <p>Which in plain text would be:
             </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    https://credential-issuer.example.com/credential-offer?
+</span></span></span><span style="display:flex;"><span><span style="color:#000">    credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j
+</span></span></span></code></pre>
 
             <pre class='http'><code>https://credential-issuer.example.com/credential-offer?
 credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</code></pre>
@@ -992,6 +1121,14 @@ credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</
             <p>Below is a non-normative example of a Token Request:
             </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#000">POST</span> <span style="color:#000">/token</span> <span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Host: server.example.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">&amp;pre-authorized_code=SplxlOBeZQQYbYS6WxSbIA</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">&amp;user_pin=493536</span>
+</span></span></code></pre>
+
             <pre class='http'><code>POST /token HTTP/1.1
 Host: server.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -1016,6 +1153,18 @@ grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code
 
             <p>Below is a non-normative example of a Token Response:
             </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">200</span> <span style="color:#000">OK</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/json</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Cache-Control: no-store</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;access_token&#34;: &#34;eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;token_type&#34;: &#34;bearer&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;expires_in&#34;: 86400,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce&#34;: &#34;tZignsnFbp&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce_expires_in&#34;: 86400</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">}</span>
+</span></span></code></pre>
 
             <pre class='http'><code>HTTP/1.1 200 OK
 Content-Type: application/json
@@ -1115,6 +1264,12 @@ Cache-Control: no-store
                 <p>Below is a non-normative example of a proof parameter (dots in the middle of jwt for display purposes only):
                 </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;proof_type&#34;</span>: <span style="color:#c41a16">&#34;jwt&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;jwt&#34;</span>: <span style="color:#c41a16">&#34;eyJraWQiOiJkaWQ6ZXhhb....aZKPxgihac0aW9EkL1nOzM&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
+
                 <pre class='json'><code>{
     "proof_type": "jwt",
     "jwt": "eyJraWQiOiJkaWQ6ZXhhb....aZKPxgihac0aW9EkL1nOzM"
@@ -1122,6 +1277,19 @@ Cache-Control: no-store
 
                 <p>where the JWT looks like this:
                 </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;typ&#34;</span>: <span style="color:#c41a16">&#34;openid4vci-proof+jwt&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;alg&#34;</span>: <span style="color:#c41a16">&#34;ES256&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;kid&#34;</span>:<span style="color:#c41a16">&#34;did:example:ebfeb1f712ebc6f1c276e12ec21/keys/1&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;iss&#34;</span>: <span style="color:#c41a16">&#34;s6BhdRkqt3&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;aud&#34;</span>: <span style="color:#c41a16">&#34;https://server.example.com&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;iat&#34;</span>: <span style="color:#1c01ce">1659145924</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;nonce&#34;</span>: <span style="color:#c41a16">&#34;tZignsnFbp&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre>
 
                 <pre class='json'><code>{
     "typ": "openid4vci-proof+jwt",
@@ -1157,6 +1325,17 @@ Cache-Control: no-store
             <p>Below is a non-normative example of a Credential Response:
             </p>
 
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">200</span> <span style="color:#000">OK</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/json</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Cache-Control: no-store</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;format&#34;: &#34;jwt_vc_json&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;credential&#34; : &#34;LUpixVCWJk0eOt4CXQe1NXK....WZwmhmn9OQp6YxX0a2L&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce&#34;: &#34;fGFF7UkhLa&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce_expires_in&#34;: 86400</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">}</span>
+</span></span></code></pre>
+
             <pre class='http'><code>HTTP/1.1 200 OK
 Content-Type: application/json
 Cache-Control: no-store
@@ -1184,6 +1363,18 @@ Cache-Control: no-store
             </p>
             <p>Below is a non-normative example of a Credential Response with the Credential Issuer requesting a Wallet to provide in a subsequent Credential Request a proof that is bound to a <code>c_nonce</code>:
             </p>
+
+<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">400</span> <span style="color:#000">Bad Request</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/json</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Cache-Control: no-store</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;error&#34;: &#34;invalid_or_missing_proof&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;error_description&#34;:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#1c01ce">&#34;Credential Issuer requires proof to be bound to a Credential Issuer provided nonce.&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce&#34;: &#34;8YE9hCnyV2&#34;,</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce_expires_in&#34;: 86400</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">}</span>
+</span></span></code></pre>
 
             <pre class='http'><code>HTTP/1.1 400 Bad Request
 Content-Type: application/json
@@ -1259,41 +1450,55 @@ Cache-Control: no-store
 
 <!-- Original D2 diagram definition
     shape: sequence_diagram
-    user: John\nDoe { shape: person }
-    laptop: John's\nLaptop
-    mobile: Webapp\nin mobile
-    portal: DOM\nwebserver
-    verifier: VC Verifier
-    user -> laptop: (1) Access DOM portal
-    laptop -> portal: (1) Access DOM
+    user: John Doe {
+        icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+    }
+    mobile: Webapp {
+        icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
+    }
+    browser: Laptop {
+        icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+    }
+    portal: Portal {
+        icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
+    }
+    verifier: VC Verifier {
+        icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
+    }
+    # ==================================================
+    user -> browser: (1) Access DOM portal {
+        style.stroke-dash: 5
+    }
+    browser -> portal.t: (1) Access DOM
     # -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
-    portal -> laptop: (2) HTTP 302 (redirect)
-    # -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-    # -+ Esta es una linea añadida a la anterior
-    # -+ Esta es una linea añadida a la anterior
-    # -+ Esta es una linea añadida a la anterior
-    # -+ Esta es una linea añadida a la anterior
-    laptop -> verifier: (3) Login page
+    portal.t -> browser.t: (2) HTTP 302 (redirect)
+    # -(Large definition.) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+    # -+ This is additional content. This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request.
+    browser.t -> verifier.t: (3) Access Login page
+    verifier.t -> browser: Display QR code
     # -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
-    verifier -> mobile: (4) Scan QR code
-    mobile -> verifier: (4) /authentication-requests
+    user -> mobile.t: Start QR scan {
+        style.stroke-dash: 5
+    }
+    browser -> mobile.t: (4) Scan QR code
+    mobile.t -> verifier: (4) /authentication-requests
     # -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
  -->
 
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 945 879"><svg id="d2-svg" class="d2-3051653578" width="945" height="879" viewBox="-89 -86 945 879"><rect x="-89.000000" y="-86.000000" width="945.000000" height="879.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-3051653578 .text {
-	font-family: "d2-3051653578-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1023 924"><svg id="d2-svg" class="d2-2706753151" width="1023" height="924" viewBox="-89 -49 1023 924"><rect x="-89.000000" y="-49.000000" width="1023.000000" height="924.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-2706753151 .text {
+	font-family: "d2-2706753151-font-regular";
 }
 @font-face {
-	font-family: d2-3051653578-font-regular;
-	src: url("data:application/font-woff;base64,d09GRgABAAAAABHIAAoAAAAAGvQAAguFAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAAA9AAAAGAAAABgXd/Vo2NtYXAAAAFUAAAAtAAAAPwEzgXfZ2x5ZgAAAggAAArhAAAPDB8l6nxoZWFkAAAM7AAAADYAAAA2G4Ue32hoZWEAAA0kAAAAJAAAACQKhAX0aG10eAAADUgAAACzAAAAyF7UCf1sb2NhAAAN/AAAAGYAAABmZe5h3m1heHAAAA5kAAAAIAAAACAASgD2bmFtZQAADoQAAAMjAAAIFAbDVU1wb3N0AAARqAAAAB0AAAAg/9EAMgADAgkBkAAFAAACigJYAAAASwKKAlgAAAFeADIBIwAAAgsFAwMEAwICBGAAAvcAAAADAAAAAAAAAABBREJPAEAAIP//Au7/BgAAA9gBESAAAZ8AAAAAAeYClAAAACAAA3icfM25LgVxFMfxz7hjv/Z9H7uLMQovMKEQIRqhVkr03kq0toR4Ei+hPTL/qJ3mNJ/8vsi0ZGjLfaFQyNPf1lGqHKmdOHXmwpUbdx4i/sROEodqx0mcu3Tt1n1EfMt1NzJ+4jM+4j3e4jVe4jme4jE1/7/MntKBfZWt1OrY1aXV7OrRq0+/AYPahgwbMWrMuAmTpkybMWvOvAWLlixbUVi1Zt2GTX4BAAD//wEAAP//aSAmmXicjFdrbBvlmn6/z5NMnDhNJr5M4tixPZN4YsfOxePxOLZjJ/ElNydx7ITm0ia9pE3T25YUWpV2W+1S2i50WS8CUUFhC4sESLAti1QWIe0PtJTscttFLBwOtOLwIwcJjjgnyjk659CMj2bsuCnw4/waS5753vd53ud53hkogSkALODHQQVqqIIa0APwlI1qsnEcS4q8KLK0SuQQRU6hL6UsQgNewucjOnq/7T1x5gyaPI0fXz8YOLuw8M7s8ePSP658I3nQh98ABhUANuMsqIEC0JI8Z7dzbGmpSstrWY4l37O8Y6mxVhNV1l/emr01Ff4+gv5mfl481Nl5SJrG2fUjy8sAAAi8uTVcjy+DGaCEsdsFr8/Heww0abezTGmpXmcw8B6fSJeWonT674aSZzOhbSa3sdcZ3s57ZsJtg5ZWbpdm7NKB/ZfSHVafiek5lk6f6G1mvG4PAGCYBsBenIUyuU+e4j0Gva6U5XiPT/DaWXb6hUvPPvPExNDRo0ePDuHsy5ef+bfYI6dOPaT0Jj/rwVmoUJ6kbBRPsZSNms6gjvFx6SOclX6DtOtHkCC9p9xvya2hf8BZqAKgGU5UWhcontKVln5yMhAy+FnBO96U0iw6ObZnCL0rdfhnxXwd9D7OQkmhjn46gyw4u/5GHxT7+FuclTniKV5rMNC8zydq5W68PpElVayKYw0GPTU9f1pDawiNXnNqz0iZivCeEk95CRWJs9LzTJxh4gyaXT+CFl0HWp6QXkHjT7QccElPKjzJc9iDL0PVjyYh01XKeXwKXYwyEJRMn+nrO5POnO7vP50Jbm3fPzm5v31SM/7U4uKTY2NPLi4+NT4QPZF+4NFHH0ifiEJxDhUKl7rCHJRBsBRVHMVbg4fD5w4e3HVPZus9szjbONG/MC/dRv09iT6x0OMMPoovQyU4AZru6qmEsXOteHPP5B3lJIs9ItXMA+a+g6F894F9CXpCMDCV1VWezujJcbnh8ZPRW1PR8snHduSxzGanNC2uEqK7VF3EYcVZ2AL0JhykllVthvJBdF8wFXtx9tnjh4fT6eHDOMuOxZLbKelrpJe+RVOR7h5vfrbO3Br6Hl8Gt8L6hmi8djt3B0/BDTJOmm7AMjpUHT/W4mHn+J5+c4dl1tLlEGaDwXnW3TDQKkZtHuN2e1ejb14juAJN7mA702za4qh09rZ7Rt3uRp/Z5nVZHMaK5mp3T4d3wgMITADoNs4CKaNiBZuepb6+gb66gQcTifXr+V5lAlQ4C5UAvGqTDlUffzy1WFOvJWpM1OLE/+Ks9GxgTyCwJ4B2rR8BJDOF/4yzYPvRc5tOYFX5/CBVzz9yT1ytUxMVtRUzyRlNrYZQ15THUxfmd6urygiypmwnzkpPC/sF4YAX7ZGe9h7I/1o/gh6xD9jtA3bp/rye0WtoFYzQKLtRlrPoVWgkOYVUPcXKBTmPTxSUoHm7a+yfnqZamp2DZiuzOzCVipEqZszAhtkTOz2agZ7UBGXxs1Zdp8FxaEb6NGBy9jKW81WhNkcTYEjn1tAPeBm0YM1PkiVZiteT+Vp5D+XlSuoNBuRgBqwqsjeNbaPNc7uCc4nQaDBu6WatEY3N7MHLb0+auXP3Zo6F4wvTqd2MNWei8zNoza2hq2hVntfP5+WG6Gu694V6DoTb43VOfZvZFecyUSZgaLSlNKGlVHopxNA+bW3bhD+zYNaJZpus7bbcGvp8A0OeM+VwTuA3yBKFYqE/zhwO7hSdYSuRiZEqU7KuO2TpbOAi9oTmoROjR8MNxsxb6/5OkyMelUx0W8a/dTdgpf//QatQC5a7EMgmshUtq7IpVCG6Z384Mi9u34Ow9B8lWxNssN5sGX0PEZFOfkzTtTSaWgqf2ldZpx7epqd8ugZkHxweVXhqAEAR/El+37GCKHgLPLGMXs/rWWpHb298gHZW19SbYgsL6F/DJcODW9VkRDM7HJW2A4AK3Dkr+g6tQgd0wXBRRYJ900U5lNez+cxhGS4/g8LMVZ47EaUtZANjz9/zh6kjdltNHaOt5TzjHbrGypfnKbo95eGYypqmjtmJidDhpLMr1NIS6vIlxvm28S22amPt0FexiKXTQFQ0myytlYQu1iKMOMmSSLVg8SYdVEW9jm4Qu9zJNvRaRBBCIUGISBe67IyRILROPdeqcJMGQJ/h5UISb2hU3iaKPql0WsUOe4b70q72pmATXn573ta2c7v0PnLEwvYm6QrkchAHgNfxdWyHdgAohY5TeX2mc2vwC7yc34F2ZfttDPXlVkd6i5ogyYoyg6ZTwHvXH9dSCIUJIt8T/h1aVTKC4uVYkJm9qzOyeE3HSJU12eKPVNlHXEMDaVerL5Z2tfliaCXBtnW4HN6NdoekK4XLBm60WsBdqLEZd4xUsSNF4Mphd+Eu6Pe3aBWqoP5n92Rx3qgquBCJLARDeyORvaHI8HAkPDJS8F5oKZ1aCsUWMuP79o1nFkDJDx79gFYL3rvTnaIqO0frtZvzQ+7UNtoyuys452eiDD6uxEek0Rb+AL/uNzWfvzd9LNxgnHgBld6VH7LHefT5Rp0SQVSOLwpZ5CnVZo+jc4R5yJk3ercNl/V+VDT5B69OmpoVo5vNrevDqPSOyzc0NotWC29deTSFlMoTXdfvMNPVGl2VJVqHViZbfeX9BOEJS4X3QlNuDT2IVuVNT9+9F5W1+KOtmF+K/+edZR3WWEt7u42vZ3qdU6PuEVNznc/a2tLQXs/G3I5RDWcS62xuSx1Dl1faBEdw1Ep7tbVOE23WV1TaxFaut1mpX5tbQ3F8WN5dio5ZQRR5JTiKev52pKs/WR5/8EGbs7JBU61r00z3o8pwyYULUWnV3aEmwmSFctZQbg19iFZk3d3lCaoQq18N92da2u1BRuaFSWp2bkde6bNYmGtBU5Ix2dwOCDQA6F208tPd+9bViW0VdAVRQZdvG3sFrUjfNfazbH8j0klGGQcAvo5W/rrd+y/nx/vLtpBEWbV6KJVUU2VEWRXZN/L38wl1lZooqy6PoRXp10yUYaIMqtv0y4hK2FhTU5yVbgMGV24NvYMfhooN9rwFKW/2x592HDq0Y+7QoTl/LOb3x+OaV68899JLz115tffMxYsnT168eEbhbhQAvYFPy/h5eQ0JPp8oh9boY/e5eoyRszH0qVBGV6/fiOV10wiA/gs/LLuTF8K4YBmuaCY57Hh9845ziVBXc8zU1jwTntobvT9p9Ne92bHjn+/nxYTb2uYSFiZCJ8+PYqIPEBhza+g/8cM/1SIrFF9C75SQ/SlX+i651+o0j/gDg9xUMjbKBPnmqNnVNO3PHOz2BlL+OY3I+hpauwV7pzVi9dnafI1mL+ueGA4M6ojKTK8/7QIs+wf9Pz4Nalk9Ii9vHnlUWsEmIJkHVr9vmUCExriFl36FqG1bt66+aeyvo1205L3mQ5ek+3qvybyk0FV4Cf+7/I2h5TieJHdXqyZV1ejqi9u2vQgIHPAFqkJG+btOFHi9Y+WLSCSf5ymkxl/KuqPzi49WkoH+NJxIhPlAZ2fg2p6bZ8/emq+du7m0dHMOENhzKbhZeIZTCJI50+tKp5T7+XAica1wd+38rbNnbwKC8twONIZvyPVpxKNyVBGSfn9Ftff2U7CRJ/ACWpH/l7+R0mm0Ius79994EER8Xf5GozYprdZiqa21WPCgua62oaG2zgx/AQAA//8BAAD//xvFN2YAAAAAAQAAAAILhb6crqlfDzz1AAMD6AAAAADYXaChAAAAAN1mLzb+Ov7bCG8DyAAAAAMAAgAAAAAAAAABAAAD2P7vAAAImP46/joIbwABAAAAAAAAAAAAAAAAAAAAMnicLMqtSgRRHMbh3/ueJhYNOsiyDrgI68dOGRQRo8mg/JtHsHoz2u3ezFgsBqvJ7CnDmEYYNj3l8Qv3dOCa5EtaP5H9TNY3+/oh+4vsV1qfrb0ge4cjV8ycIG2zq4HWS0IdKx/T6JeVFsw1cOqaoOeakUhXhA8Iz6cX030g9MZMQeWaG32y6Q8qFU5UuFVhocKeClv8cadzlmoINRzqkQ16Asb3fwAAAP//AQAA//+7FyUWAAAAACwALABQAIAAngC2ANIA4gEUAUQBZgGoAdACFAImAkICfAK0AugDFgNIA3wDngQKBCwEOARUBIYEqATUBQgFPAVcBZwFwgXkBgAGOgZgBngGogbgBwQHFAcgBzoHVAdkB3AHhgAAAAEAAAAyAIwADABmAAcAAQAAAAAAAAAAAAAAAAAEAAN4nJyU3U4bVxSFPwfbbVQ1FxWKyA06l22VjN0IogSuTAmKVYRTj9Mfqao0eMY/Yjwz8gxQqj5Ar/sWfYtc9Tn6EFWvq7O8DTaqFIEQsM6cvfdZZ6+1D7DJv2xQqz8E/mr+YLjGdnPP8AMeNZ8a3uC48bfh+kpMg7jxm+EmXzb6hj/iff0Pwx+zU//Z8EO26keGP+F5fdPwpxuOfww/Yof3C1yDl/xuuMYWheEHbPKT4Q0eYzVrdR7TNtzgM7YNN9kGBkypSJmSMcYxYsqYc+YklIQkzJkyIiHG0aVDSqWvGZGQY/y/XyNCKuZEqjihwpESkhJRMrGKvyor561OHGk1t70OFRMiTpVxRkSGI2dMTkbCmepUVBTs0aJFyVB8CypKAkqmpATkzBnToscRxwyYMKXEcaRKnllIzoiKSyKd7yzCd2ZIQkZprM7JiMXTiV+i7C7HOHoUil2tfLxW4SmO75TtueWK/YpAv26F2fq5SzYRF+pnqq6k2rmUghPt+nM7fCtcsYe7V3/WmXy4R7H+V6p8yrn0j6VUJiYZzm3RIZSDQvcEx4HWXUJ15Hu6DHhDj3cMtO7Qp0+HEwZ0ea3cHn0cX9PjhENldIUXe0dyzAk/4viGrmJ87cT6s1As4RcKc3cpjnPdY0ahnnvmge6a6IZ3V9jPUL7mjlI5Q82Rj3TSL9OcRYzNFYUYztTLpTdK619sjpjpLl7bm30/DRc2e8spviLXDHu3Ljh55RaMPqRqcMszl/oJiIjJOVXEkJwZLSquxPstEeekOA7VvTeakorOdY4/50ouSZiJQZdMdeYU+huZb0LjPlzzvbO3JFa+Z3p2fav7nOLUqxuN3ql7y73QupysKNAyVfMVNw3FNTPvJ5qpVf6hcku9bjnP6JNI9VQ3uP0OPCegzQ677DPROUPtXNgb0dY70eYV++rBGYmiRnJ1YhV2CXjBLru84sVazQ6HHNBj/w4cF1k9Dnh9a2ddp2UVZ3X+FJu2+DqeXa9e3luvz+/gyy80UTcvY1/a+G5fWLUb/58QMfNc3NbqndwTgv8AAAD//wEAAP//B1tMMAB4nGJgZgCD/+cYjBiwAAAAAAD//wEAAP//LwECAwAAAA==");
+	font-family: d2-2706753151-font-regular;
+	src: url("data:application/font-woff;base64,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");
 }
-.d2-3051653578 .text-italic {
-	font-family: "d2-3051653578-font-italic";
+.d2-2706753151 .text-italic {
+	font-family: "d2-2706753151-font-italic";
 }
 @font-face {
-	font-family: d2-3051653578-font-italic;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-2706753151-font-italic;
+	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
   stroke-linejoin: round;
@@ -1307,96 +1512,95 @@ Cache-Control: no-store
   opacity: 0.5;
 }
 
-		.d2-3051653578 .fill-N1{fill:#0A0F25;}
-		.d2-3051653578 .fill-N2{fill:#676C7E;}
-		.d2-3051653578 .fill-N3{fill:#9499AB;}
-		.d2-3051653578 .fill-N4{fill:#CFD2DD;}
-		.d2-3051653578 .fill-N5{fill:#DEE1EB;}
-		.d2-3051653578 .fill-N6{fill:#EEF1F8;}
-		.d2-3051653578 .fill-N7{fill:#FFFFFF;}
-		.d2-3051653578 .fill-B1{fill:#0D32B2;}
-		.d2-3051653578 .fill-B2{fill:#0D32B2;}
-		.d2-3051653578 .fill-B3{fill:#E3E9FD;}
-		.d2-3051653578 .fill-B4{fill:#E3E9FD;}
-		.d2-3051653578 .fill-B5{fill:#EDF0FD;}
-		.d2-3051653578 .fill-B6{fill:#F7F8FE;}
-		.d2-3051653578 .fill-AA2{fill:#4A6FF3;}
-		.d2-3051653578 .fill-AA4{fill:#EDF0FD;}
-		.d2-3051653578 .fill-AA5{fill:#F7F8FE;}
-		.d2-3051653578 .fill-AB4{fill:#EDF0FD;}
-		.d2-3051653578 .fill-AB5{fill:#F7F8FE;}
-		.d2-3051653578 .stroke-N1{stroke:#0A0F25;}
-		.d2-3051653578 .stroke-N2{stroke:#676C7E;}
-		.d2-3051653578 .stroke-N3{stroke:#9499AB;}
-		.d2-3051653578 .stroke-N4{stroke:#CFD2DD;}
-		.d2-3051653578 .stroke-N5{stroke:#DEE1EB;}
-		.d2-3051653578 .stroke-N6{stroke:#EEF1F8;}
-		.d2-3051653578 .stroke-N7{stroke:#FFFFFF;}
-		.d2-3051653578 .stroke-B1{stroke:#0D32B2;}
-		.d2-3051653578 .stroke-B2{stroke:#0D32B2;}
-		.d2-3051653578 .stroke-B3{stroke:#E3E9FD;}
-		.d2-3051653578 .stroke-B4{stroke:#E3E9FD;}
-		.d2-3051653578 .stroke-B5{stroke:#EDF0FD;}
-		.d2-3051653578 .stroke-B6{stroke:#F7F8FE;}
-		.d2-3051653578 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-3051653578 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-3051653578 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-3051653578 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-3051653578 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-3051653578 .background-color-N1{background-color:#0A0F25;}
-		.d2-3051653578 .background-color-N2{background-color:#676C7E;}
-		.d2-3051653578 .background-color-N3{background-color:#9499AB;}
-		.d2-3051653578 .background-color-N4{background-color:#CFD2DD;}
-		.d2-3051653578 .background-color-N5{background-color:#DEE1EB;}
-		.d2-3051653578 .background-color-N6{background-color:#EEF1F8;}
-		.d2-3051653578 .background-color-N7{background-color:#FFFFFF;}
-		.d2-3051653578 .background-color-B1{background-color:#0D32B2;}
-		.d2-3051653578 .background-color-B2{background-color:#0D32B2;}
-		.d2-3051653578 .background-color-B3{background-color:#E3E9FD;}
-		.d2-3051653578 .background-color-B4{background-color:#E3E9FD;}
-		.d2-3051653578 .background-color-B5{background-color:#EDF0FD;}
-		.d2-3051653578 .background-color-B6{background-color:#F7F8FE;}
-		.d2-3051653578 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-3051653578 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-3051653578 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-3051653578 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-3051653578 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-3051653578 .color-N1{color:#0A0F25;}
-		.d2-3051653578 .color-N2{color:#676C7E;}
-		.d2-3051653578 .color-N3{color:#9499AB;}
-		.d2-3051653578 .color-N4{color:#CFD2DD;}
-		.d2-3051653578 .color-N5{color:#DEE1EB;}
-		.d2-3051653578 .color-N6{color:#EEF1F8;}
-		.d2-3051653578 .color-N7{color:#FFFFFF;}
-		.d2-3051653578 .color-B1{color:#0D32B2;}
-		.d2-3051653578 .color-B2{color:#0D32B2;}
-		.d2-3051653578 .color-B3{color:#E3E9FD;}
-		.d2-3051653578 .color-B4{color:#E3E9FD;}
-		.d2-3051653578 .color-B5{color:#EDF0FD;}
-		.d2-3051653578 .color-B6{color:#F7F8FE;}
-		.d2-3051653578 .color-AA2{color:#4A6FF3;}
-		.d2-3051653578 .color-AA4{color:#EDF0FD;}
-		.d2-3051653578 .color-AA5{color:#F7F8FE;}
-		.d2-3051653578 .color-AB4{color:#EDF0FD;}
-		.d2-3051653578 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><path d="M 112 164 H 12 V 162 C 12 137 23 114 40 103 C 31 94 25 79 25 64 C 25 37 42 15 62 15 C 82 15 99 37 99 64 C 99 80 93 94 84 103 C 101 114 112 137 112 162 V 164 H 112 Z" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="62.000000" y="185.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="62.000000" dy="0.000000">John</tspan><tspan x="62.000000" dy="18.500000">Doe</tspan></text></g><g id="laptop"><g class="shape" ><rect x="192.000000" y="119.000000" width="100.000000" height="82.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="242.000000" y="157.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="242.000000" dy="0.000000">John&#39;s</tspan><tspan x="242.000000" dy="18.500000">Laptop</tspan></text></g><g id="mobile"><g class="shape" ><rect x="338.000000" y="119.000000" width="108.000000" height="82.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="392.000000" y="157.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="392.000000" dy="0.000000">Webapp</tspan><tspan x="392.000000" dy="18.500000">in mobile</tspan></text></g><g id="portal"><g class="shape" ><rect x="486.000000" y="119.000000" width="115.000000" height="82.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="543.500000" y="157.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="543.500000" dy="0.000000">DOM</tspan><tspan x="543.500000" dy="18.500000">webserver</tspan></text></g><g id="verifier"><g class="shape" ><rect x="641.000000" y="135.000000" width="114.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="698.000000" y="173.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 62.000000 208.090909 L 62.000000 690.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3051653578)" /></g><g id="(laptop -- )[0]"><path d="M 242.000000 203.090909 L 242.000000 690.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3051653578)" /></g><g id="(mobile -- )[0]"><path d="M 392.000000 203.090909 L 392.000000 690.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3051653578)" /></g><g id="(portal -- )[0]"><path d="M 543.500000 203.090909 L 543.500000 690.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3051653578)" /></g><g id="(verifier -- )[0]"><path d="M 698.000000 203.090909 L 698.000000 690.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3051653578)" /></g><g id="(user -&gt; laptop)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 64.000000 271.090909 L 238.000000 271.090909" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3051653578)" /><text x="152.000000" y="277.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM portal</text></g><g id="(laptop -&gt; portal)[0]"><path d="M 244.000000 341.090909 L 539.500000 341.090909" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3051653578)" /><text x="392.500000" y="347.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM</text></g><g id="(portal -&gt; laptop)[0]"><path d="M 541.500000 411.090909 L 246.000000 411.090909" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3051653578)" /><text x="393.000000" y="417.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(2) HTTP 302 (redirect)</text></g><g id="(laptop -&gt; verifier)[0]"><path d="M 244.000000 481.090909 L 694.000000 481.090909" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3051653578)" /><text x="470.500000" y="487.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(3) Login page</text></g><g id="(verifier -&gt; mobile)[0]"><path d="M 696.000000 551.090909 L 396.000000 551.090909" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3051653578)" /><text x="545.500000" y="557.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) Scan QR code</text></g><g id="(mobile -&gt; verifier)[0]"><path d="M 394.000000 621.090909 L 694.000000 621.090909" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3051653578)" /><text x="545.500000" y="627.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) /authentication-requests</text></g><mask id="d2-3051653578" maskUnits="userSpaceOnUse" x="-89" y="-86" width="945" height="879">
-<rect x="-89" y="-86" width="945" height="879" fill="white"></rect>
-<rect x="82.000000" y="261.000000" width="140" height="21" fill="black"></rect>
-<rect x="344.000000" y="331.000000" width="97" height="21" fill="black"></rect>
-<rect x="321.000000" y="401.000000" width="144" height="21" fill="black"></rect>
-<rect x="424.000000" y="471.000000" width="93" height="21" fill="black"></rect>
-<rect x="491.000000" y="541.000000" width="109" height="21" fill="black"></rect>
-<rect x="454.000000" y="611.000000" width="183" height="21" fill="black"></rect>
+		.d2-2706753151 .fill-N1{fill:#0A0F25;}
+		.d2-2706753151 .fill-N2{fill:#676C7E;}
+		.d2-2706753151 .fill-N3{fill:#9499AB;}
+		.d2-2706753151 .fill-N4{fill:#CFD2DD;}
+		.d2-2706753151 .fill-N5{fill:#DEE1EB;}
+		.d2-2706753151 .fill-N6{fill:#EEF1F8;}
+		.d2-2706753151 .fill-N7{fill:#FFFFFF;}
+		.d2-2706753151 .fill-B1{fill:#0D32B2;}
+		.d2-2706753151 .fill-B2{fill:#0D32B2;}
+		.d2-2706753151 .fill-B3{fill:#E3E9FD;}
+		.d2-2706753151 .fill-B4{fill:#E3E9FD;}
+		.d2-2706753151 .fill-B5{fill:#EDF0FD;}
+		.d2-2706753151 .fill-B6{fill:#F7F8FE;}
+		.d2-2706753151 .fill-AA2{fill:#4A6FF3;}
+		.d2-2706753151 .fill-AA4{fill:#EDF0FD;}
+		.d2-2706753151 .fill-AA5{fill:#F7F8FE;}
+		.d2-2706753151 .fill-AB4{fill:#EDF0FD;}
+		.d2-2706753151 .fill-AB5{fill:#F7F8FE;}
+		.d2-2706753151 .stroke-N1{stroke:#0A0F25;}
+		.d2-2706753151 .stroke-N2{stroke:#676C7E;}
+		.d2-2706753151 .stroke-N3{stroke:#9499AB;}
+		.d2-2706753151 .stroke-N4{stroke:#CFD2DD;}
+		.d2-2706753151 .stroke-N5{stroke:#DEE1EB;}
+		.d2-2706753151 .stroke-N6{stroke:#EEF1F8;}
+		.d2-2706753151 .stroke-N7{stroke:#FFFFFF;}
+		.d2-2706753151 .stroke-B1{stroke:#0D32B2;}
+		.d2-2706753151 .stroke-B2{stroke:#0D32B2;}
+		.d2-2706753151 .stroke-B3{stroke:#E3E9FD;}
+		.d2-2706753151 .stroke-B4{stroke:#E3E9FD;}
+		.d2-2706753151 .stroke-B5{stroke:#EDF0FD;}
+		.d2-2706753151 .stroke-B6{stroke:#F7F8FE;}
+		.d2-2706753151 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-2706753151 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-2706753151 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-2706753151 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-2706753151 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-2706753151 .background-color-N1{background-color:#0A0F25;}
+		.d2-2706753151 .background-color-N2{background-color:#676C7E;}
+		.d2-2706753151 .background-color-N3{background-color:#9499AB;}
+		.d2-2706753151 .background-color-N4{background-color:#CFD2DD;}
+		.d2-2706753151 .background-color-N5{background-color:#DEE1EB;}
+		.d2-2706753151 .background-color-N6{background-color:#EEF1F8;}
+		.d2-2706753151 .background-color-N7{background-color:#FFFFFF;}
+		.d2-2706753151 .background-color-B1{background-color:#0D32B2;}
+		.d2-2706753151 .background-color-B2{background-color:#0D32B2;}
+		.d2-2706753151 .background-color-B3{background-color:#E3E9FD;}
+		.d2-2706753151 .background-color-B4{background-color:#E3E9FD;}
+		.d2-2706753151 .background-color-B5{background-color:#EDF0FD;}
+		.d2-2706753151 .background-color-B6{background-color:#F7F8FE;}
+		.d2-2706753151 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-2706753151 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-2706753151 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-2706753151 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-2706753151 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-2706753151 .color-N1{color:#0A0F25;}
+		.d2-2706753151 .color-N2{color:#676C7E;}
+		.d2-2706753151 .color-N3{color:#9499AB;}
+		.d2-2706753151 .color-N4{color:#CFD2DD;}
+		.d2-2706753151 .color-N5{color:#DEE1EB;}
+		.d2-2706753151 .color-N6{color:#EEF1F8;}
+		.d2-2706753151 .color-N7{color:#FFFFFF;}
+		.d2-2706753151 .color-B1{color:#0D32B2;}
+		.d2-2706753151 .color-B2{color:#0D32B2;}
+		.d2-2706753151 .color-B3{color:#E3E9FD;}
+		.d2-2706753151 .color-B4{color:#E3E9FD;}
+		.d2-2706753151 .color-B5{color:#EDF0FD;}
+		.d2-2706753151 .color-B6{color:#F7F8FE;}
+		.d2-2706753151 .color-AA2{color:#4A6FF3;}
+		.d2-2706753151 .color-AA4{color:#EDF0FD;}
+		.d2-2706753151 .color-AA5{color:#F7F8FE;}
+		.d2-2706753151 .color-AB4{color:#EDF0FD;}
+		.d2-2706753151 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><rect x="12.000000" y="52.000000" width="135.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="79.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">John Doe</text></g><g id="mobile"><g class="shape" ><rect x="187.000000" y="52.000000" width="127.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2F052-smartphone-3.svg" x="187.000000" y="52.000000" width="46" height="46" /><text x="250.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Webapp</text></g><g id="browser"><g class="shape" ><rect x="354.000000" y="52.000000" width="118.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2Fbrowser-2.svg" x="354.000000" y="52.000000" width="46" height="46" /><text x="413.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Laptop</text></g><g id="portal"><g class="shape" ><rect x="542.000000" y="52.000000" width="111.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg" x="542.000000" y="52.000000" width="46" height="46" /><text x="597.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Portal</text></g><g id="verifier"><g class="shape" ><rect x="693.000000" y="52.000000" width="140.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg" x="693.000000" y="52.000000" width="46" height="46" /><text x="763.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 79.500000 146.000000 L 79.500000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(mobile -- )[0]"><path d="M 250.500000 146.000000 L 250.500000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(browser -- )[0]"><path d="M 413.000000 146.000000 L 413.000000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(portal -- )[0]"><path d="M 597.500000 146.000000 L 597.500000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(verifier -- )[0]"><path d="M 763.000000 146.000000 L 763.000000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="portal.t"><g class="shape" ><rect x="591.000000" y="274.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="browser.t"><g class="shape" ><rect x="407.000000" y="344.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="verifier.t"><g class="shape" ><rect x="757.000000" y="414.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="mobile.t"><g class="shape" ><rect x="244.000000" y="554.000000" width="12.000000" height="160.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="(user -&gt; browser)[0]"><marker id="mk-2177206569" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 81.500000 214.000000 L 409.000000 214.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2706753151)" /><text x="246.000000" y="220.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM portal</text></g><g id="(browser -&gt; portal.t)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 415.000000 284.000000 L 587.500000 284.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="502.500000" y="290.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM</text></g><g id="(portal.t -&gt; browser.t)[0]"><path d="M 589.500000 354.000000 L 423.000000 354.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="505.000000" y="360.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(2) HTTP 302 (redirect)</text></g><g id="(browser.t -&gt; verifier.t)[0]"><path d="M 421.000000 424.000000 L 753.000000 424.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="588.500000" y="430.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(3) Access Login page</text></g><g id="(verifier.t -&gt; browser)[0]"><path d="M 755.000000 494.000000 L 417.000000 494.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="585.000000" y="500.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Display QR code</text></g><g id="(user -&gt; mobile.t)[0]"><path d="M 81.500000 564.000000 L 240.500000 564.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2706753151)" /><text x="162.000000" y="570.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Start QR scan</text></g><g id="(browser -&gt; mobile.t)[0]"><path d="M 411.000000 634.000000 L 260.500000 634.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="334.500000" y="640.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) Scan QR code</text></g><g id="(mobile.t -&gt; verifier)[0]"><path d="M 258.500000 704.000000 L 759.000000 704.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="509.500000" y="710.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) /authentication-requests</text></g><mask id="d2-2706753151" maskUnits="userSpaceOnUse" x="-89" y="-49" width="1023" height="924">
+<rect x="-89" y="-49" width="1023" height="924" fill="white"></rect>
+<rect x="176.000000" y="204.000000" width="140" height="21" fill="black"></rect>
+<rect x="454.000000" y="274.000000" width="97" height="21" fill="black"></rect>
+<rect x="433.000000" y="344.000000" width="144" height="21" fill="black"></rect>
+<rect x="519.000000" y="414.000000" width="139" height="21" fill="black"></rect>
+<rect x="532.000000" y="484.000000" width="106" height="21" fill="black"></rect>
+<rect x="118.000000" y="554.000000" width="88" height="21" fill="black"></rect>
+<rect x="280.000000" y="624.000000" width="109" height="21" fill="black"></rect>
+<rect x="418.000000" y="694.000000" width="183" height="21" fill="black"></rect>
 </mask></svg></svg>
 
-            <ul>
-                <li id='889.1'><a href='#889.1' class='selfref'><b>1</b></a> The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
-                <li id='892.2'><a href='#892.2' class='selfref'><b>2</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-                <div> Esta es una linea añadida a la anterior</div>
-                <div> Esta es una linea añadida a la anterior</div>
-                <div> Esta es una linea añadida a la anterior</div>
-                <div> Esta es una linea añadida a la anterior</div>
-                <li id='899.3'><a href='#899.3' class='selfref'><b>3</b></a> The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
-                <li id='903.4'><a href='#903.4' class='selfref'><b>4</b></a> The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
+            <ul style='list-style: none;'>
+                <li style='margin-left:2em; text-indent: -1em;' id='907.1'><a href='#907.1' class='selfref'><b>1</b></a> The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
+                <li style='margin-left:2em; text-indent: -1em;' id='910.Large_definition.'><a href='#910.Large_definition.' class='selfref'><b>Large definition.</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+                <p style='text-indent:0'> This is additional content. This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request.</p>
+                <li style='margin-left:2em; text-indent: -1em;' id='915.3'><a href='#915.3' class='selfref'><b>3</b></a> The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
+                <li style='margin-left:2em; text-indent: -1em;' id='922.4'><a href='#922.4' class='selfref'><b>4</b></a> The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
             </ul>
         </section>
 
@@ -1405,20 +1609,31 @@ Cache-Control: no-store
 
 <!-- Original D2 diagram definition
     shape: sequence_diagram
-    user: John\nDoe { shape: person }
-    laptop: John's\nLaptop
-    mobile: Webapp\nin mobile
-    portal: DOM\nwebserver
-    verifier: VC Verifier
+    user: John Doe {
+        icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+    }
+    mobile: Webapp {
+        icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
+    }
+    browser: Laptop {
+        icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+    }
+    portal: Portal {
+        icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
+    }
+    verifier: VC Verifier {
+        icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
+    }
+    # ==================================================
  -->
 
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 915 459"><svg id="d2-svg" class="d2-1360396247" width="915" height="459" viewBox="-89 -86 915 459"><rect x="-89.000000" y="-86.000000" width="915.000000" height="459.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-1360396247 .text {
-	font-family: "d2-1360396247-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 993 364"><svg id="d2-svg" class="d2-774506953" width="993" height="364" viewBox="-89 -49 993 364"><rect x="-89.000000" y="-49.000000" width="993.000000" height="364.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-774506953 .text {
+	font-family: "d2-774506953-font-regular";
 }
 @font-face {
-	font-family: d2-1360396247-font-regular;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-774506953-font-regular;
+	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
   stroke-linejoin: round;
@@ -1432,79 +1647,79 @@ Cache-Control: no-store
   opacity: 0.5;
 }
 
-		.d2-1360396247 .fill-N1{fill:#0A0F25;}
-		.d2-1360396247 .fill-N2{fill:#676C7E;}
-		.d2-1360396247 .fill-N3{fill:#9499AB;}
-		.d2-1360396247 .fill-N4{fill:#CFD2DD;}
-		.d2-1360396247 .fill-N5{fill:#DEE1EB;}
-		.d2-1360396247 .fill-N6{fill:#EEF1F8;}
-		.d2-1360396247 .fill-N7{fill:#FFFFFF;}
-		.d2-1360396247 .fill-B1{fill:#0D32B2;}
-		.d2-1360396247 .fill-B2{fill:#0D32B2;}
-		.d2-1360396247 .fill-B3{fill:#E3E9FD;}
-		.d2-1360396247 .fill-B4{fill:#E3E9FD;}
-		.d2-1360396247 .fill-B5{fill:#EDF0FD;}
-		.d2-1360396247 .fill-B6{fill:#F7F8FE;}
-		.d2-1360396247 .fill-AA2{fill:#4A6FF3;}
-		.d2-1360396247 .fill-AA4{fill:#EDF0FD;}
-		.d2-1360396247 .fill-AA5{fill:#F7F8FE;}
-		.d2-1360396247 .fill-AB4{fill:#EDF0FD;}
-		.d2-1360396247 .fill-AB5{fill:#F7F8FE;}
-		.d2-1360396247 .stroke-N1{stroke:#0A0F25;}
-		.d2-1360396247 .stroke-N2{stroke:#676C7E;}
-		.d2-1360396247 .stroke-N3{stroke:#9499AB;}
-		.d2-1360396247 .stroke-N4{stroke:#CFD2DD;}
-		.d2-1360396247 .stroke-N5{stroke:#DEE1EB;}
-		.d2-1360396247 .stroke-N6{stroke:#EEF1F8;}
-		.d2-1360396247 .stroke-N7{stroke:#FFFFFF;}
-		.d2-1360396247 .stroke-B1{stroke:#0D32B2;}
-		.d2-1360396247 .stroke-B2{stroke:#0D32B2;}
-		.d2-1360396247 .stroke-B3{stroke:#E3E9FD;}
-		.d2-1360396247 .stroke-B4{stroke:#E3E9FD;}
-		.d2-1360396247 .stroke-B5{stroke:#EDF0FD;}
-		.d2-1360396247 .stroke-B6{stroke:#F7F8FE;}
-		.d2-1360396247 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-1360396247 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-1360396247 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-1360396247 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-1360396247 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-1360396247 .background-color-N1{background-color:#0A0F25;}
-		.d2-1360396247 .background-color-N2{background-color:#676C7E;}
-		.d2-1360396247 .background-color-N3{background-color:#9499AB;}
-		.d2-1360396247 .background-color-N4{background-color:#CFD2DD;}
-		.d2-1360396247 .background-color-N5{background-color:#DEE1EB;}
-		.d2-1360396247 .background-color-N6{background-color:#EEF1F8;}
-		.d2-1360396247 .background-color-N7{background-color:#FFFFFF;}
-		.d2-1360396247 .background-color-B1{background-color:#0D32B2;}
-		.d2-1360396247 .background-color-B2{background-color:#0D32B2;}
-		.d2-1360396247 .background-color-B3{background-color:#E3E9FD;}
-		.d2-1360396247 .background-color-B4{background-color:#E3E9FD;}
-		.d2-1360396247 .background-color-B5{background-color:#EDF0FD;}
-		.d2-1360396247 .background-color-B6{background-color:#F7F8FE;}
-		.d2-1360396247 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-1360396247 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-1360396247 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-1360396247 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-1360396247 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-1360396247 .color-N1{color:#0A0F25;}
-		.d2-1360396247 .color-N2{color:#676C7E;}
-		.d2-1360396247 .color-N3{color:#9499AB;}
-		.d2-1360396247 .color-N4{color:#CFD2DD;}
-		.d2-1360396247 .color-N5{color:#DEE1EB;}
-		.d2-1360396247 .color-N6{color:#EEF1F8;}
-		.d2-1360396247 .color-N7{color:#FFFFFF;}
-		.d2-1360396247 .color-B1{color:#0D32B2;}
-		.d2-1360396247 .color-B2{color:#0D32B2;}
-		.d2-1360396247 .color-B3{color:#E3E9FD;}
-		.d2-1360396247 .color-B4{color:#E3E9FD;}
-		.d2-1360396247 .color-B5{color:#EDF0FD;}
-		.d2-1360396247 .color-B6{color:#F7F8FE;}
-		.d2-1360396247 .color-AA2{color:#4A6FF3;}
-		.d2-1360396247 .color-AA4{color:#EDF0FD;}
-		.d2-1360396247 .color-AA5{color:#F7F8FE;}
-		.d2-1360396247 .color-AB4{color:#EDF0FD;}
-		.d2-1360396247 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><path d="M 112 164 H 12 V 162 C 12 137 23 114 40 103 C 31 94 25 79 25 64 C 25 37 42 15 62 15 C 82 15 99 37 99 64 C 99 80 93 94 84 103 C 101 114 112 137 112 162 V 164 H 112 Z" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="62.000000" y="185.000000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="62.000000" dy="0.000000">John</tspan><tspan x="62.000000" dy="18.500000">Doe</tspan></text></g><g id="laptop"><g class="shape" ><rect x="162.000000" y="119.000000" width="100.000000" height="82.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="212.000000" y="157.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="212.000000" dy="0.000000">John&#39;s</tspan><tspan x="212.000000" dy="18.500000">Laptop</tspan></text></g><g id="mobile"><g class="shape" ><rect x="308.000000" y="119.000000" width="108.000000" height="82.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="362.000000" y="157.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="362.000000" dy="0.000000">Webapp</tspan><tspan x="362.000000" dy="18.500000">in mobile</tspan></text></g><g id="portal"><g class="shape" ><rect x="456.000000" y="119.000000" width="115.000000" height="82.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="513.500000" y="157.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="513.500000" dy="0.000000">DOM</tspan><tspan x="513.500000" dy="18.500000">webserver</tspan></text></g><g id="verifier"><g class="shape" ><rect x="611.000000" y="135.000000" width="114.000000" height="66.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="668.000000" y="173.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 62.000000 208.090909 L 62.000000 270.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1360396247)" /></g><g id="(laptop -- )[0]"><path d="M 212.000000 203.090909 L 212.000000 270.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1360396247)" /></g><g id="(mobile -- )[0]"><path d="M 362.000000 203.090909 L 362.000000 270.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1360396247)" /></g><g id="(portal -- )[0]"><path d="M 513.500000 203.090909 L 513.500000 270.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1360396247)" /></g><g id="(verifier -- )[0]"><path d="M 668.000000 203.090909 L 668.000000 270.090909" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-1360396247)" /></g><mask id="d2-1360396247" maskUnits="userSpaceOnUse" x="-89" y="-86" width="915" height="459">
-<rect x="-89" y="-86" width="915" height="459" fill="white"></rect>
+		.d2-774506953 .fill-N1{fill:#0A0F25;}
+		.d2-774506953 .fill-N2{fill:#676C7E;}
+		.d2-774506953 .fill-N3{fill:#9499AB;}
+		.d2-774506953 .fill-N4{fill:#CFD2DD;}
+		.d2-774506953 .fill-N5{fill:#DEE1EB;}
+		.d2-774506953 .fill-N6{fill:#EEF1F8;}
+		.d2-774506953 .fill-N7{fill:#FFFFFF;}
+		.d2-774506953 .fill-B1{fill:#0D32B2;}
+		.d2-774506953 .fill-B2{fill:#0D32B2;}
+		.d2-774506953 .fill-B3{fill:#E3E9FD;}
+		.d2-774506953 .fill-B4{fill:#E3E9FD;}
+		.d2-774506953 .fill-B5{fill:#EDF0FD;}
+		.d2-774506953 .fill-B6{fill:#F7F8FE;}
+		.d2-774506953 .fill-AA2{fill:#4A6FF3;}
+		.d2-774506953 .fill-AA4{fill:#EDF0FD;}
+		.d2-774506953 .fill-AA5{fill:#F7F8FE;}
+		.d2-774506953 .fill-AB4{fill:#EDF0FD;}
+		.d2-774506953 .fill-AB5{fill:#F7F8FE;}
+		.d2-774506953 .stroke-N1{stroke:#0A0F25;}
+		.d2-774506953 .stroke-N2{stroke:#676C7E;}
+		.d2-774506953 .stroke-N3{stroke:#9499AB;}
+		.d2-774506953 .stroke-N4{stroke:#CFD2DD;}
+		.d2-774506953 .stroke-N5{stroke:#DEE1EB;}
+		.d2-774506953 .stroke-N6{stroke:#EEF1F8;}
+		.d2-774506953 .stroke-N7{stroke:#FFFFFF;}
+		.d2-774506953 .stroke-B1{stroke:#0D32B2;}
+		.d2-774506953 .stroke-B2{stroke:#0D32B2;}
+		.d2-774506953 .stroke-B3{stroke:#E3E9FD;}
+		.d2-774506953 .stroke-B4{stroke:#E3E9FD;}
+		.d2-774506953 .stroke-B5{stroke:#EDF0FD;}
+		.d2-774506953 .stroke-B6{stroke:#F7F8FE;}
+		.d2-774506953 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-774506953 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-774506953 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-774506953 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-774506953 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-774506953 .background-color-N1{background-color:#0A0F25;}
+		.d2-774506953 .background-color-N2{background-color:#676C7E;}
+		.d2-774506953 .background-color-N3{background-color:#9499AB;}
+		.d2-774506953 .background-color-N4{background-color:#CFD2DD;}
+		.d2-774506953 .background-color-N5{background-color:#DEE1EB;}
+		.d2-774506953 .background-color-N6{background-color:#EEF1F8;}
+		.d2-774506953 .background-color-N7{background-color:#FFFFFF;}
+		.d2-774506953 .background-color-B1{background-color:#0D32B2;}
+		.d2-774506953 .background-color-B2{background-color:#0D32B2;}
+		.d2-774506953 .background-color-B3{background-color:#E3E9FD;}
+		.d2-774506953 .background-color-B4{background-color:#E3E9FD;}
+		.d2-774506953 .background-color-B5{background-color:#EDF0FD;}
+		.d2-774506953 .background-color-B6{background-color:#F7F8FE;}
+		.d2-774506953 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-774506953 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-774506953 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-774506953 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-774506953 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-774506953 .color-N1{color:#0A0F25;}
+		.d2-774506953 .color-N2{color:#676C7E;}
+		.d2-774506953 .color-N3{color:#9499AB;}
+		.d2-774506953 .color-N4{color:#CFD2DD;}
+		.d2-774506953 .color-N5{color:#DEE1EB;}
+		.d2-774506953 .color-N6{color:#EEF1F8;}
+		.d2-774506953 .color-N7{color:#FFFFFF;}
+		.d2-774506953 .color-B1{color:#0D32B2;}
+		.d2-774506953 .color-B2{color:#0D32B2;}
+		.d2-774506953 .color-B3{color:#E3E9FD;}
+		.d2-774506953 .color-B4{color:#E3E9FD;}
+		.d2-774506953 .color-B5{color:#EDF0FD;}
+		.d2-774506953 .color-B6{color:#F7F8FE;}
+		.d2-774506953 .color-AA2{color:#4A6FF3;}
+		.d2-774506953 .color-AA4{color:#EDF0FD;}
+		.d2-774506953 .color-AA5{color:#F7F8FE;}
+		.d2-774506953 .color-AB4{color:#EDF0FD;}
+		.d2-774506953 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><rect x="12.000000" y="52.000000" width="135.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="79.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">John Doe</text></g><g id="mobile"><g class="shape" ><rect x="187.000000" y="52.000000" width="127.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2F052-smartphone-3.svg" x="187.000000" y="52.000000" width="46" height="46" /><text x="250.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Webapp</text></g><g id="browser"><g class="shape" ><rect x="354.000000" y="52.000000" width="118.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2Fbrowser-2.svg" x="354.000000" y="52.000000" width="46" height="46" /><text x="413.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Laptop</text></g><g id="portal"><g class="shape" ><rect x="512.000000" y="52.000000" width="111.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg" x="512.000000" y="52.000000" width="46" height="46" /><text x="567.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Portal</text></g><g id="verifier"><g class="shape" ><rect x="663.000000" y="52.000000" width="140.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg" x="663.000000" y="52.000000" width="46" height="46" /><text x="733.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 79.500000 146.000000 L 79.500000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(mobile -- )[0]"><path d="M 250.500000 146.000000 L 250.500000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(browser -- )[0]"><path d="M 413.000000 146.000000 L 413.000000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(portal -- )[0]"><path d="M 567.500000 146.000000 L 567.500000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(verifier -- )[0]"><path d="M 733.000000 146.000000 L 733.000000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><mask id="d2-774506953" maskUnits="userSpaceOnUse" x="-89" y="-49" width="993" height="364">
+<rect x="-89" y="-49" width="993" height="364" fill="white"></rect>
 
 </mask></svg></svg>
             <ul style="list-style-type: none">
