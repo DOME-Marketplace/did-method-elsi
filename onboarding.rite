@@ -182,15 +182,15 @@ localBiblio:
 
         The X.509 certificate of the COO has the following contents in the `Subject` field (the example below is derived from a real certificate but with the identifiers modified to be an example):
 
-        <x-code .yaml>
-            cn=56565656V Jesus Ruiz
-            serialNumber=56565656V
-            givenName=Jesus
-            sn=Ruiz
-            2.5.4.97=VATES-12345678
-            o=GoodAir
-            c=ES
-            2.5.4.13=Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021
+        <x-code .ini>
+            cn = 56565656V Jesus Ruiz
+            serialNumber = 56565656V
+            givenName = Jesus
+            sn = Ruiz
+            2.5.4.97 = VATES-12345678
+            o = GoodAir
+            c = ES
+            2.5.4.13 = Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021
 
         The above set of fields bind the legal identity of the COO with the identity of the business:
 
@@ -214,7 +214,7 @@ localBiblio:
 
         In our case, the entry for RealTruth in the TL includes a `\<TSPService\>` entry, and inside it the `\<ServiceDigitalIdentity\>` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
 
-        <x-code .yaml>
+        <x-code .INI>
             2.5.4.97 = VATDE-170173453
             CN = DRV QC 11 MA CA 2017ca
             OU = QC 11 Mitarbeiter CA
@@ -366,7 +366,7 @@ localBiblio:
             }
 
 
-        <aside .note title="Attributes for natural and legal persons">
+        <x-note>Attributes for natural and legal persons
 
             The attributes for natural persons and legal persons are derived from the <a href="https://ec.europa.eu/digital-building-blocks/wikis/download/attachments/467109280/eidas_saml_attribute_profile_v1.0_2.pdf?version=1&modificationDate=1639417533738&api=v2">eIDAS SAML Attribute Profile (eIDAS Technical Sub-group, 22 June 2015)</a>.
 
@@ -568,13 +568,13 @@ localBiblio:
 
             Below is a non-normative example of the Credential Offer displayed by the Credential Issuer as a QR code when the Credential Offer is passed by reference, as required in this profile:
 
-            <x-code .http>
+            <x-code .INI>
                 https://credential-issuer.example.com/credential-offer?
                 credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j
 
             Which in plain text would be:
 
-            <x-code .http>
+            <x-code .INI>
                 https://credential-issuer.example.com/credential-offer?
                 credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j
 
@@ -653,7 +653,7 @@ localBiblio:
 
             Below is a non-normative example of a Token Request:
 
-            <x-code .http>
+            <x-code .HTTP>
                 POST /token HTTP/1.1
                 Host: server.example.com
                 Content-Type: application/x-www-form-urlencoded
@@ -676,7 +676,7 @@ localBiblio:
 
             Below is a non-normative example of a Token Response:
 
-            <x-code .http>
+            <x-code .HTTP>
                 HTTP/1.1 200 OK
                 Content-Type: application/json
                 Cache-Control: no-store
@@ -796,7 +796,7 @@ localBiblio:
 
             Below is a non-normative example of a Credential Response:
 
-            <x-code .http>
+            <x-code .HTTP>
                 HTTP/1.1 200 OK
                 Content-Type: application/json
                 Cache-Control: no-store

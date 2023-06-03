@@ -325,25 +325,15 @@
         <p>The X.509 certificate of the COO has the following contents in the <code>Subject</code> field (the example below is derived from a real certificate but with the identifiers modified to be an example):
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#1c01ce">cn=56565656V Jesus Ruiz</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">serialNumber=56565656V</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">givenName=Jesus</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">sn=Ruiz</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">2.5.4.97</span><span style="color:#1c01ce">=VATES-12345678</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">o=GoodAir</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">c=ES</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">2.5.4.13</span><span style="color:#1c01ce">=Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#836c28">cn</span> <span style="color:#000">=</span> <span style="color:#c41a16">56565656V Jesus Ruiz</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">serialNumber</span> <span style="color:#000">=</span> <span style="color:#c41a16">56565656V</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">givenName</span> <span style="color:#000">=</span> <span style="color:#c41a16">Jesus</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">sn</span> <span style="color:#000">=</span> <span style="color:#c41a16">Ruiz</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">2.5.4.97</span> <span style="color:#000">=</span> <span style="color:#c41a16">VATES-12345678</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">o</span> <span style="color:#000">=</span> <span style="color:#c41a16">GoodAir</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">c</span> <span style="color:#000">=</span> <span style="color:#c41a16">ES</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">2.5.4.13</span> <span style="color:#000">=</span> <span style="color:#c41a16">Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021</span>
 </span></span></code></pre>
-
-        <pre class='yaml'><code>cn=56565656V Jesus Ruiz
-serialNumber=56565656V
-givenName=Jesus
-sn=Ruiz
-2.5.4.97=VATES-12345678
-o=GoodAir
-c=ES
-2.5.4.13=Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021</code></pre>
-
         <p>The above set of fields bind the legal identity of the COO with the identity of the business:
         </p>
         <ul>
@@ -371,19 +361,12 @@ c=ES
         <p>In our case, the entry for RealTruth in the TL includes a `&ltTSPService&gt` entry, and inside it the `&ltServiceDigitalIdentity&gt` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#1c01ce">2.5.4.97</span> <span style="color:#1c01ce">= VATDE-170173453</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">CN = DRV QC 11 MA CA 2017ca</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">OU = QC 11 Mitarbeiter CA</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">O = Deutsche Rentenversicherung Westfalen</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">C = DE</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#836c28">2.5.4.97</span> <span style="color:#000">=</span> <span style="color:#c41a16">VATDE-170173453</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">CN</span> <span style="color:#000">=</span> <span style="color:#c41a16">DRV QC 11 MA CA 2017ca</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">OU</span> <span style="color:#000">=</span> <span style="color:#c41a16">QC 11 Mitarbeiter CA</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">O</span> <span style="color:#000">=</span> <span style="color:#c41a16">Deutsche Rentenversicherung Westfalen</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">C</span> <span style="color:#000">=</span> <span style="color:#c41a16">DE</span>
 </span></span></code></pre>
-
-        <pre class='yaml'><code>2.5.4.97 = VATDE-170173453
-CN = DRV QC 11 MA CA 2017ca
-OU = QC 11 Mitarbeiter CA
-O = Deutsche Rentenversicherung Westfalen
-C = DE</code></pre>
-
         <p>Which in the <code>organizationIdentifier</code> field (OID 2.5.4.97) specifies the unique organisation identifier assigned by the German regulatory authority to the TSP: VATDE-170173453.
         </p>
         <p>RealTruth provides `Legal Person Representative Certificates` which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
@@ -579,31 +562,18 @@ C = DE</code></pre>
         <p>From the above form we can derive the following claims:
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-        <pre class='json'><code>{
-    "title": "Mr.",
-    "first_name": "John",
-    "last_name": "Doe",
-    "gender": "M",
-    "postal_address": "",
-    "email": "johndoe@goodair.com",
-    "telephone": "",
-    "fax": "",
-    "mobile_phone": "+34787426623"
-}</code></pre>
-
         <p>Where the <code>id</code> field is the `did:key` identifier assigned to the employee when issuing the credential, for privacy reasons. This is explained in more detail below.
         </p>
     </section>
@@ -628,47 +598,28 @@ C = DE</code></pre>
         <p>An example could be:
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d#key1&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d#key1&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-        <pre class='json'><code>{
-    "id": "did:key:99ab5bca41bb45b78d242a46f0157b7d#key1"
-}</code></pre>
-
         <p>In this example, the signatures performed with the private key can not be JAdES-compliant ([[ETSI-JADES]]), but if the LEARCredential is attached to any other credential that is signed with this private key, then they can be traced up to the eIDAS certificate of the COO and so the chain of responsibility can be determined..
         </p>
         <p>With the DID for the employee, the set of claims identifying him would be then:
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-        <pre class='json'><code>{
-    "id": "did:key:99ab5bca41bb45b78d242a46f0157b7d",
-    "title": "Mr.",
-    "first_name": "John",
-    "last_name": "Doe",
-    "gender": "M",
-    "postal_address": "",
-    "email": "johndoe@goodair.com",
-    "telephone": "",
-    "fax": "",
-    "mobile_phone": "+34787426623"
-}</code></pre>
-
     </section>
 
 
@@ -677,25 +628,16 @@ C = DE</code></pre>
         <p>This section identifies the natural person (the COO) who is a legal representative of the legal person (GoodAir) and that is nominating the employee identified in the credential.
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#c41a16">&#34;legalRepresentative&#34;</span><span style="color:#000">:</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;cn&#34;</span>: <span style="color:#c41a16">&#34;56565656V Jesus Ruiz&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;serialNumber&#34;</span>: <span style="color:#c41a16">&#34;56565656V&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;organizationIdentifier&#34;</span>: <span style="color:#c41a16">&#34;VATES-12345678&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;o&#34;</span>: <span style="color:#c41a16">&#34;GoodAir&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;c&#34;</span>: <span style="color:#c41a16">&#34;ES&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#c41a16">&#34;legalRepresentative&#34;</span><span style="color:#000">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;cn&#34;</span>: <span style="color:#c41a16">&#34;56565656V Jesus Ruiz&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;serialNumber&#34;</span>: <span style="color:#c41a16">&#34;56565656V&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;organizationIdentifier&#34;</span>: <span style="color:#c41a16">&#34;VATES-12345678&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;o&#34;</span>: <span style="color:#c41a16">&#34;GoodAir&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c&#34;</span>: <span style="color:#c41a16">&#34;ES&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
 
-        <pre class='json'><code>"legalRepresentative": {
-    "cn": "56565656V Jesus Ruiz",
-    "serialNumber": "56565656V",
-    "organizationIdentifier": "VATES-12345678",
-    "o": "GoodAir",
-    "c": "ES"
-}</code></pre>
-
-
-        <aside class='note' title="Attributes for natural and legal persons">
+        <aside class='note' title='Attributes for natural and legal persons'>
             <p>The attributes for natural persons and legal persons are derived from the <a href="https://ec.europa.eu/digital-building-blocks/wikis/download/attachments/467109280/eidas_saml_attribute_profile_v1.0_2.pdf?version=1&modificationDate=1639417533738&api=v2">eIDAS SAML Attribute Profile (eIDAS Technical Sub-group, 22 June 2015)</a>.
             </p>
             <p>All attributes for the eIDAS minimum data sets can be derived from the <a href="https://ec.europa.eu/isa2/solutions/core-vocabularies_en/">ISA Core Vocabulary</a> and <a href="https://joinup.ec.europa.eu/collection/semic-support-centre/specifications">https://joinup.ec.europa.eu/collection/semic-support-centre/specifications</a>.
@@ -726,21 +668,13 @@ C = DE</code></pre>
         <p>A simplistic implementation of the object inside the credential could be:
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    <span style="color:#c41a16">&#34;rolesAndDuties&#34;</span><span style="color:#000">:</span> [
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;type&#34;</span>: <span style="color:#c41a16">&#34;LEARCredential&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;</span>
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    ]
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#c41a16">&#34;rolesAndDuties&#34;</span><span style="color:#000">:</span> [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;type&#34;</span>: <span style="color:#c41a16">&#34;LEARCredential&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>]
 </span></span></code></pre>
-
-        <pre class='json'><code>"rolesAndDuties": [
-    {
-        "type": "LEARCredential",
-        "id": "https://www.dome-project.com/lear/v1/6484994n4r9e990494"
-    }
-]</code></pre>
-
         <p>Where the last part of the url can correspond to the hash of the external linked document to ensure that any modification or tampering can be detected. 
         </p>
     </section>
@@ -751,87 +685,46 @@ C = DE</code></pre>
         <p>With the above values for the example, the complete LEARCredential would become something like this:
         </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;@context&#34;</span>: [
-</span></span><span style="display:flex;"><span>            <span style="color:#c41a16">&#34;https://www.w3.org/2018/credentials/v1&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#c41a16">&#34;https://www.dome-project.com/2022/credentials/learcredential/v1&#34;</span>
-</span></span><span style="display:flex;"><span>        ],
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;urn:did:elsi:25159389-8dd17b796ac0&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;type&#34;</span>: [<span style="color:#c41a16">&#34;VerifiableCredential&#34;</span>, <span style="color:#c41a16">&#34;LEARCredential&#34;</span>],
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;issuer&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:elsi:VATES-12345678&#34;</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;@context&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#c41a16">&#34;https://www.w3.org/2018/credentials/v1&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#c41a16">&#34;https://www.dome-project.com/2022/credentials/learcredential/v1&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;urn:did:elsi:25159389-8dd17b796ac0&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;type&#34;</span>: [<span style="color:#c41a16">&#34;VerifiableCredential&#34;</span>, <span style="color:#c41a16">&#34;LEARCredential&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;issuer&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:elsi:VATES-12345678&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;issuanceDate&#34;</span>: <span style="color:#c41a16">&#34;2022-03-22T14:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;validFrom&#34;</span>: <span style="color:#c41a16">&#34;2022-03-22T14:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;expirationDate&#34;</span>: <span style="color:#c41a16">&#34;2023-03-22T14:00:00Z&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;credentialSubject&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;legalRepresentative&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;cn&#34;</span>: <span style="color:#c41a16">&#34;56565656V Jesus Ruiz&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;serialNumber&#34;</span>: <span style="color:#c41a16">&#34;56565656V&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;organizationIdentifier&#34;</span>: <span style="color:#c41a16">&#34;VATES-12345678&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;o&#34;</span>: <span style="color:#c41a16">&#34;GoodAir&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;c&#34;</span>: <span style="color:#c41a16">&#34;ES&#34;</span>
 </span></span><span style="display:flex;"><span>        },
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;issuanceDate&#34;</span>: <span style="color:#c41a16">&#34;2022-03-22T14:00:00Z&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;validFrom&#34;</span>: <span style="color:#c41a16">&#34;2022-03-22T14:00:00Z&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;expirationDate&#34;</span>: <span style="color:#c41a16">&#34;2023-03-22T14:00:00Z&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;credentialSubject&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;did:key:99ab5bca41bb45b78d242a46f0157b7d&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;title&#34;</span>: <span style="color:#c41a16">&#34;Mr.&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;first_name&#34;</span>: <span style="color:#c41a16">&#34;John&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;last_name&#34;</span>: <span style="color:#c41a16">&#34;Doe&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;gender&#34;</span>: <span style="color:#c41a16">&#34;M&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;postal_address&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;email&#34;</span>: <span style="color:#c41a16">&#34;johndoe@goodair.com&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;telephone&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;fax&#34;</span>: <span style="color:#c41a16">&#34;&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;mobile_phone&#34;</span>: <span style="color:#c41a16">&#34;+34787426623&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;legalRepresentative&#34;</span>: {
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;cn&#34;</span>: <span style="color:#c41a16">&#34;56565656V Jesus Ruiz&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;serialNumber&#34;</span>: <span style="color:#c41a16">&#34;56565656V&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;organizationIdentifier&#34;</span>: <span style="color:#c41a16">&#34;VATES-12345678&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;o&#34;</span>: <span style="color:#c41a16">&#34;GoodAir&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;c&#34;</span>: <span style="color:#c41a16">&#34;ES&#34;</span>
-</span></span><span style="display:flex;"><span>            },
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;rolesAndDuties&#34;</span>: [
-</span></span><span style="display:flex;"><span>                {
-</span></span><span style="display:flex;"><span>                    <span style="color:#000">&#34;type&#34;</span>: <span style="color:#c41a16">&#34;LEARCredential&#34;</span>,
-</span></span><span style="display:flex;"><span>                    <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;</span>
-</span></span><span style="display:flex;"><span>                }
-</span></span><span style="display:flex;"><span>            ]
-</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;rolesAndDuties&#34;</span>: [
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;type&#34;</span>: <span style="color:#c41a16">&#34;LEARCredential&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;id&#34;</span>: <span style="color:#c41a16">&#34;https://www.dome-project.com/lear/v1/6484994n4r9e990494&#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        ]
 </span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-        <pre class='json'><code>{
-    "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://www.dome-project.com/2022/credentials/learcredential/v1"
-    ],
-    "id": "urn:did:elsi:25159389-8dd17b796ac0",
-    "type": ["VerifiableCredential", "LEARCredential"],
-    "issuer": {
-        "id": "did:elsi:VATES-12345678"
-    },
-    "issuanceDate": "2022-03-22T14:00:00Z",
-    "validFrom": "2022-03-22T14:00:00Z",
-    "expirationDate": "2023-03-22T14:00:00Z",
-    "credentialSubject": {
-        "id": "did:key:99ab5bca41bb45b78d242a46f0157b7d",
-        "title": "Mr.",
-        "first_name": "John",
-        "last_name": "Doe",
-        "gender": "M",
-        "postal_address": "",
-        "email": "johndoe@goodair.com",
-        "telephone": "",
-        "fax": "",
-        "mobile_phone": "+34787426623",
-        "legalRepresentative": {
-            "cn": "56565656V Jesus Ruiz",
-            "serialNumber": "56565656V",
-            "organizationIdentifier": "VATES-12345678",
-            "o": "GoodAir",
-            "c": "ES"
-        },
-        "rolesAndDuties": [
-            {
-                "type": "LEARCredential",
-                "id": "https://www.dome-project.com/lear/v1/6484994n4r9e990494"
-            }
-        ]
-    }
-}</code></pre>
-
     </section>
 
 </section>
@@ -972,33 +865,19 @@ C = DE</code></pre>
             <p>The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("LEARCredential"):
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;credential_issuer&#34;</span>: <span style="color:#c41a16">&#34;https://credential-issuer.example.com&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;credentials&#34;</span>: [
-</span></span><span style="display:flex;"><span>            <span style="color:#c41a16">&#34;LEARCredential&#34;</span>
-</span></span><span style="display:flex;"><span>        ],
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;grants&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;urn:ietf:params:oauth:grant-type:pre-authorized_code&#34;</span>: {
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;pre-authorized_code&#34;</span>: <span style="color:#c41a16">&#34;asju68jgtyk9ikkew&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#000">&#34;user_pin_required&#34;</span>: <span style="color:#a90d91">true</span>
-</span></span><span style="display:flex;"><span>            }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;credential_issuer&#34;</span>: <span style="color:#c41a16">&#34;https://credential-issuer.example.com&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;credentials&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#c41a16">&#34;LEARCredential&#34;</span>
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;grants&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;urn:ietf:params:oauth:grant-type:pre-authorized_code&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;pre-authorized_code&#34;</span>: <span style="color:#c41a16">&#34;asju68jgtyk9ikkew&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#000">&#34;user_pin_required&#34;</span>: <span style="color:#a90d91">true</span>
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-            <pre class='json'><code>{
-    "credential_issuer": "https://credential-issuer.example.com",
-    "credentials": [
-        "LEARCredential"
-    ],
-    "grants": {
-        "urn:ietf:params:oauth:grant-type:pre-authorized_code": {
-            "pre-authorized_code": "asju68jgtyk9ikkew",
-            "user_pin_required": true
-        }
-    }
-}</code></pre>
-
         </section>
 
 
@@ -1007,23 +886,15 @@ C = DE</code></pre>
             <p>Below is a non-normative example of the Credential Offer displayed by the Credential Issuer as a QR code when the Credential Offer is passed by reference, as required in this profile:
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    https://credential-issuer.example.com/credential-offer?
-</span></span></span><span style="display:flex;"><span><span style="color:#000">    credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j
-</span></span></span></code></pre>
-
-            <pre class='http'><code>https://credential-issuer.example.com/credential-offer?
-credential_offer_uri=https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j</code></pre>
-
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#836c28">https://credential-issuer.example.com/credential-offer?</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">credential_offer_uri</span><span style="color:#000">=</span><span style="color:#c41a16">https%3A%2F%2Fserver%2Eexample%2Ecom%2Fcredential-offer%2F5j349k3e3n23j</span>
+</span></span></code></pre>
             <p>Which in plain text would be:
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    https://credential-issuer.example.com/credential-offer?
-</span></span></span><span style="display:flex;"><span><span style="color:#000">    credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j
-</span></span></span></code></pre>
-
-            <pre class='http'><code>https://credential-issuer.example.com/credential-offer?
-credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</code></pre>
-
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#836c28">https://credential-issuer.example.com/credential-offer?</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">credential_offer_uri</span><span style="color:#000">=</span><span style="color:#c41a16">https://server.example.com/credential-offer/5j349k3e3n23j</span>
+</span></span></code></pre>
             <p>To increase security, the Issuer MUST make sure that every Credential Offer URI is unique for all credential offers created. This is the purpose of the nonce (<code>5j349k3e3n23j</code>) at the end of the url in the example. Issuers can implement whatever mechanism they wish, as far as it is transparent to the wallet.
             </p>
         </section>
@@ -1121,22 +992,14 @@ credential_offer_uri=https://server.example.com/credential-offer/5j349k3e3n23j</
             <p>Below is a non-normative example of a Token Request:
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#000">POST</span> <span style="color:#000">/token</span> <span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Host: server.example.com</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/x-www-form-urlencoded</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">&amp;pre-authorized_code=SplxlOBeZQQYbYS6WxSbIA</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">&amp;user_pin=493536</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#000">POST</span> <span style="color:#000">/token</span> <span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Host</span><span style="color:#000">:</span> <span style="color:#1c01ce">server.example.com</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Content-Type</span><span style="color:#000">:</span> <span style="color:#1c01ce">application/x-www-form-urlencoded</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code
+</span></span><span style="display:flex;"><span>&amp;pre-authorized_code=SplxlOBeZQQYbYS6WxSbIA
+</span></span><span style="display:flex;"><span>&amp;user_pin=493536
 </span></span></code></pre>
-
-            <pre class='http'><code>POST /token HTTP/1.1
-Host: server.example.com
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code
-&pre-authorized_code=SplxlOBeZQQYbYS6WxSbIA
-&user_pin=493536</code></pre>
-
         </section>
 
 
@@ -1154,30 +1017,18 @@ grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code
             <p>Below is a non-normative example of a Token Response:
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">200</span> <span style="color:#000">OK</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/json</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Cache-Control: no-store</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;access_token&#34;: &#34;eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;token_type&#34;: &#34;bearer&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;expires_in&#34;: 86400,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce&#34;: &#34;tZignsnFbp&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce_expires_in&#34;: 86400</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">}</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">200</span> <span style="color:#000">OK</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Content-Type</span><span style="color:#000">:</span> <span style="color:#1c01ce">application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Cache-Control</span><span style="color:#000">:</span> <span style="color:#1c01ce">no-store</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;access_token&#34;</span>: <span style="color:#c41a16">&#34;eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;token_type&#34;</span>: <span style="color:#c41a16">&#34;bearer&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;expires_in&#34;</span>: <span style="color:#1c01ce">86400</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c_nonce&#34;</span>: <span style="color:#c41a16">&#34;tZignsnFbp&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c_nonce_expires_in&#34;</span>: <span style="color:#1c01ce">86400</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-            <pre class='http'><code>HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
-    "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6Ikp..sHQ",
-    "token_type": "bearer",
-    "expires_in": 86400,
-    "c_nonce": "tZignsnFbp",
-    "c_nonce_expires_in": 86400
-}</code></pre>
-
         </section>
 
 
@@ -1264,46 +1115,27 @@ Cache-Control: no-store
                 <p>Below is a non-normative example of a proof parameter (dots in the middle of jwt for display purposes only):
                 </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;proof_type&#34;</span>: <span style="color:#c41a16">&#34;jwt&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;jwt&#34;</span>: <span style="color:#c41a16">&#34;eyJraWQiOiJkaWQ6ZXhhb....aZKPxgihac0aW9EkL1nOzM&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;proof_type&#34;</span>: <span style="color:#c41a16">&#34;jwt&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;jwt&#34;</span>: <span style="color:#c41a16">&#34;eyJraWQiOiJkaWQ6ZXhhb....aZKPxgihac0aW9EkL1nOzM&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-                <pre class='json'><code>{
-    "proof_type": "jwt",
-    "jwt": "eyJraWQiOiJkaWQ6ZXhhb....aZKPxgihac0aW9EkL1nOzM"
-}</code></pre>
-
                 <p>where the JWT looks like this:
                 </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;typ&#34;</span>: <span style="color:#c41a16">&#34;openid4vci-proof+jwt&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;alg&#34;</span>: <span style="color:#c41a16">&#34;ES256&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;kid&#34;</span>:<span style="color:#c41a16">&#34;did:example:ebfeb1f712ebc6f1c276e12ec21/keys/1&#34;</span>
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;iss&#34;</span>: <span style="color:#c41a16">&#34;s6BhdRkqt3&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;aud&#34;</span>: <span style="color:#c41a16">&#34;https://server.example.com&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;iat&#34;</span>: <span style="color:#1c01ce">1659145924</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#000">&#34;nonce&#34;</span>: <span style="color:#c41a16">&#34;tZignsnFbp&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;typ&#34;</span>: <span style="color:#c41a16">&#34;openid4vci-proof+jwt&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;alg&#34;</span>: <span style="color:#c41a16">&#34;ES256&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;kid&#34;</span>:<span style="color:#c41a16">&#34;did:example:ebfeb1f712ebc6f1c276e12ec21/keys/1&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;iss&#34;</span>: <span style="color:#c41a16">&#34;s6BhdRkqt3&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;aud&#34;</span>: <span style="color:#c41a16">&#34;https://server.example.com&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;iat&#34;</span>: <span style="color:#1c01ce">1659145924</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;nonce&#34;</span>: <span style="color:#c41a16">&#34;tZignsnFbp&#34;</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-                <pre class='json'><code>{
-    "typ": "openid4vci-proof+jwt",
-    "alg": "ES256",
-    "kid":"did:example:ebfeb1f712ebc6f1c276e12ec21/keys/1"
-}
-
-{
-    "iss": "s6BhdRkqt3",
-    "aud": "https://server.example.com",
-    "iat": 1659145924,
-    "nonce": "tZignsnFbp"
-}</code></pre>
-
             </section>
 
         </section>
@@ -1325,28 +1157,17 @@ Cache-Control: no-store
             <p>Below is a non-normative example of a Credential Response:
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">200</span> <span style="color:#000">OK</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/json</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Cache-Control: no-store</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;format&#34;: &#34;jwt_vc_json&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;credential&#34; : &#34;LUpixVCWJk0eOt4CXQe1NXK....WZwmhmn9OQp6YxX0a2L&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce&#34;: &#34;fGFF7UkhLa&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce_expires_in&#34;: 86400</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">}</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">200</span> <span style="color:#000">OK</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Content-Type</span><span style="color:#000">:</span> <span style="color:#1c01ce">application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Cache-Control</span><span style="color:#000">:</span> <span style="color:#1c01ce">no-store</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;format&#34;</span>: <span style="color:#c41a16">&#34;jwt_vc_json&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;credential&#34;</span> : <span style="color:#c41a16">&#34;LUpixVCWJk0eOt4CXQe1NXK....WZwmhmn9OQp6YxX0a2L&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c_nonce&#34;</span>: <span style="color:#c41a16">&#34;fGFF7UkhLa&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c_nonce_expires_in&#34;</span>: <span style="color:#1c01ce">86400</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-            <pre class='http'><code>HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
-    "format": "jwt_vc_json",
-    "credential" : "LUpixVCWJk0eOt4CXQe1NXK....WZwmhmn9OQp6YxX0a2L",
-    "c_nonce": "fGFF7UkhLa",
-    "c_nonce_expires_in": 86400
-}</code></pre>
-
         </section>
 
 
@@ -1364,30 +1185,18 @@ Cache-Control: no-store
             <p>Below is a non-normative example of a Credential Response with the Credential Issuer requesting a Wallet to provide in a subsequent Credential Request a proof that is bound to a <code>c_nonce</code>:
             </p>
 
-<pre class="nohighlight"  style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000">    </span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">400</span> <span style="color:#000">Bad Request</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Content-Type: application/json</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">Cache-Control: no-store</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">{</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;error&#34;: &#34;invalid_or_missing_proof&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;error_description&#34;:</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#1c01ce">&#34;Credential Issuer requires proof to be bound to a Credential Issuer provided nonce.&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce&#34;: &#34;8YE9hCnyV2&#34;,</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#1c01ce">&#34;c_nonce_expires_in&#34;: 86400</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#1c01ce">}</span>
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#a90d91">HTTP</span><span style="color:#000">/</span><span style="color:#1c01ce">1.1</span> <span style="color:#1c01ce">400</span> <span style="color:#000">Bad Request</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Content-Type</span><span style="color:#000">:</span> <span style="color:#1c01ce">application/json</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">Cache-Control</span><span style="color:#000">:</span> <span style="color:#1c01ce">no-store</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;error&#34;</span>: <span style="color:#c41a16">&#34;invalid_or_missing_proof&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;error_description&#34;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#c41a16">&#34;Credential Issuer requires proof to be bound to a Credential Issuer provided nonce.&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c_nonce&#34;</span>: <span style="color:#c41a16">&#34;8YE9hCnyV2&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#000">&#34;c_nonce_expires_in&#34;</span>: <span style="color:#1c01ce">86400</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre>
-
-            <pre class='http'><code>HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-
-{
-    "error": "invalid_or_missing_proof",
-    "error_description":
-        "Credential Issuer requires proof to be bound to a Credential Issuer provided nonce.",
-    "c_nonce": "8YE9hCnyV2",
-    "c_nonce_expires_in": 86400
-}</code></pre>
-
         </section>
 
     </section>
