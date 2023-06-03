@@ -97,6 +97,10 @@
                         href: "https://www.rfc-editor.org/rfc/rfc8725",
                         title: "JSON Web Token Best Current Practices",
                 },
+                "SIOPv2": {
+                        href: "https://openid.bitbucket.io/connect/openid-connect-self-issued-v2-1_0.html",
+                        title: "Self-Issued OpenID Provider v2",
+                },
             },
         };
     </script>
@@ -302,7 +306,7 @@
         </p>
         <p>The DOME Data Space has an onboarding service that allows external entities to perform onboarding in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
         </p>
-        <p>In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both).
+        <p>In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
         </p>
     </section>
 
@@ -311,7 +315,7 @@
 
         <p>The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
         </p>
-        <p>The company is registered in the tax agency and business registry of Spain with VAT number VATES-12345678
+        <p>The company is registered in the tax agency and business registry of Spain with VAT number <b>VATES-12345678</b>.
         </p>
     </section>
 
@@ -337,8 +341,8 @@
         <p>The above set of fields bind the legal identity of the COO with the identity of the business:
         </p>
         <ul>
-            <li id='list_197.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
-            <li id='list_197.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
+            <li id='list_200.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
+            <li id='list_200.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
         </ul>
 
         <p>Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
@@ -378,10 +382,10 @@
             <p>The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
             </p>
             <ul>
-                <li id='list_233.1'>The data concerning the business name or corporate name of the organisation.                </li>
-                <li id='list_233.2'>The data relating to the constitution and legal status of the subscriber.                </li>
-                <li id='list_233.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
-                <li id='list_233.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
+                <li id='list_236.1'>The data concerning the business name or corporate name of the organisation.                </li>
+                <li id='list_236.2'>The data relating to the constitution and legal status of the subscriber.                </li>
+                <li id='list_236.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
+                <li id='list_236.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
             </ul>
 
         </blockquote>
@@ -774,8 +778,8 @@
         <p>In this profile we assume that the Issuer is composed of two components:
         </p>
         <ul>
-            <li id='list_484.1'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
-            <li id='list_484.2'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
+            <li id='list_487.1'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
+            <li id='list_487.2'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
         </ul>
 
         <p>The Issuer backend and the Authorization server could be implemented as a single component in a real use case, but we assume here that they are separated to make the profile more general, especially for big entities and also when using Trust Service Providers for cloud signature and credential issuance, for example.
@@ -838,8 +842,8 @@
             <p>This profile restricts the options available in section 4.1.1 of [[OIDCVCI]]. The profile defines a Credential Offer object containing the following parameters:
             </p>
             <ul>
-                <li id='list_531.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
-                <li id='list_531.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                <div>
+                <li id='list_534.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
+                <li id='list_534.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                <div>
 
                     <aside class='note' title='LEARCredential'>
                         <p>The only credential being offered in our case is the LEARCredential, so this is the credential schema that should be specified here. The LEARCredential is a credential known globally to the DOME ecosystem, so its schema should be published and be available in the Trusted Credential Schemas List.
@@ -848,7 +852,7 @@
 
                 </div>
                 </li>
-                <li id='list_531.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                <div>
+                <li id='list_534.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                <div>
                     <p>In other scenarios like when the wallet is a native mobile application and the user interacts with the Issuer exclusively with the mobile (without the laptop), then the Authorization Code Flow has to be used. This can be described in detail in a different profile.
                     </p>
                 </div>
@@ -858,8 +862,8 @@
             <p>The grant object contains the following values:
             </p>
             <ul>
-                <li id='list_545.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
-                <li id='list_545.2'><code>user_pin_required</code>: REQUIRED. The OIDCVCI standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
+                <li id='list_548.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
+                <li id='list_548.2'><code>user_pin_required</code>: REQUIRED. The OIDCVCI standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
             </ul>
 
             <p>The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("LEARCredential"):
@@ -930,9 +934,9 @@
             <p>The object contained in <code>openid-credential-issuer</code> contains the following:
             </p>
             <ul>
-                <li id='list_605.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
-                <li id='list_605.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
-                <li id='list_605.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
+                <li id='list_608.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
+                <li id='list_608.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
+                <li id='list_608.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
             </ul>
 
             <p>TODO: define a global directory of credentials supported to eliminate requirement for each individual Issuer to publish its own list.
@@ -940,9 +944,9 @@
             <p>This profile does not make use of the following parameters:
             </p>
             <ul>
-                <li id='list_616.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
-                <li id='list_616.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
-                <li id='list_616.3'><code>display</code> parameter.                </li>
+                <li id='list_619.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
+                <li id='list_619.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
+                <li id='list_619.3'><code>display</code> parameter.                </li>
             </ul>
 
         </section>
@@ -955,7 +959,7 @@
         <p>This specification also defines a new OAuth 2.0 Authorization Server metadata [[RFC8414]] parameter to publish whether the AS that the Credential Issuer relies on for authorization, supports anonymous Token Requests with the Pre-authorized Grant Type. It is defined as follows:
         </p>
         <ul>
-            <li id='list_628.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
+            <li id='list_631.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
         </ul>
 
     </section>
@@ -983,8 +987,8 @@
             <p>The following are the extension parameters to the Token Request used in a Pre-Authorized Code Flow as used in this profile:
             </p>
             <ul>
-                <li id='list_647.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
-                <li id='list_647.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
+                <li id='list_650.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
+                <li id='list_650.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
             </ul>
 
             <p>In this profile the Wallet does not have to authenticate when using the Token Endpoint, because we are using the Pre-Authorized Code Grant Type, given the level of trust between the Issuer and the End User and that authentication was already performed at the beginning of the flow.
@@ -1010,8 +1014,8 @@
             <p>In addition to the response parameters defined in [[RFC6749]], the Authorization Server returns the following parameters:
             </p>
             <ul>
-                <li id='list_672.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
-                <li id='list_672.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+                <li id='list_675.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_675.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
             </ul>
 
             <p>Below is a non-normative example of a Token Response:
@@ -1076,8 +1080,8 @@
             <p>The Wallet backend makes a Credential Request to the Credential Endpoint by sending the following parameters in the entity-body of an HTTP POST request using the `application/json` media type.
             </p>
             <ul>
-                <li id='list_724.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
-                <li id='list_724.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
+                <li id='list_727.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_727.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
             </ul>
 
             <p>The proof element MUST incorporate a c_nonce value generated by the Credential Issuer and the Credential Issuer Identifier (audience) to allow the Credential Issuer to detect replay. The way that data is incorporated depends on the proof type. In a JWT, for example, the c_nonce is conveyd in the nonce claims whereas the audience is conveyed in the aud claim. In a Linked Data proof, for example, the c_nonce is included as the challenge element in the proof object and the Credential Issuer (the intended audience) is included as the domain element.
@@ -1090,20 +1094,20 @@
                 <p><code>jwt</code>: objects of this type contain a single jwt element with a JWS [RFC7515] as proof of possession. The JWT MUST contain the following elements:
                 </p>
                     <ul>
-                        <li id='list_737.1'>in the JOSE Header,                        <div>
+                        <li id='list_740.1'>in the JOSE Header,                        <div>
                             <ul>
-                                <li id='list_740.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].                                </li>
-                                <li id='list_740.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
-                                <li id='list_740.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
+                                <li id='list_743.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].                                </li>
+                                <li id='list_743.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
+                                <li id='list_743.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
                             </ul>
 
                         </div>
                         </li>
-                        <li id='list_737.2'>in the JWT body,                        <div>
+                        <li id='list_740.2'>in the JWT body,                        <div>
                             <ul>
-                                <li id='list_749.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
-                                <li id='list_749.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].                                </li>
-                                <li id='list_749.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
+                                <li id='list_752.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
+                                <li id='list_752.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].                                </li>
+                                <li id='list_752.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
                             </ul>
 
                         </div>
@@ -1148,10 +1152,10 @@
             <p>The following claims are used in the Credential Response:
             </p>
             <ul>
-                <li id='list_788.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
-                <li id='list_788.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
-                <li id='list_788.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
-                <li id='list_788.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+                <li id='list_791.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_791.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
+                <li id='list_791.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_791.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
             </ul>
 
             <p>Below is a non-normative example of a Credential Response:
@@ -1259,6 +1263,7 @@
 
 <!-- Original D2 diagram definition
     shape: sequence_diagram
+    # Definition of the participants
     user: John Doe {
         icon: https://icons.terrastruct.com/essentials%2F365-user.svg
     }
@@ -1275,39 +1280,42 @@
         icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
     }
     # ==================================================
+    # -(1) The user (GoodAir employee) accesses the DOME portal to perform the onboarding process.
     user -> browser: (1) Access DOM portal {
         style.stroke-dash: 5
     }
-    browser -> portal.t: (1) Access DOM
-    # -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
+    browser -> portal.t: (1) Access DOM portal
+    # -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
     portal.t -> browser.t: (2) HTTP 302 (redirect)
-    # -(Large definition.) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-    # -+ This is additional content. This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request.
-    browser.t -> verifier.t: (3) Access Login page
-    verifier.t -> browser: Display QR code
-    # -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
+    browser.t -> verifier.t: (2) Access Login page
+    # -(3) The Verifier generates and displays a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the OIDCVP process.
+    verifier.t -> browser: (3) Display QR code
+    # -(4) The user starts the scan with the wallet
     user -> mobile.t: Start QR scan {
         style.stroke-dash: 5
     }
-    browser -> mobile.t: (4) Scan QR code
-    mobile.t -> verifier: (4) /authentication-requests
-    # -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
+    browser -> mobile.t: (4) Scan QR code {
+        style.stroke-dash: 5
+    }
+    # -(5) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authentication Request
+    mobile.t -> verifier: (5) GET /authentication-requests
+    verifier -> mobile: (5) Reply with Authentication Request
  -->
 
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1023 924"><svg id="d2-svg" class="d2-2706753151" width="1023" height="924" viewBox="-89 -49 1023 924"><rect x="-89.000000" y="-49.000000" width="1023.000000" height="924.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-2706753151 .text {
-	font-family: "d2-2706753151-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1023 994"><svg id="d2-svg" class="d2-2868454509" width="1023" height="994" viewBox="-89 -49 1023 994"><rect x="-89.000000" y="-49.000000" width="1023.000000" height="994.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-2868454509 .text {
+	font-family: "d2-2868454509-font-regular";
 }
 @font-face {
-	font-family: d2-2706753151-font-regular;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-2868454509-font-regular;
+	src: url("data:application/font-woff;base64,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");
 }
-.d2-2706753151 .text-italic {
-	font-family: "d2-2706753151-font-italic";
+.d2-2868454509 .text-italic {
+	font-family: "d2-2868454509-font-italic";
 }
 @font-face {
-	font-family: d2-2706753151-font-italic;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-2868454509-font-italic;
+	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
   stroke-linejoin: round;
@@ -1321,103 +1329,173 @@
   opacity: 0.5;
 }
 
-		.d2-2706753151 .fill-N1{fill:#0A0F25;}
-		.d2-2706753151 .fill-N2{fill:#676C7E;}
-		.d2-2706753151 .fill-N3{fill:#9499AB;}
-		.d2-2706753151 .fill-N4{fill:#CFD2DD;}
-		.d2-2706753151 .fill-N5{fill:#DEE1EB;}
-		.d2-2706753151 .fill-N6{fill:#EEF1F8;}
-		.d2-2706753151 .fill-N7{fill:#FFFFFF;}
-		.d2-2706753151 .fill-B1{fill:#0D32B2;}
-		.d2-2706753151 .fill-B2{fill:#0D32B2;}
-		.d2-2706753151 .fill-B3{fill:#E3E9FD;}
-		.d2-2706753151 .fill-B4{fill:#E3E9FD;}
-		.d2-2706753151 .fill-B5{fill:#EDF0FD;}
-		.d2-2706753151 .fill-B6{fill:#F7F8FE;}
-		.d2-2706753151 .fill-AA2{fill:#4A6FF3;}
-		.d2-2706753151 .fill-AA4{fill:#EDF0FD;}
-		.d2-2706753151 .fill-AA5{fill:#F7F8FE;}
-		.d2-2706753151 .fill-AB4{fill:#EDF0FD;}
-		.d2-2706753151 .fill-AB5{fill:#F7F8FE;}
-		.d2-2706753151 .stroke-N1{stroke:#0A0F25;}
-		.d2-2706753151 .stroke-N2{stroke:#676C7E;}
-		.d2-2706753151 .stroke-N3{stroke:#9499AB;}
-		.d2-2706753151 .stroke-N4{stroke:#CFD2DD;}
-		.d2-2706753151 .stroke-N5{stroke:#DEE1EB;}
-		.d2-2706753151 .stroke-N6{stroke:#EEF1F8;}
-		.d2-2706753151 .stroke-N7{stroke:#FFFFFF;}
-		.d2-2706753151 .stroke-B1{stroke:#0D32B2;}
-		.d2-2706753151 .stroke-B2{stroke:#0D32B2;}
-		.d2-2706753151 .stroke-B3{stroke:#E3E9FD;}
-		.d2-2706753151 .stroke-B4{stroke:#E3E9FD;}
-		.d2-2706753151 .stroke-B5{stroke:#EDF0FD;}
-		.d2-2706753151 .stroke-B6{stroke:#F7F8FE;}
-		.d2-2706753151 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-2706753151 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-2706753151 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-2706753151 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-2706753151 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-2706753151 .background-color-N1{background-color:#0A0F25;}
-		.d2-2706753151 .background-color-N2{background-color:#676C7E;}
-		.d2-2706753151 .background-color-N3{background-color:#9499AB;}
-		.d2-2706753151 .background-color-N4{background-color:#CFD2DD;}
-		.d2-2706753151 .background-color-N5{background-color:#DEE1EB;}
-		.d2-2706753151 .background-color-N6{background-color:#EEF1F8;}
-		.d2-2706753151 .background-color-N7{background-color:#FFFFFF;}
-		.d2-2706753151 .background-color-B1{background-color:#0D32B2;}
-		.d2-2706753151 .background-color-B2{background-color:#0D32B2;}
-		.d2-2706753151 .background-color-B3{background-color:#E3E9FD;}
-		.d2-2706753151 .background-color-B4{background-color:#E3E9FD;}
-		.d2-2706753151 .background-color-B5{background-color:#EDF0FD;}
-		.d2-2706753151 .background-color-B6{background-color:#F7F8FE;}
-		.d2-2706753151 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-2706753151 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-2706753151 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-2706753151 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-2706753151 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-2706753151 .color-N1{color:#0A0F25;}
-		.d2-2706753151 .color-N2{color:#676C7E;}
-		.d2-2706753151 .color-N3{color:#9499AB;}
-		.d2-2706753151 .color-N4{color:#CFD2DD;}
-		.d2-2706753151 .color-N5{color:#DEE1EB;}
-		.d2-2706753151 .color-N6{color:#EEF1F8;}
-		.d2-2706753151 .color-N7{color:#FFFFFF;}
-		.d2-2706753151 .color-B1{color:#0D32B2;}
-		.d2-2706753151 .color-B2{color:#0D32B2;}
-		.d2-2706753151 .color-B3{color:#E3E9FD;}
-		.d2-2706753151 .color-B4{color:#E3E9FD;}
-		.d2-2706753151 .color-B5{color:#EDF0FD;}
-		.d2-2706753151 .color-B6{color:#F7F8FE;}
-		.d2-2706753151 .color-AA2{color:#4A6FF3;}
-		.d2-2706753151 .color-AA4{color:#EDF0FD;}
-		.d2-2706753151 .color-AA5{color:#F7F8FE;}
-		.d2-2706753151 .color-AB4{color:#EDF0FD;}
-		.d2-2706753151 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><rect x="12.000000" y="52.000000" width="135.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="79.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">John Doe</text></g><g id="mobile"><g class="shape" ><rect x="187.000000" y="52.000000" width="127.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2F052-smartphone-3.svg" x="187.000000" y="52.000000" width="46" height="46" /><text x="250.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Webapp</text></g><g id="browser"><g class="shape" ><rect x="354.000000" y="52.000000" width="118.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2Fbrowser-2.svg" x="354.000000" y="52.000000" width="46" height="46" /><text x="413.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Laptop</text></g><g id="portal"><g class="shape" ><rect x="542.000000" y="52.000000" width="111.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg" x="542.000000" y="52.000000" width="46" height="46" /><text x="597.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Portal</text></g><g id="verifier"><g class="shape" ><rect x="693.000000" y="52.000000" width="140.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg" x="693.000000" y="52.000000" width="46" height="46" /><text x="763.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 79.500000 146.000000 L 79.500000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(mobile -- )[0]"><path d="M 250.500000 146.000000 L 250.500000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(browser -- )[0]"><path d="M 413.000000 146.000000 L 413.000000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(portal -- )[0]"><path d="M 597.500000 146.000000 L 597.500000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="(verifier -- )[0]"><path d="M 763.000000 146.000000 L 763.000000 773.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2706753151)" /></g><g id="portal.t"><g class="shape" ><rect x="591.000000" y="274.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="browser.t"><g class="shape" ><rect x="407.000000" y="344.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="verifier.t"><g class="shape" ><rect x="757.000000" y="414.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="mobile.t"><g class="shape" ><rect x="244.000000" y="554.000000" width="12.000000" height="160.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="(user -&gt; browser)[0]"><marker id="mk-2177206569" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 81.500000 214.000000 L 409.000000 214.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2706753151)" /><text x="246.000000" y="220.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM portal</text></g><g id="(browser -&gt; portal.t)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 415.000000 284.000000 L 587.500000 284.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="502.500000" y="290.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM</text></g><g id="(portal.t -&gt; browser.t)[0]"><path d="M 589.500000 354.000000 L 423.000000 354.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="505.000000" y="360.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(2) HTTP 302 (redirect)</text></g><g id="(browser.t -&gt; verifier.t)[0]"><path d="M 421.000000 424.000000 L 753.000000 424.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="588.500000" y="430.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(3) Access Login page</text></g><g id="(verifier.t -&gt; browser)[0]"><path d="M 755.000000 494.000000 L 417.000000 494.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="585.000000" y="500.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Display QR code</text></g><g id="(user -&gt; mobile.t)[0]"><path d="M 81.500000 564.000000 L 240.500000 564.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2706753151)" /><text x="162.000000" y="570.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Start QR scan</text></g><g id="(browser -&gt; mobile.t)[0]"><path d="M 411.000000 634.000000 L 260.500000 634.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="334.500000" y="640.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) Scan QR code</text></g><g id="(mobile.t -&gt; verifier)[0]"><path d="M 258.500000 704.000000 L 759.000000 704.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2706753151)" /><text x="509.500000" y="710.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) /authentication-requests</text></g><mask id="d2-2706753151" maskUnits="userSpaceOnUse" x="-89" y="-49" width="1023" height="924">
-<rect x="-89" y="-49" width="1023" height="924" fill="white"></rect>
+		.d2-2868454509 .fill-N1{fill:#0A0F25;}
+		.d2-2868454509 .fill-N2{fill:#676C7E;}
+		.d2-2868454509 .fill-N3{fill:#9499AB;}
+		.d2-2868454509 .fill-N4{fill:#CFD2DD;}
+		.d2-2868454509 .fill-N5{fill:#DEE1EB;}
+		.d2-2868454509 .fill-N6{fill:#EEF1F8;}
+		.d2-2868454509 .fill-N7{fill:#FFFFFF;}
+		.d2-2868454509 .fill-B1{fill:#0D32B2;}
+		.d2-2868454509 .fill-B2{fill:#0D32B2;}
+		.d2-2868454509 .fill-B3{fill:#E3E9FD;}
+		.d2-2868454509 .fill-B4{fill:#E3E9FD;}
+		.d2-2868454509 .fill-B5{fill:#EDF0FD;}
+		.d2-2868454509 .fill-B6{fill:#F7F8FE;}
+		.d2-2868454509 .fill-AA2{fill:#4A6FF3;}
+		.d2-2868454509 .fill-AA4{fill:#EDF0FD;}
+		.d2-2868454509 .fill-AA5{fill:#F7F8FE;}
+		.d2-2868454509 .fill-AB4{fill:#EDF0FD;}
+		.d2-2868454509 .fill-AB5{fill:#F7F8FE;}
+		.d2-2868454509 .stroke-N1{stroke:#0A0F25;}
+		.d2-2868454509 .stroke-N2{stroke:#676C7E;}
+		.d2-2868454509 .stroke-N3{stroke:#9499AB;}
+		.d2-2868454509 .stroke-N4{stroke:#CFD2DD;}
+		.d2-2868454509 .stroke-N5{stroke:#DEE1EB;}
+		.d2-2868454509 .stroke-N6{stroke:#EEF1F8;}
+		.d2-2868454509 .stroke-N7{stroke:#FFFFFF;}
+		.d2-2868454509 .stroke-B1{stroke:#0D32B2;}
+		.d2-2868454509 .stroke-B2{stroke:#0D32B2;}
+		.d2-2868454509 .stroke-B3{stroke:#E3E9FD;}
+		.d2-2868454509 .stroke-B4{stroke:#E3E9FD;}
+		.d2-2868454509 .stroke-B5{stroke:#EDF0FD;}
+		.d2-2868454509 .stroke-B6{stroke:#F7F8FE;}
+		.d2-2868454509 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-2868454509 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-2868454509 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-2868454509 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-2868454509 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-2868454509 .background-color-N1{background-color:#0A0F25;}
+		.d2-2868454509 .background-color-N2{background-color:#676C7E;}
+		.d2-2868454509 .background-color-N3{background-color:#9499AB;}
+		.d2-2868454509 .background-color-N4{background-color:#CFD2DD;}
+		.d2-2868454509 .background-color-N5{background-color:#DEE1EB;}
+		.d2-2868454509 .background-color-N6{background-color:#EEF1F8;}
+		.d2-2868454509 .background-color-N7{background-color:#FFFFFF;}
+		.d2-2868454509 .background-color-B1{background-color:#0D32B2;}
+		.d2-2868454509 .background-color-B2{background-color:#0D32B2;}
+		.d2-2868454509 .background-color-B3{background-color:#E3E9FD;}
+		.d2-2868454509 .background-color-B4{background-color:#E3E9FD;}
+		.d2-2868454509 .background-color-B5{background-color:#EDF0FD;}
+		.d2-2868454509 .background-color-B6{background-color:#F7F8FE;}
+		.d2-2868454509 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-2868454509 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-2868454509 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-2868454509 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-2868454509 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-2868454509 .color-N1{color:#0A0F25;}
+		.d2-2868454509 .color-N2{color:#676C7E;}
+		.d2-2868454509 .color-N3{color:#9499AB;}
+		.d2-2868454509 .color-N4{color:#CFD2DD;}
+		.d2-2868454509 .color-N5{color:#DEE1EB;}
+		.d2-2868454509 .color-N6{color:#EEF1F8;}
+		.d2-2868454509 .color-N7{color:#FFFFFF;}
+		.d2-2868454509 .color-B1{color:#0D32B2;}
+		.d2-2868454509 .color-B2{color:#0D32B2;}
+		.d2-2868454509 .color-B3{color:#E3E9FD;}
+		.d2-2868454509 .color-B4{color:#E3E9FD;}
+		.d2-2868454509 .color-B5{color:#EDF0FD;}
+		.d2-2868454509 .color-B6{color:#F7F8FE;}
+		.d2-2868454509 .color-AA2{color:#4A6FF3;}
+		.d2-2868454509 .color-AA4{color:#EDF0FD;}
+		.d2-2868454509 .color-AA5{color:#F7F8FE;}
+		.d2-2868454509 .color-AB4{color:#EDF0FD;}
+		.d2-2868454509 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><rect x="12.000000" y="52.000000" width="135.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="79.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">John Doe</text></g><g id="mobile"><g class="shape" ><rect x="187.000000" y="52.000000" width="127.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2F052-smartphone-3.svg" x="187.000000" y="52.000000" width="46" height="46" /><text x="250.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Webapp</text></g><g id="browser"><g class="shape" ><rect x="354.000000" y="52.000000" width="118.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2Fbrowser-2.svg" x="354.000000" y="52.000000" width="46" height="46" /><text x="413.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Laptop</text></g><g id="portal"><g class="shape" ><rect x="542.000000" y="52.000000" width="111.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg" x="542.000000" y="52.000000" width="46" height="46" /><text x="597.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Portal</text></g><g id="verifier"><g class="shape" ><rect x="693.000000" y="52.000000" width="140.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg" x="693.000000" y="52.000000" width="46" height="46" /><text x="763.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 79.500000 146.000000 L 79.500000 843.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2868454509)" /></g><g id="(mobile -- )[0]"><path d="M 250.500000 146.000000 L 250.500000 843.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2868454509)" /></g><g id="(browser -- )[0]"><path d="M 413.000000 146.000000 L 413.000000 843.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2868454509)" /></g><g id="(portal -- )[0]"><path d="M 597.500000 146.000000 L 597.500000 843.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2868454509)" /></g><g id="(verifier -- )[0]"><path d="M 763.000000 146.000000 L 763.000000 843.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-2868454509)" /></g><g id="portal.t"><g class="shape" ><rect x="591.000000" y="274.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="browser.t"><g class="shape" ><rect x="407.000000" y="344.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="verifier.t"><g class="shape" ><rect x="757.000000" y="414.000000" width="12.000000" height="90.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="mobile.t"><g class="shape" ><rect x="244.000000" y="554.000000" width="12.000000" height="160.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="(user -&gt; browser)[0]"><marker id="mk-2177206569" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B2" stroke-width="2" /> </marker><path d="M 81.500000 214.000000 L 409.000000 214.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2868454509)" /><text x="246.000000" y="220.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM portal</text></g><g id="(browser -&gt; portal.t)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 415.000000 284.000000 L 587.500000 284.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2868454509)" /><text x="502.000000" y="290.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(1) Access DOM portal</text></g><g id="(portal.t -&gt; browser.t)[0]"><path d="M 589.500000 354.000000 L 423.000000 354.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2868454509)" /><text x="505.000000" y="360.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(2) HTTP 302 (redirect)</text></g><g id="(browser.t -&gt; verifier.t)[0]"><path d="M 421.000000 424.000000 L 753.000000 424.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2868454509)" /><text x="588.500000" y="430.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(2) Access Login page</text></g><g id="(verifier.t -&gt; browser)[0]"><path d="M 755.000000 494.000000 L 417.000000 494.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2868454509)" /><text x="585.500000" y="500.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(3) Display QR code</text></g><g id="(user -&gt; mobile.t)[0]"><path d="M 81.500000 564.000000 L 240.500000 564.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2868454509)" /><text x="162.000000" y="570.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Start QR scan</text></g><g id="(browser -&gt; mobile.t)[0]"><path d="M 411.000000 634.000000 L 260.500000 634.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:10.000000,9.865639;" marker-end="url(#mk-2177206569)" mask="url(#d2-2868454509)" /><text x="334.500000" y="640.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) Scan QR code</text></g><g id="(mobile.t -&gt; verifier)[0]"><path d="M 258.500000 704.000000 L 759.000000 704.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2868454509)" /><text x="510.000000" y="710.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(5) GET /authentication-requests</text></g><g id="(verifier -&gt; mobile)[0]"><path d="M 761.000000 774.000000 L 254.500000 774.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-2868454509)" /><text x="506.500000" y="780.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(5) Reply with Authentication Request</text></g><mask id="d2-2868454509" maskUnits="userSpaceOnUse" x="-89" y="-49" width="1023" height="994">
+<rect x="-89" y="-49" width="1023" height="994" fill="white"></rect>
 <rect x="176.000000" y="204.000000" width="140" height="21" fill="black"></rect>
-<rect x="454.000000" y="274.000000" width="97" height="21" fill="black"></rect>
+<rect x="432.000000" y="274.000000" width="140" height="21" fill="black"></rect>
 <rect x="433.000000" y="344.000000" width="144" height="21" fill="black"></rect>
 <rect x="519.000000" y="414.000000" width="139" height="21" fill="black"></rect>
-<rect x="532.000000" y="484.000000" width="106" height="21" fill="black"></rect>
+<rect x="523.000000" y="484.000000" width="125" height="21" fill="black"></rect>
 <rect x="118.000000" y="554.000000" width="88" height="21" fill="black"></rect>
 <rect x="280.000000" y="624.000000" width="109" height="21" fill="black"></rect>
-<rect x="418.000000" y="694.000000" width="183" height="21" fill="black"></rect>
+<rect x="404.000000" y="694.000000" width="212" height="21" fill="black"></rect>
+<rect x="384.000000" y="764.000000" width="245" height="21" fill="black"></rect>
 </mask></svg></svg>
 
             <ul style='list-style: none;'>
-                <li style='margin-left:2em; text-indent: -1em;' id='907.1'><a href='#907.1' class='selfref'><b>1</b></a> The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
-                <li style='margin-left:2em; text-indent: -1em;' id='910.Large_definition.'><a href='#910.Large_definition.' class='selfref'><b>Large definition.</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-                <p style='text-indent:0'> This is additional content. This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request.</p>
-                <li style='margin-left:2em; text-indent: -1em;' id='915.3'><a href='#915.3' class='selfref'><b>3</b></a> The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
-                <li style='margin-left:2em; text-indent: -1em;' id='922.4'><a href='#922.4' class='selfref'><b>4</b></a> The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
+                <li style='text-indent: -1em;' id='901.1'><a href='#901.1' class='selfref'><b>1</b></a> The user (GoodAir employee) accesses the DOME portal to perform the onboarding process.
+                <li style='text-indent: -1em;' id='907.2'><a href='#907.2' class='selfref'><b>2</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+                <li style='text-indent: -1em;' id='911.3'><a href='#911.3' class='selfref'><b>3</b></a> The Verifier generates and displays a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the OIDCVP process.
+                <li style='text-indent: -1em;' id='914.4'><a href='#914.4' class='selfref'><b>4</b></a> The user starts the scan with the wallet
+                <li style='text-indent: -1em;' id='922.5'><a href='#922.5' class='selfref'><b>5</b></a> After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authentication Request
             </ul>
+            <p>This starts a Self-Issued OpenID Provider flow [[SIOPv2]], where the Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP. In this step, the Verifier creates a SIOP Authentication Request. As a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[SIOPv2]].
+            </p>
         </section>
 
 
         <section><h2>Authentication Request</h2>
 
+            <p>The Authentication Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. The decoded contents of the JWT may be:
+            </p>
+
+<pre class="nohighlight" style="padding-left:0.5em;background-color: #fafafa;"><code><span style="display:flex;"><span><span style="color:#836c28">openid://?</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">response_type</span><span style="color:#000">=</span><span style="color:#c41a16">id_token</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;response_mode</span><span style="color:#000">=</span><span style="color:#c41a16">post</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;client_id</span><span style="color:#000">=</span><span style="color:#c41a16">did:elsi:VATFR-99999999</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;redirect_uri</span><span style="color:#000">=</span><span style="color:#c41a16">https%3A%2F%2Fidp-pdc.fiware.io%2Fsiop_sessions</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;scope</span><span style="color:#000">=</span><span style="color:#c41a16">openid%20profile</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;state</span><span style="color:#000">=</span><span style="color:#c41a16">af0ifjsldkj</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;nonce</span><span style="color:#000">=</span><span style="color:#c41a16">n-0S6_WzA2Mj</span>
+</span></span><span style="display:flex;"><span><span style="color:#836c28">&amp;registration</span><span style="color:#000">=</span><span style="color:#c41a16">%7B%22subject_syntax_types_supported%22:%5B%22did%22%5D,
+</span></span></span><span style="display:flex;"><span><span style="color:#c41a16">    %22id_token_signing_alg_values_supported%22:%5B%22RS256%22%5D%7</span>
+</span></span></code></pre>
+            <p>The most important fields of the Authentication request are explained below.
+            </p>
+
+            <dt>response_mode
+            </dt>
+
+
+            <dd>The SIOPv2 flow uses the response mode <code>post</code> which is used to request the SIOP to perform an HTTP <code>POST</code> request to deliver the result of the authentication process to a certain endpoint. The parameter <code>response_mode</code> is used to carry this value.
+            </dd>
+
+
+            <dt>client_id
+            </dt>
+
+
+            <dd>Contains the DID of the Relying Party, in this case the `did:elsi` identifier of the DOME portal.
+            </dd>
+
+
+            <dt>redirect_uri
+            </dt>
+
+
+            <dd>Contains the endpoint to where the SIOP shall send the the authentication using the HTTP <code>POST</code>.
+            </dd>
+
+        </section>
+
+
+        <section><h2>Verification of the Authentication Request</h2>
+
+            <p>Before sending the Authentication Response, the wallet should verify that the Authentication Request seems correct. The most important verifications are the following:
+            </p>
+            <ol>
+                <li id='list_963.1'>Verification of the signature. As mentioned in the previous section, the Authentication Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.                </li>
+                <li id='list_963.2'>Verification that the DID in the <code>client_id</code> field of the Authentication Request corresponds to the entity that signed the Authentication Request. This is easy in our case because we use the `did:elsi` method.                </li>
+                <li id='list_963.3'>Verification that the entity identified in the <code>client_id</code> field of the Authentication Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the <code>client_id</code> field.                <div>
+                    <p>The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard. In the case of DOME, the DOME onboarding service is a well-known entity and it is easy to verify that the DID corresponds to the DOME onboarding service.
+                    </p>
+                    <p>In the case that the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the DOME onboarding service.
+                    </p>
+                    <p>In this case, to check if the DID is a participant on the DOME ecosystem, the wallet sends a `GET /api/did/v1/identifiers/did:elsi:VATFR-9999999` request to the endpoint of one of several trusted servers implementing the query Trusted Participant Registry functionality. The API returns a JSON document as a DID Document DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the DOME ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the wallet of the user.
+                    </p>
+                </div>
+                </li>
+            </ol>
+
+        </section>
+
+
+        <section><h2>Creating and sending the Authentication Response </h2>
+
 <!-- Original D2 diagram definition
     shape: sequence_diagram
+    # Definition of the participants
     user: John Doe {
         icon: https://icons.terrastruct.com/essentials%2F365-user.svg
     }
@@ -1434,15 +1512,25 @@
         icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
     }
     # ==================================================
+    # -(5) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authentication Request
+    mobile.t -> verifier: (4) GET /authentication-requests
+    verifier -> mobile: (5) Reply with Authentication Request
  -->
 
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 993 364"><svg id="d2-svg" class="d2-774506953" width="993" height="364" viewBox="-89 -49 993 364"><rect x="-89.000000" y="-49.000000" width="993.000000" height="364.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-774506953 .text {
-	font-family: "d2-774506953-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 993 504"><svg id="d2-svg" class="d2-3991843440" width="993" height="504" viewBox="-89 -49 993 504"><rect x="-89.000000" y="-49.000000" width="993.000000" height="504.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-3991843440 .text {
+	font-family: "d2-3991843440-font-regular";
 }
 @font-face {
-	font-family: d2-774506953-font-regular;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-3991843440-font-regular;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-3991843440 .text-italic {
+	font-family: "d2-3991843440-font-italic";
+}
+@font-face {
+	font-family: d2-3991843440-font-italic;
+	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
   stroke-linejoin: round;
@@ -1456,154 +1544,89 @@
   opacity: 0.5;
 }
 
-		.d2-774506953 .fill-N1{fill:#0A0F25;}
-		.d2-774506953 .fill-N2{fill:#676C7E;}
-		.d2-774506953 .fill-N3{fill:#9499AB;}
-		.d2-774506953 .fill-N4{fill:#CFD2DD;}
-		.d2-774506953 .fill-N5{fill:#DEE1EB;}
-		.d2-774506953 .fill-N6{fill:#EEF1F8;}
-		.d2-774506953 .fill-N7{fill:#FFFFFF;}
-		.d2-774506953 .fill-B1{fill:#0D32B2;}
-		.d2-774506953 .fill-B2{fill:#0D32B2;}
-		.d2-774506953 .fill-B3{fill:#E3E9FD;}
-		.d2-774506953 .fill-B4{fill:#E3E9FD;}
-		.d2-774506953 .fill-B5{fill:#EDF0FD;}
-		.d2-774506953 .fill-B6{fill:#F7F8FE;}
-		.d2-774506953 .fill-AA2{fill:#4A6FF3;}
-		.d2-774506953 .fill-AA4{fill:#EDF0FD;}
-		.d2-774506953 .fill-AA5{fill:#F7F8FE;}
-		.d2-774506953 .fill-AB4{fill:#EDF0FD;}
-		.d2-774506953 .fill-AB5{fill:#F7F8FE;}
-		.d2-774506953 .stroke-N1{stroke:#0A0F25;}
-		.d2-774506953 .stroke-N2{stroke:#676C7E;}
-		.d2-774506953 .stroke-N3{stroke:#9499AB;}
-		.d2-774506953 .stroke-N4{stroke:#CFD2DD;}
-		.d2-774506953 .stroke-N5{stroke:#DEE1EB;}
-		.d2-774506953 .stroke-N6{stroke:#EEF1F8;}
-		.d2-774506953 .stroke-N7{stroke:#FFFFFF;}
-		.d2-774506953 .stroke-B1{stroke:#0D32B2;}
-		.d2-774506953 .stroke-B2{stroke:#0D32B2;}
-		.d2-774506953 .stroke-B3{stroke:#E3E9FD;}
-		.d2-774506953 .stroke-B4{stroke:#E3E9FD;}
-		.d2-774506953 .stroke-B5{stroke:#EDF0FD;}
-		.d2-774506953 .stroke-B6{stroke:#F7F8FE;}
-		.d2-774506953 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-774506953 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-774506953 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-774506953 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-774506953 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-774506953 .background-color-N1{background-color:#0A0F25;}
-		.d2-774506953 .background-color-N2{background-color:#676C7E;}
-		.d2-774506953 .background-color-N3{background-color:#9499AB;}
-		.d2-774506953 .background-color-N4{background-color:#CFD2DD;}
-		.d2-774506953 .background-color-N5{background-color:#DEE1EB;}
-		.d2-774506953 .background-color-N6{background-color:#EEF1F8;}
-		.d2-774506953 .background-color-N7{background-color:#FFFFFF;}
-		.d2-774506953 .background-color-B1{background-color:#0D32B2;}
-		.d2-774506953 .background-color-B2{background-color:#0D32B2;}
-		.d2-774506953 .background-color-B3{background-color:#E3E9FD;}
-		.d2-774506953 .background-color-B4{background-color:#E3E9FD;}
-		.d2-774506953 .background-color-B5{background-color:#EDF0FD;}
-		.d2-774506953 .background-color-B6{background-color:#F7F8FE;}
-		.d2-774506953 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-774506953 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-774506953 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-774506953 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-774506953 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-774506953 .color-N1{color:#0A0F25;}
-		.d2-774506953 .color-N2{color:#676C7E;}
-		.d2-774506953 .color-N3{color:#9499AB;}
-		.d2-774506953 .color-N4{color:#CFD2DD;}
-		.d2-774506953 .color-N5{color:#DEE1EB;}
-		.d2-774506953 .color-N6{color:#EEF1F8;}
-		.d2-774506953 .color-N7{color:#FFFFFF;}
-		.d2-774506953 .color-B1{color:#0D32B2;}
-		.d2-774506953 .color-B2{color:#0D32B2;}
-		.d2-774506953 .color-B3{color:#E3E9FD;}
-		.d2-774506953 .color-B4{color:#E3E9FD;}
-		.d2-774506953 .color-B5{color:#EDF0FD;}
-		.d2-774506953 .color-B6{color:#F7F8FE;}
-		.d2-774506953 .color-AA2{color:#4A6FF3;}
-		.d2-774506953 .color-AA4{color:#EDF0FD;}
-		.d2-774506953 .color-AA5{color:#F7F8FE;}
-		.d2-774506953 .color-AB4{color:#EDF0FD;}
-		.d2-774506953 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><rect x="12.000000" y="52.000000" width="135.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="79.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">John Doe</text></g><g id="mobile"><g class="shape" ><rect x="187.000000" y="52.000000" width="127.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2F052-smartphone-3.svg" x="187.000000" y="52.000000" width="46" height="46" /><text x="250.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Webapp</text></g><g id="browser"><g class="shape" ><rect x="354.000000" y="52.000000" width="118.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2Fbrowser-2.svg" x="354.000000" y="52.000000" width="46" height="46" /><text x="413.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Laptop</text></g><g id="portal"><g class="shape" ><rect x="512.000000" y="52.000000" width="111.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg" x="512.000000" y="52.000000" width="46" height="46" /><text x="567.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Portal</text></g><g id="verifier"><g class="shape" ><rect x="663.000000" y="52.000000" width="140.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg" x="663.000000" y="52.000000" width="46" height="46" /><text x="733.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 79.500000 146.000000 L 79.500000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(mobile -- )[0]"><path d="M 250.500000 146.000000 L 250.500000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(browser -- )[0]"><path d="M 413.000000 146.000000 L 413.000000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(portal -- )[0]"><path d="M 567.500000 146.000000 L 567.500000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><g id="(verifier -- )[0]"><path d="M 733.000000 146.000000 L 733.000000 213.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-774506953)" /></g><mask id="d2-774506953" maskUnits="userSpaceOnUse" x="-89" y="-49" width="993" height="364">
-<rect x="-89" y="-49" width="993" height="364" fill="white"></rect>
-
+		.d2-3991843440 .fill-N1{fill:#0A0F25;}
+		.d2-3991843440 .fill-N2{fill:#676C7E;}
+		.d2-3991843440 .fill-N3{fill:#9499AB;}
+		.d2-3991843440 .fill-N4{fill:#CFD2DD;}
+		.d2-3991843440 .fill-N5{fill:#DEE1EB;}
+		.d2-3991843440 .fill-N6{fill:#EEF1F8;}
+		.d2-3991843440 .fill-N7{fill:#FFFFFF;}
+		.d2-3991843440 .fill-B1{fill:#0D32B2;}
+		.d2-3991843440 .fill-B2{fill:#0D32B2;}
+		.d2-3991843440 .fill-B3{fill:#E3E9FD;}
+		.d2-3991843440 .fill-B4{fill:#E3E9FD;}
+		.d2-3991843440 .fill-B5{fill:#EDF0FD;}
+		.d2-3991843440 .fill-B6{fill:#F7F8FE;}
+		.d2-3991843440 .fill-AA2{fill:#4A6FF3;}
+		.d2-3991843440 .fill-AA4{fill:#EDF0FD;}
+		.d2-3991843440 .fill-AA5{fill:#F7F8FE;}
+		.d2-3991843440 .fill-AB4{fill:#EDF0FD;}
+		.d2-3991843440 .fill-AB5{fill:#F7F8FE;}
+		.d2-3991843440 .stroke-N1{stroke:#0A0F25;}
+		.d2-3991843440 .stroke-N2{stroke:#676C7E;}
+		.d2-3991843440 .stroke-N3{stroke:#9499AB;}
+		.d2-3991843440 .stroke-N4{stroke:#CFD2DD;}
+		.d2-3991843440 .stroke-N5{stroke:#DEE1EB;}
+		.d2-3991843440 .stroke-N6{stroke:#EEF1F8;}
+		.d2-3991843440 .stroke-N7{stroke:#FFFFFF;}
+		.d2-3991843440 .stroke-B1{stroke:#0D32B2;}
+		.d2-3991843440 .stroke-B2{stroke:#0D32B2;}
+		.d2-3991843440 .stroke-B3{stroke:#E3E9FD;}
+		.d2-3991843440 .stroke-B4{stroke:#E3E9FD;}
+		.d2-3991843440 .stroke-B5{stroke:#EDF0FD;}
+		.d2-3991843440 .stroke-B6{stroke:#F7F8FE;}
+		.d2-3991843440 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-3991843440 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-3991843440 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-3991843440 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-3991843440 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-3991843440 .background-color-N1{background-color:#0A0F25;}
+		.d2-3991843440 .background-color-N2{background-color:#676C7E;}
+		.d2-3991843440 .background-color-N3{background-color:#9499AB;}
+		.d2-3991843440 .background-color-N4{background-color:#CFD2DD;}
+		.d2-3991843440 .background-color-N5{background-color:#DEE1EB;}
+		.d2-3991843440 .background-color-N6{background-color:#EEF1F8;}
+		.d2-3991843440 .background-color-N7{background-color:#FFFFFF;}
+		.d2-3991843440 .background-color-B1{background-color:#0D32B2;}
+		.d2-3991843440 .background-color-B2{background-color:#0D32B2;}
+		.d2-3991843440 .background-color-B3{background-color:#E3E9FD;}
+		.d2-3991843440 .background-color-B4{background-color:#E3E9FD;}
+		.d2-3991843440 .background-color-B5{background-color:#EDF0FD;}
+		.d2-3991843440 .background-color-B6{background-color:#F7F8FE;}
+		.d2-3991843440 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-3991843440 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-3991843440 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-3991843440 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-3991843440 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-3991843440 .color-N1{color:#0A0F25;}
+		.d2-3991843440 .color-N2{color:#676C7E;}
+		.d2-3991843440 .color-N3{color:#9499AB;}
+		.d2-3991843440 .color-N4{color:#CFD2DD;}
+		.d2-3991843440 .color-N5{color:#DEE1EB;}
+		.d2-3991843440 .color-N6{color:#EEF1F8;}
+		.d2-3991843440 .color-N7{color:#FFFFFF;}
+		.d2-3991843440 .color-B1{color:#0D32B2;}
+		.d2-3991843440 .color-B2{color:#0D32B2;}
+		.d2-3991843440 .color-B3{color:#E3E9FD;}
+		.d2-3991843440 .color-B4{color:#E3E9FD;}
+		.d2-3991843440 .color-B5{color:#EDF0FD;}
+		.d2-3991843440 .color-B6{color:#F7F8FE;}
+		.d2-3991843440 .color-AA2{color:#4A6FF3;}
+		.d2-3991843440 .color-AA4{color:#EDF0FD;}
+		.d2-3991843440 .color-AA5{color:#F7F8FE;}
+		.d2-3991843440 .color-AB4{color:#EDF0FD;}
+		.d2-3991843440 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="user"><g class="shape" ><rect x="12.000000" y="52.000000" width="135.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="79.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">John Doe</text></g><g id="mobile"><g class="shape" ><rect x="187.000000" y="52.000000" width="127.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2F052-smartphone-3.svg" x="187.000000" y="52.000000" width="46" height="46" /><text x="250.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Webapp</text></g><g id="browser"><g class="shape" ><rect x="354.000000" y="52.000000" width="118.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/tech%2Fbrowser-2.svg" x="354.000000" y="52.000000" width="46" height="46" /><text x="413.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Laptop</text></g><g id="portal"><g class="shape" ><rect x="512.000000" y="52.000000" width="111.000000" height="92.000000" class=" stroke-B1 fill-N7" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg" x="512.000000" y="52.000000" width="46" height="46" /><text x="567.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Portal</text></g><g id="verifier"><g class="shape" ><rect x="663.000000" y="52.000000" width="140.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg" x="663.000000" y="52.000000" width="46" height="46" /><text x="733.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">VC Verifier</text></g><g id="(user -- )[0]"><path d="M 79.500000 146.000000 L 79.500000 353.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3991843440)" /></g><g id="(mobile -- )[0]"><path d="M 250.500000 146.000000 L 250.500000 353.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3991843440)" /></g><g id="(browser -- )[0]"><path d="M 413.000000 146.000000 L 413.000000 353.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3991843440)" /></g><g id="(portal -- )[0]"><path d="M 567.500000 146.000000 L 567.500000 353.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3991843440)" /></g><g id="(verifier -- )[0]"><path d="M 733.000000 146.000000 L 733.000000 353.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3991843440)" /></g><g id="mobile.t"><g class="shape" ><rect x="244.000000" y="204.000000" width="12.000000" height="30.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g></g><g id="(mobile.t -&gt; verifier)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 258.500000 214.000000 L 729.000000 214.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3991843440)" /><text x="495.000000" y="220.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(4) GET /authentication-requests</text></g><g id="(verifier -&gt; mobile)[0]"><path d="M 731.000000 284.000000 L 254.500000 284.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3991843440)" /><text x="491.500000" y="290.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">(5) Reply with Authentication Request</text></g><mask id="d2-3991843440" maskUnits="userSpaceOnUse" x="-89" y="-49" width="993" height="504">
+<rect x="-89" y="-49" width="993" height="504" fill="white"></rect>
+<rect x="389.000000" y="204.000000" width="212" height="21" fill="black"></rect>
+<rect x="369.000000" y="274.000000" width="245" height="21" fill="black"></rect>
 </mask></svg></svg>
-            <ul style="list-style-type: none">
-            </ul>
 
-            <p>This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request. As a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in https://openid.net/specs/openid-connect-self-issued-v2-1_0.html.
-            </p>
+            <ul style='list-style: none;'>
+                <li style='text-indent: -1em;' id='1003.5'><a href='#1003.5' class='selfref'><b>5</b></a> After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authentication Request
+            </ul>
         </section>
 
-        <p>The Authentication Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by Packet Delivery company. The decoded contents of the JWT may be:
-        openid://?
-        response_type=id_token
-        &response_mode=post
-        &client_id=did:elsi:EU.EORI.NLPACKETDEL
-        &redirect_uri=https%3A%2F%2Fidp-pdc.fiware.io%2Fsiop_sessions
-        &scope=openid%20profile
-        &state=af0ifjsldkj
-        &nonce=n-0S6_WzA2Mj
-        &registration=%7B%22subject_syntax_types_supported%22:%5B%22did%22%5D,
-        %22id_token_signing_alg_values_supported%22:%5B%22RS256%22%5D%7
-        </p>
-        <p>The Authentication Request is returned to the customer wallet acting as SIOP. The SIOP flow uses a new response mode post which is used to request the SIOP to deliver the result of the authentication process to a certain endpoint. The parameter response_mode is used to carry this value.
-        This endpoint where the SIOP shall deliver the authentication result is defined in the standard parameter redirect_uri.
-        In this step the customer verifies that the Packet Delivery company is a trusted entity belonging to the ecosystem, by resolving the DID of the Packet Delivery company which is received in the client_id parameter of the Authentication Request. 
-        To resolve a DID, the wallet sends a GET request to the /api/did/v1/identifiers/did:elsi:EU.EORI.NLPACKETDEL endpoint of one of several trusted servers implementing the Universal Resolver functionality. The Universal Resolver includes a blockchain node, and there may be as many as needed. Its mission is to resolve DIDs using the blockchain and return the associated DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the Data Space ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The Universal Resolver server must be operated by a trusted entity for the customer. There may be as many nodes as needed operated by different entities. At least one of those trusted entities has to be configured in the wallet of the user.
-        The wallet receives the DID Document of Packet Delivery company, with trusted information about the company, including the Public Key associated with the Private Key that Packet Delivery company uses to digitally sign tokens. For example:
-        {
-        "payload": {
-        "@context": [
-        "https://www.w3.org/ns/did/v1",
-        "https://w3id.org/security/v1"
-        ],
-        "id": "did:elsi:EU.EORI.NLPACKETDEL",
-        "verificationMethod": [
-        {
-        "id": "did:elsi:EU.EORI.NLPACKETDEL#key-verification",
-        "type": "JwsVerificationKey2020",
-        "controller": "did:elsi:EU.EORI.NLPACKETDEL",
-        "publicKeyJwk": {
-        "kid": "key-verification",
-        "kty": "EC",
-        "crv": "secp256k1",
-        "x": "V8XptJkb5wplYkExcTF4nkyYVp7t5H5d5C4UPqCCM9c",
-        "y": "kn3nSPxIIvd9iaG0N4v14ceuo8E4PcLXhhGeDzCE7VM"
-        }
-        }
-        ],
-        "service": [
-        {
-        "id": "did:elsi:EU.EORI.NLPACKETDEL#info",
-        "type": "EntityCommercialInfo",
-        "serviceEndpoint": "https://packetdelivery.com/info",
-        "name": "Packet Delivery co."
-        },
-        {
-        "id": "did:elsi:EU.EORI.NLPACKETDEL#sms",
-        "type": "SecureMessagingService",
-        "serviceEndpoint": "https://packetdelivery.com/api"
-        }
-        ],
-        "anchors": [
-        {
-        "id": "redt.alastria",
-        "resolution": "UniversalResolver",
-        "domain": "packetdelivery.ala",
-        "ethereumAddress": "0xbcB9b29eeb28f36fd84f1CfF98C3F1887D831d78"
-        }
-        ],
-        "created": "2021-11-14T13:02:37Z",
-        "updated": "2021-11-14T13:02:37Z"
-        }
-        }
-        </p>
-        <p>The DID Document includes one or more public keys inside the “verificationMethod” array. The keys are identified by the “id” field in each element of the array. The customer wallet uses the kid field that was received in the Authentication Request (in the protected header of the JWT) to select the corresponding Public Key and verify the signature of the JWT. It also verifies that the top-level “id” field in the DID Document ("did:elsi:EU.EORI.NLPACKETDEL") is equal to the client_id parameter of the Authentication Request.
-        The customer wallet creates an Authentication Response to be posted in the redirect_uri specified by Packet Delivery company in step 5. The contents of the Authentication Response are described below. 
+        <p>The customer wallet creates an Authentication Response to be posted in the redirect_uri specified by Packet Delivery company in step 5. The contents of the Authentication Response are described below. 
         The SIOP sends the authentication response to the endpoint passed in the redirect_uri authentication request parameter using a HTTP POST request using "application/x-www-form-urlencoded" encoding. The response contains an ID Token and a VP (Verifiable Presentation) token as defined in https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0.html.
         POST /siop_sessions HTTP/1.1
         Host: client.example.com

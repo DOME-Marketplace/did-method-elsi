@@ -60,6 +60,9 @@ localBiblio:
     "OIDCVCI":
         title: "OpenID for Verifiable Credential Issuance"
         href: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html"
+    "SIOPv2":
+        title: "Self-Issued OpenID Provider v2"
+        href: "https://openid.bitbucket.io/connect/openid-connect-self-issued-v2-1_0.html"
     "RFC6749":
         title: "The OAuth 2.0 Authorization Framework"
         href: "https://www.rfc-editor.org/rfc/rfc6749.html"
@@ -166,13 +169,13 @@ localBiblio:
 
         The DOME Data Space has an onboarding service that allows external entities to perform onboarding in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
 
-        In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both).
+        In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
 
     <section #participant>GoodAir: the company that wants will perform the onboarding process
 
         The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
 
-        The company is registered in the tax agency and business registry of Spain with VAT number VATES-12345678
+        The company is registered in the tax agency and business registry of Spain with VAT number <b>VATES-12345678</b>.
 
     <section>Jesus Ruiz: COO (Chief Operating Officer) of GoodAir
 
@@ -878,151 +881,132 @@ localBiblio:
             <x-diagram .d2>
                 shape: sequence_diagram
 
+                # Definition of the participants
                 user: John Doe {
                     icon: https://icons.terrastruct.com/essentials%2F365-user.svg
                 }
-
                 mobile: Webapp {
                     icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
                 }
-
                 browser: Laptop {
                     icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
                 }
-
                 portal: Portal {
                     icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
                 }
-
                 verifier: VC Verifier {
                     icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
                 }
-
                 # ==================================================
 
+                # -(1) The user (GoodAir employee) accesses the DOME portal to perform the onboarding process.
                 user -> browser: (1) Access DOM portal {
                     style.stroke-dash: 5
                 }
+                browser -> portal.t: (1) Access DOM portal
 
-                browser -> portal.t: (1) Access DOM
-                # -(1) The user (GoodAir employee) accesses the DOME portal or to perform the onboarding process.
-
+                # -(2) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
                 portal.t -> browser.t: (2) HTTP 302 (redirect)
-                # -(Large definition.) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-                # -+ This is additional content. This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request.
+                browser.t -> verifier.t: (2) Access Login page
 
-                browser.t -> verifier.t: (3) Access Login page
-                verifier.t -> browser: Display QR code
-                # -(3) The user clicks the button causing the generation and display of a QR, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component.
+                # -(3) The Verifier generates and displays a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the OIDCVP process.
+                verifier.t -> browser: (3) Display QR code
 
+                # -(4) The user starts the scan with the wallet
                 user -> mobile.t: Start QR scan {
                     style.stroke-dash: 5
                 }
-                browser -> mobile.t: (4) Scan QR code
-                mobile.t -> verifier: (4) /authentication-requests
-                # -(4) The user scans the QR with her mobile and the mobile calls the `/authentication-requests` endpoint.
-             
+                browser -> mobile.t: (4) Scan QR code {
+                    style.stroke-dash: 5
+                }
+
+                # -(5) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authentication Request
+                mobile.t -> verifier: (5) GET /authentication-requests
+                verifier -> mobile: (5) Reply with Authentication Request
+
+
+            This starts a Self-Issued OpenID Provider flow [[SIOPv2]], where the Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP. In this step, the Verifier creates a SIOP Authentication Request. As a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[SIOPv2]].
+
 
         <section>Authentication Request
+
+            The Authentication Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. The decoded contents of the JWT may be:
+
+            <x-code .ini>
+                openid://?
+                response_type=id_token
+                &response_mode=post
+                &client_id=did:elsi:VATFR-99999999
+                &redirect_uri=https%3A%2F%2Fidp-pdc.fiware.io%2Fsiop_sessions
+                &scope=openid%20profile
+                &state=af0ifjsldkj
+                &nonce=n-0S6_WzA2Mj
+                &registration=%7B%22subject_syntax_types_supported%22:%5B%22did%22%5D,
+                    %22id_token_signing_alg_values_supported%22:%5B%22RS256%22%5D%7
+
+
+            The most important fields of the Authentication request are explained below.
+
+            <dt>response_mode
+            <dd>The SIOPv2 flow uses the response mode `post` which is used to request the SIOP to perform an HTTP `POST` request to deliver the result of the authentication process to a certain endpoint. The parameter `response_mode` is used to carry this value.
+
+            <dt>client_id
+            <dd>Contains the DID of the Relying Party, in this case the `did:elsi` identifier of the DOME portal.
+
+            <dt>redirect_uri
+            <dd>Contains the endpoint to where the SIOP shall send the the authentication using the HTTP `POST`.
+
+        <section>Verification of the Authentication Request
+
+            Before sending the Authentication Response, the wallet should verify that the Authentication Request seems correct. The most important verifications are the following:
+            
+            <ol>
+                - Verification of the signature. As mentioned in the previous section, the Authentication Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
+
+                - Verification that the DID in the `client_id` field of the Authentication Request corresponds to the entity that signed the Authentication Request. This is easy in our case because we use the `did:elsi` method.
+
+                - Verification that the entity identified in the `client_id` field of the Authentication Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the `client_id` field.
+
+                    The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard. In the case of DOME, the DOME onboarding service is a well-known entity and it is easy to verify that the DID corresponds to the DOME onboarding service.
+
+                    In the case that the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the DOME onboarding service.
+                    
+                    In this case, to check if the DID is a participant on the DOME ecosystem, the wallet sends a `GET /api/did/v1/identifiers/did:elsi:VATFR-9999999` request to the endpoint of one of several trusted servers implementing the query Trusted Participant Registry functionality. The API returns a JSON document as a DID Document DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the DOME ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the wallet of the user.
+
+        <section>Creating and sending the Authentication Response 
+
+
+
+
+
 
             <x-diagram .d2>
                 shape: sequence_diagram
 
+                # Definition of the participants
                 user: John Doe {
                     icon: https://icons.terrastruct.com/essentials%2F365-user.svg
                 }
-
                 mobile: Webapp {
                     icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
                 }
-
                 browser: Laptop {
                     icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
                 }
-
                 portal: Portal {
                     icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
                 }
-
                 verifier: VC Verifier {
                     icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
                 }
-
                 # ==================================================
 
-            <ul style="list-style-type: none">
-    
-            This starts a standard SIOP (Self-Issued OpenID Provider) flow, where the DOM portal plays the role of Relying Party (RP in Open ID Connect terminology) and the mobile device of the customer as a Self-Issued IDP. In this step, the Verifier creates a SIOP Authentication Request. As a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in https://openid.net/specs/openid-connect-self-issued-v2-1_0.html.
-
-
-        The Authentication Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by Packet Delivery company. The decoded contents of the JWT may be:
-        openid://?
-        response_type=id_token
-        &response_mode=post
-        &client_id=did:elsi:EU.EORI.NLPACKETDEL
-        &redirect_uri=https%3A%2F%2Fidp-pdc.fiware.io%2Fsiop_sessions
-        &scope=openid%20profile
-        &state=af0ifjsldkj
-        &nonce=n-0S6_WzA2Mj
-        &registration=%7B%22subject_syntax_types_supported%22:%5B%22did%22%5D,
-            %22id_token_signing_alg_values_supported%22:%5B%22RS256%22%5D%7
+                # -(5) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authentication Request
+                mobile.t -> verifier: (4) GET /authentication-requests
+                verifier -> mobile: (5) Reply with Authentication Request
 
 
 
-        The Authentication Request is returned to the customer wallet acting as SIOP. The SIOP flow uses a new response mode post which is used to request the SIOP to deliver the result of the authentication process to a certain endpoint. The parameter response_mode is used to carry this value.
-        This endpoint where the SIOP shall deliver the authentication result is defined in the standard parameter redirect_uri.
-        In this step the customer verifies that the Packet Delivery company is a trusted entity belonging to the ecosystem, by resolving the DID of the Packet Delivery company which is received in the client_id parameter of the Authentication Request. 
-        To resolve a DID, the wallet sends a GET request to the /api/did/v1/identifiers/did:elsi:EU.EORI.NLPACKETDEL endpoint of one of several trusted servers implementing the Universal Resolver functionality. The Universal Resolver includes a blockchain node, and there may be as many as needed. Its mission is to resolve DIDs using the blockchain and return the associated DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the Data Space ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The Universal Resolver server must be operated by a trusted entity for the customer. There may be as many nodes as needed operated by different entities. At least one of those trusted entities has to be configured in the wallet of the user.
-        The wallet receives the DID Document of Packet Delivery company, with trusted information about the company, including the Public Key associated with the Private Key that Packet Delivery company uses to digitally sign tokens. For example:
-        {
-        "payload": {
-            "@context": [
-            "https://www.w3.org/ns/did/v1",
-            "https://w3id.org/security/v1"
-            ],
-            "id": "did:elsi:EU.EORI.NLPACKETDEL",
-            "verificationMethod": [
-            {
-                "id": "did:elsi:EU.EORI.NLPACKETDEL#key-verification",
-                "type": "JwsVerificationKey2020",
-                "controller": "did:elsi:EU.EORI.NLPACKETDEL",
-                "publicKeyJwk": {
-                "kid": "key-verification",
-                "kty": "EC",
-                "crv": "secp256k1",
-                "x": "V8XptJkb5wplYkExcTF4nkyYVp7t5H5d5C4UPqCCM9c",
-                "y": "kn3nSPxIIvd9iaG0N4v14ceuo8E4PcLXhhGeDzCE7VM"
-                }
-            }
-            ],
-            "service": [
-            {
-                "id": "did:elsi:EU.EORI.NLPACKETDEL#info",
-                "type": "EntityCommercialInfo",
-                "serviceEndpoint": "https://packetdelivery.com/info",
-                "name": "Packet Delivery co."
-            },
-            {
-                "id": "did:elsi:EU.EORI.NLPACKETDEL#sms",
-                "type": "SecureMessagingService",
-                "serviceEndpoint": "https://packetdelivery.com/api"
-            }
-            ],
-            "anchors": [
-            {
-                "id": "redt.alastria",
-                "resolution": "UniversalResolver",
-                "domain": "packetdelivery.ala",
-                "ethereumAddress": "0xbcB9b29eeb28f36fd84f1CfF98C3F1887D831d78"
-            }
-            ],
-            "created": "2021-11-14T13:02:37Z",
-            "updated": "2021-11-14T13:02:37Z"
-        }
-        }
-
-
-        The DID Document includes one or more public keys inside the “verificationMethod” array. The keys are identified by the “id” field in each element of the array. The customer wallet uses the kid field that was received in the Authentication Request (in the protected header of the JWT) to select the corresponding Public Key and verify the signature of the JWT. It also verifies that the top-level “id” field in the DID Document ("did:elsi:EU.EORI.NLPACKETDEL") is equal to the client_id parameter of the Authentication Request.
         The customer wallet creates an Authentication Response to be posted in the redirect_uri specified by Packet Delivery company in step 5. The contents of the Authentication Response are described below. 
         The SIOP sends the authentication response to the endpoint passed in the redirect_uri authentication request parameter using a HTTP POST request using "application/x-www-form-urlencoded" encoding. The response contains an ID Token and a VP (Verifiable Presentation) token as defined in https://openid.net/specs/openid-connect-4-verifiable-presentations-1_0.html.
         POST /siop_sessions HTTP/1.1
