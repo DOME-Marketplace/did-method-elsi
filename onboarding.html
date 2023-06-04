@@ -161,6 +161,167 @@
 </section>
 
 
+<section><h2>Introduction</h2>
+
+    <p>The onboarding process will be performed by an employee of an organisation which has received a special type of Verifiable Credential called <code>LEARCredential</code> (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
+    </p>
+    <p>The LEARCredential must be signed with an eIDAS certificate which is either:
+    </p>
+    <ul>
+        <li id='list_114.1'>a <b>certificate for electronic seals</b> issued to a legal person by a Qualified Trust Service Provider, or        </li>
+        <li id='list_114.2'>a <b>certificate for electronic signatures</b>, issued to a legal representative of the legal person by a Qualified Trust Service Provider.        </li>
+    </ul>
+
+    <p>Both types of certificates are an electronic attestation <b>that links electronic seal/signature validation data to a legal person and confirms the name of that person</b>. This way, the certificate, usually linked to the sealed/signed document, can be used to verify the identity of the creator of the seal/signature and whether the document has been sealed/signed using the corresponding private key.
+    </p>
+    <p>Before issuing a certificate like the above, the Qualified Trust Service Provider (QTSP) performs validations against `Authentic Sources` to authenticate the identity of the organisation:
+    </p>
+    <ul>
+        <li id='list_122.1'>The data concerning the business name or corporate name of the organisation.        </li>
+        <li id='list_122.2'>The data relating to the constitution and legal status of the subscriber.        </li>
+        <li id='list_122.3'>The data concerning the extent and validity of the powers of representation of the applicant.        </li>
+        <li id='list_122.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.        </li>
+    </ul>
+
+    <p>The person controlling the above certificates will appoint a legal entity representative (LEAR) by generating and signing a Verifiable Credential which:
+    </p>
+    <ul>
+        <li id='list_130.1'>Includes identification data of an employee of the organisation        </li>
+        <li id='list_130.2'>Includes claims stating the delegation of specific powers to perform onboarding on behalf of the organisation        </li>
+        <li id='list_130.3'>Includes a public key where the corresponding private key is controlled by the employee, enabling him to prove that he is the holder of the credential when it is being used in an authentication process like the onboarding process described in this document.        </li>
+    </ul>
+
+    <p>The high-level view of the process is described in the following diagram, when a COO (Chief Operating Officer) appoints an employee to perform the onboarding process:
+    </p>
+<!-- Original D2 diagram definition
+    shape: sequence_diagram
+    # Definition of the participants
+    employee: Employee of company {
+        icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+    }
+    COO: COO of company {
+        icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+    }
+    TSP: Trust Service Provider {
+        icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg
+    }
+    registry: Authentic Sources {
+        icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg
+    }
+    COO -> TSP: Request a\ncertificate for signatures
+    TSP <-> registry: Verify trusted data
+    TSP -> COO: Provide certificate for signature
+    COO -> employee: Issue LEARCredential
+ -->
+
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1144 679"><svg id="d2-svg" class="d2-3669787437" width="1144" height="679" viewBox="-89 -49 1144 679"><rect x="-89.000000" y="-49.000000" width="1144.000000" height="679.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-3669787437 .text {
+	font-family: "d2-3669787437-font-regular";
+}
+@font-face {
+	font-family: d2-3669787437-font-regular;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-3669787437 .text-italic {
+	font-family: "d2-3669787437-font-italic";
+}
+@font-face {
+	font-family: d2-3669787437-font-italic;
+	src: url("data:application/font-woff;base64,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");
+}]]></style><style type="text/css"><![CDATA[.shape {
+  shape-rendering: geometricPrecision;
+  stroke-linejoin: round;
+}
+.connection {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.blend {
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+		.d2-3669787437 .fill-N1{fill:#0A0F25;}
+		.d2-3669787437 .fill-N2{fill:#676C7E;}
+		.d2-3669787437 .fill-N3{fill:#9499AB;}
+		.d2-3669787437 .fill-N4{fill:#CFD2DD;}
+		.d2-3669787437 .fill-N5{fill:#DEE1EB;}
+		.d2-3669787437 .fill-N6{fill:#EEF1F8;}
+		.d2-3669787437 .fill-N7{fill:#FFFFFF;}
+		.d2-3669787437 .fill-B1{fill:#0D32B2;}
+		.d2-3669787437 .fill-B2{fill:#0D32B2;}
+		.d2-3669787437 .fill-B3{fill:#E3E9FD;}
+		.d2-3669787437 .fill-B4{fill:#E3E9FD;}
+		.d2-3669787437 .fill-B5{fill:#EDF0FD;}
+		.d2-3669787437 .fill-B6{fill:#F7F8FE;}
+		.d2-3669787437 .fill-AA2{fill:#4A6FF3;}
+		.d2-3669787437 .fill-AA4{fill:#EDF0FD;}
+		.d2-3669787437 .fill-AA5{fill:#F7F8FE;}
+		.d2-3669787437 .fill-AB4{fill:#EDF0FD;}
+		.d2-3669787437 .fill-AB5{fill:#F7F8FE;}
+		.d2-3669787437 .stroke-N1{stroke:#0A0F25;}
+		.d2-3669787437 .stroke-N2{stroke:#676C7E;}
+		.d2-3669787437 .stroke-N3{stroke:#9499AB;}
+		.d2-3669787437 .stroke-N4{stroke:#CFD2DD;}
+		.d2-3669787437 .stroke-N5{stroke:#DEE1EB;}
+		.d2-3669787437 .stroke-N6{stroke:#EEF1F8;}
+		.d2-3669787437 .stroke-N7{stroke:#FFFFFF;}
+		.d2-3669787437 .stroke-B1{stroke:#0D32B2;}
+		.d2-3669787437 .stroke-B2{stroke:#0D32B2;}
+		.d2-3669787437 .stroke-B3{stroke:#E3E9FD;}
+		.d2-3669787437 .stroke-B4{stroke:#E3E9FD;}
+		.d2-3669787437 .stroke-B5{stroke:#EDF0FD;}
+		.d2-3669787437 .stroke-B6{stroke:#F7F8FE;}
+		.d2-3669787437 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-3669787437 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-3669787437 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-3669787437 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-3669787437 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-3669787437 .background-color-N1{background-color:#0A0F25;}
+		.d2-3669787437 .background-color-N2{background-color:#676C7E;}
+		.d2-3669787437 .background-color-N3{background-color:#9499AB;}
+		.d2-3669787437 .background-color-N4{background-color:#CFD2DD;}
+		.d2-3669787437 .background-color-N5{background-color:#DEE1EB;}
+		.d2-3669787437 .background-color-N6{background-color:#EEF1F8;}
+		.d2-3669787437 .background-color-N7{background-color:#FFFFFF;}
+		.d2-3669787437 .background-color-B1{background-color:#0D32B2;}
+		.d2-3669787437 .background-color-B2{background-color:#0D32B2;}
+		.d2-3669787437 .background-color-B3{background-color:#E3E9FD;}
+		.d2-3669787437 .background-color-B4{background-color:#E3E9FD;}
+		.d2-3669787437 .background-color-B5{background-color:#EDF0FD;}
+		.d2-3669787437 .background-color-B6{background-color:#F7F8FE;}
+		.d2-3669787437 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-3669787437 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-3669787437 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-3669787437 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-3669787437 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-3669787437 .color-N1{color:#0A0F25;}
+		.d2-3669787437 .color-N2{color:#676C7E;}
+		.d2-3669787437 .color-N3{color:#9499AB;}
+		.d2-3669787437 .color-N4{color:#CFD2DD;}
+		.d2-3669787437 .color-N5{color:#DEE1EB;}
+		.d2-3669787437 .color-N6{color:#EEF1F8;}
+		.d2-3669787437 .color-N7{color:#FFFFFF;}
+		.d2-3669787437 .color-B1{color:#0D32B2;}
+		.d2-3669787437 .color-B2{color:#0D32B2;}
+		.d2-3669787437 .color-B3{color:#E3E9FD;}
+		.d2-3669787437 .color-B4{color:#E3E9FD;}
+		.d2-3669787437 .color-B5{color:#EDF0FD;}
+		.d2-3669787437 .color-B6{color:#F7F8FE;}
+		.d2-3669787437 .color-AA2{color:#4A6FF3;}
+		.d2-3669787437 .color-AA4{color:#EDF0FD;}
+		.d2-3669787437 .color-AA5{color:#F7F8FE;}
+		.d2-3669787437 .color-AB4{color:#EDF0FD;}
+		.d2-3669787437 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="employee"><g class="shape" ><rect x="12.000000" y="52.000000" width="220.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="12.000000" y="52.000000" width="46" height="46" /><text x="122.000000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Employee of company</text></g><g id="COO"><g class="shape" ><rect x="272.000000" y="52.000000" width="185.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/essentials%2F365-user.svg" x="272.000000" y="52.000000" width="46" height="46" /><text x="364.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">COO of company</text></g><g id="TSP"><g class="shape" ><rect x="502.000000" y="52.000000" width="219.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg" x="502.000000" y="52.000000" width="46" height="46" /><text x="611.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Trust Service Provider</text></g><g id="registry"><g class="shape" ><rect x="761.000000" y="52.000000" width="193.000000" height="92.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><image href="https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg" x="761.000000" y="52.000000" width="46" height="46" /><text x="857.500000" y="103.500000" class="text fill-N1" style="text-anchor:middle;font-size:16px">Authentic Sources</text></g><g id="(employee -- )[0]"><path d="M 122.000000 146.000000 L 122.000000 528.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3669787437)" /></g><g id="(COO -- )[0]"><path d="M 364.500000 146.000000 L 364.500000 528.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3669787437)" /></g><g id="(TSP -- )[0]"><path d="M 611.500000 146.000000 L 611.500000 528.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3669787437)" /></g><g id="(registry -- )[0]"><path d="M 857.500000 146.000000 L 857.500000 528.000000" fill="none" class="connection stroke-B2" style="stroke-width:2;stroke-dasharray:12.000000,11.838767;" mask="url(#d2-3669787437)" /></g><g id="(COO -&gt; TSP)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 366.500000 221.000000 L 607.500000 221.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3669787437)" /><text x="488.500000" y="219.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px"><tspan x="488.500000" dy="0.000000">Request a</tspan><tspan x="488.500000" dy="18.500000">certificate for signatures</tspan></text></g><g id="(TSP &lt;-&gt; registry)[0]"><marker id="mk-2451250203" markerWidth="10.000000" markerHeight="12.000000" refX="3.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="10.000000,0.000000 0.000000,6.000000 10.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 615.500000 298.000000 L 853.500000 298.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-start="url(#mk-2451250203)" marker-end="url(#mk-3488378134)" mask="url(#d2-3669787437)" /><text x="734.500000" y="304.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Verify trusted data</text></g><g id="(TSP -&gt; COO)[0]"><path d="M 609.500000 375.000000 L 368.500000 375.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3669787437)" /><text x="488.500000" y="381.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Provide certificate for signature</text></g><g id="(COO -&gt; employee)[0]"><path d="M 362.500000 452.000000 L 126.000000 452.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3669787437)" /><text x="243.500000" y="458.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Issue LEARCredential</text></g><mask id="d2-3669787437" maskUnits="userSpaceOnUse" x="-89" y="-49" width="1144" height="679">
+<rect x="-89" y="-49" width="1144" height="679" fill="white"></rect>
+<rect x="408.000000" y="203.000000" width="161" height="37" fill="black"></rect>
+<rect x="674.000000" y="288.000000" width="121" height="21" fill="black"></rect>
+<rect x="385.000000" y="365.000000" width="207" height="21" fill="black"></rect>
+<rect x="175.000000" y="442.000000" width="137" height="21" fill="black"></rect>
+</mask></svg></svg>
+</section>
+
+
 <section><h2>Participants</h2>
 
     <p>Here we introduce the actors of the reference use case we are going to have. The main actors are marked in yellow in the following diagram.
@@ -175,77 +336,97 @@
     classes: {
         participant: {
             style: {
-                fill: "yellow"
+                fill: "aqua"
+            }
+        }
+        multiple: {
+            style: {
+                multiple: true
             }
         }
     }
     eIDAS: eIDAS Trust Framework {
-        DE_TL: Germany Trusted List {
-            RealTruth: RealTruth TSP {
-                Seal: Service\nCertificate\nfor seal
-                Seal.shape: circle
-                Sign: Service\ncertificate\nfor signature
-                Sign.shape: circle
-            }
-            RealTruth.class: participant
-            Other TSPs {
-                S3.shape: circle
-                S3: Cert\nfor Sign
-                S4.shape: circle
-                S4: Cert\nfor Seal
-            }
-        }
-        DE_TL.style.fill: transparent
-        SP_TL: Spain Trusted List {
-            TSP1 {
-                S1.shape: circle
-                S1: Cert\nfor Sign
-                S2.shape: circle
-                S2: Cert\nfor Seal
-            }
-            TSP2 {
-                S3.shape: circle
-                S3: Cert\nfor Sign
-                S4.shape: circle
-                S4: Cert\nfor Seal
-            }
-        }
-        SP_TL.style.fill: transparent
-        Other countries {
-        }
+        icon: images/eu_trust_mark.jpg
     }
     eIDAS.style.fill: transparent
+    DE_TL: Germany Trusted List
+    RealTruth: RealTruth TSP {
+        Seal: Certificate\nfor seal
+        Seal.shape: oval
+        Sign: Certificate\nfor signature
+        Sign.shape: oval
+    }
+    RealTruth.class: participant
+    OtherG: Other TSPs {
+        S3.shape: circle
+        S3: Cert\nfor Sign
+        S4.shape: circle
+        S4: Cert\nfor Seal
+    }
+    OtherG.class: multiple
+    DE_TL -> RealTruth
+    DE_TL -> OtherG
+    Other_Countries: Other Trusted Lists
+    Other_Countries.style.fill: transparent
+    Other_Countries.class: multiple
+    TSP1 {
+        S1.shape: circle
+        S1: Cert\nfor Sign
+        S2.shape: circle
+        S2: Cert\nfor Seal
+    }
+    TSPn {
+        S3.shape: circle
+        S3: Cert\nfor Sign
+        S4.shape: circle
+        S4: Cert\nfor Seal
+    }
     GoodAir {
         COO
         Employee
     }
     GoodAir.class: participant
-    eIDAS.DE_TL.RealTruth.Seal -> GoodAir: Issue Cert for Seals
-    eIDAS.DE_TL.RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures
-    GoodAir.COO -> GoodAir.Employee: LEARCredential
+    eIDAS -> DE_TL
+    eIDAS -> Other_Countries
+    RealTruth.Seal -> GoodAir: Issue Cert for Seals {
+        style: {
+            font-size: 30
+        }
+    }
+    RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures {
+        style: {
+            font-size: 30            }
+    }
+    Other_Countries -> TSP1
+    Other_Countries -> TSPn
+    GoodAir.COO -> GoodAir.Employee: LEARCredential {
+        style: {
+            font-size: 30
+        }
+    }
  -->
 
-<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 2128 1128"><svg id="d2-svg" class="d2-3300851763" width="2128" height="1128" viewBox="-101 -100 2128 1128"><rect x="-101.000000" y="-100.000000" width="2128.000000" height="1128.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
-.d2-3300851763 .text {
-	font-family: "d2-3300851763-font-regular";
+<?xml version="1.0" encoding="utf-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" d2Version="v0.4.0-HEAD" preserveAspectRatio="xMinYMin meet" viewBox="0 0 1901 1307"><svg id="d2-svg" class="d2-848158414" width="1901" height="1307" viewBox="-101 -101 1901 1307"><rect x="-101.000000" y="-101.000000" width="1901.000000" height="1307.000000" rx="0.000000" class=" fill-N7" stroke-width="0" /><style type="text/css"><![CDATA[
+.d2-848158414 .text {
+	font-family: "d2-848158414-font-regular";
 }
 @font-face {
-	font-family: d2-3300851763-font-regular;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-848158414-font-regular;
+	src: url("data:application/font-woff;base64,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");
 }
-.d2-3300851763 .text-bold {
-	font-family: "d2-3300851763-font-bold";
-}
-@font-face {
-	font-family: d2-3300851763-font-bold;
-	src: url("data:application/font-woff;base64,d09GRgABAAAAAA84AAoAAAAAF0gAAguFAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAAA9AAAAGAAAABgXxHXrmNtYXAAAAFUAAAAqAAAANgD6QTZZ2x5ZgAAAfwAAAiDAAALqJ2Gs/ZoZWFkAAAKgAAAADYAAAA2G38e1GhoZWEAAAq4AAAAJAAAACQKfwXnaG10eAAACtwAAACdAAAAoE+GBwRsb2NhAAALfAAAAFIAAABSO8Q45G1heHAAAAvQAAAAIAAAACAAQAD3bmFtZQAAC/AAAAMoAAAIKgjwVkFwb3N0AAAPGAAAAB0AAAAg/9EAMgADAioCvAAFAAACigJYAAAASwKKAlgAAAFeADIBKQAAAgsHAwMEAwICBGAAAvcAAAADAAAAAAAAAABBREJPACAAIP//Au7/BgAAA9gBESAAAZ8AAAAAAfAClAAAACAAA3icdM3JScQAGEDhLybuUeO+RY1bAdpB8CCCoIgNBE/iRbyIJbkWoMjMlDI1TAH/MLnPu36Hh0QqQS7zjlIhlaucq126cu3WvcajZ6/eIlA5U7to9cadxoMnLyONfgyiF93oxH/8xW/8xHd8xWd8tJ/xJU6cmpDKTJoybcasOfNyCxYtKSxbsWrNug2btmzbsau0Z9+ByqEjxwwBAAD//wEAAP//N/ImrXichFZ5bCNXGf/e8zGNMzl8ju9r4hnbie3Y4yOHs87hONnEzrm5ujm20VLazcluloQ2yyK15Wi9WlqnJaVAEaICpIJUrZBKUUAg0VJ1/9uWSoiWslQr1JXAqiJUbZMxmhnnWpD4Yz3S6uWb3/m9AQUMAeB5vAUyqIAa0IAegFO71B6OZWkiwSUSNCVLsEhNDGEN/8qPWZ/c55P7nduOx+bmUG4Wb+0vns3Nz/97rrWV/8Gv3uCvoUtvAODSPQDchfNQAWoALcGxDMPSSqVMy2lplibu1D5TU2WpkpOmezdfu/k971te1JdMhpe56BL/FM7vr730EgAAgmBpFzfibbAAKNwME4vG41zEQBEMQ7uVSr3OwEXiCUqJZkaeHh27NpI67xowJeiG0/Xjvd6UcWCEzD6/tPjiMOeepWyR2c7zq3Wm6XOAIQeAszgPKokxFzEY9Dqlkma5SDweizIMTedeP//c8ND1cwFr02gwONpkxfn09dXV53rWvdMDA1MeEV8OAP0L56FS1E3v0nN6Wu/S59A2//mHH6IanN984vEXNg/P/kPU5NjZHHqJ/+z2bZzf/M7m/hHnNN4Gx//iXKYco2OcWqlES1PPjk18e6LnYWfO1OTPnps+q2PIxX+6v1QmHnXNGuyr8+dXVarVDf5dV1DCAR/hPMhE5upcQRC8jO82zoNC+n+XPldAGOf3iwJ8wCKur+JtqLnPDVE5NiLIJgFE45NP9fc/NSn9dg0MdHUNDJAjL15YeH5w8IULF14cubo2P7+8PD+/BmUvGnEeSNCd8ILWq7mIMJTOfdR7OZNZ6x7u3WhPpnGenR7Mzoc+QCOPcH4JmzBjFOehGqhjMwghbMKUuDTmbvfFdCq29cqV4WxLW1tLFuc9kwO9MxT/+d276Fy4sZER9KdLu1iFt8EvsmQTBoM0gGWD+L/MoCgJLdK1X42coce9wQBXP+ZKMq2PpptW/f3OdpYJNPvPtGZalsnG4BfsjNvmsGnqqkOZUHwy2uCfMVkcVrtd7Tae6Y5PNwECEwDW4jwQAhM65tLT6ps30L0buHZzc78o8fWXdtG7aA9MQANQbsGKhAiJYEWAejUt9C0hREXsyW/SQ08WMO1ztNfFQgstcw9vqOSOngdMHu1A0kFOpAYma1ysUf+QrW75Iv8xZ6UvUtoJVb3NSImZrCvtoh20B+b7M3kUSUqpRKbulY7eL6eDPdZu2hlLpRqNQW2LZ5xsuzwyutZmp+Zs2Y72nL7mnNMi8WBLu2gP74AWnAc8xMFsjDvG4EDsT6dXWueiviaTsrChkpsz2MhqtPU6Oh4in/nK8OVTVmP2Z/tdYTO9oTO9o6nu6jndDVjE/je0B8b7GiUmxCW4K2CXcWJ8kaPnYmfXYmvPTEiO+fdVmXAsHmZmv3uDbXDHyVNrI8NrqdRCWuupiHOuKbMdtfhiIam3RgC0ht8WnoJvifuyItRd/WBnZ91QlyNaa6kykxb71BS6sqSwxMajpHJRoXAx9kv8EwAycJcCmEB7EIJW6BOVYWJRQQjB6NgBBYrT0+WyuFnRB8F6nVIpO9ZGbTn9bkY88mnLbFOP1uI0mn0ts7EG1y8HiYroZMLm0Lh9Q9MPpTf7bCxrs7GsL9LOejiTi7S03TI3NSS98iqvwxKplWvS9clBL7lQ6dY199WpagxaTWsXNxxEb/t9rM/r9fn5Qp2JqpXJjCarTdKmQzAb75QbricOQqoWURLqjgJh7Y8Mny7YnFavEe+8OmWqX5jhbyJX3Gui+NegVIIEAHyAb2EGGAAggIWnD2fb8Q6Q0t7iEpzQe0LfcV3+/R/+4tcvr6bwDr/8h5v8X37X85hwvrSLNHgHaqTEqTn1YYD/mG0tqCsUhFJDesiz/Zjef5/SILSkIKT3yGxoD1zieyhOcvcEE+Lw2SH0KxOOdWhdfeGh/oLN6WkUfkKo2O4I1Hvd4QN6jfxr5ceBTmivrFP5Hcd12lDJnblDoVAxZQ+c0EnKu5id/7+nDamVdHollVpOp5dTgWAwEAwEyl1tWxsdudy2nmvvyAqVFeZ2lHqxAe2BFuwA1BE6MX4MS+nFpNFuQm8wCDhtp9kHH0nOxZ1Js2KQiY/X+3Xe1/FPw2b6W5fGNlIW0+CzqC6T/XrgHU112Ud0He2B5oS+Unsk5pYso7eqjFWmWmubDhUnImGF4qpc7ovwHwECfWkXvYz2gBV9PdrbjLS3D4cJW9uO9TrlrfAXmU53yuGy24Jme6v30bHmCUenOWpubmacbb5HSMYxbbJQWrVBqyLrmn3d46xxUmdgjabqSro52DUjZVtd2kXLeE24eRRuJhajY4kEJ17uR4sRpgfTWfVj6+u0jTSpKG2CvDD+9pLyyScvveX3KOULSlKalSztos9QUfD/RDbV5XX4p+HTBbvTyhgKG5UyRx+5MIOi/F9jPrMN9fK13Z4GQEIPUAkVoQqAk3GUwSBImUhwshs/2WpXaVXyCq2q49qPUPETT45lc55P+NqD/YWLqCjm+/jfHZtAl7/jCGJr87lGpUopJ6oqElebKmoIOVFBhL65/mqAqCLkRCXRgIp3PL0M00ffEZ+9njt87Zt0xuvN0G+K7yNLp9A+KgopPfIrkTgBuRpvGFw1ZkLzgMerIn671VOpUckfUFckr71KNQ3+XilfRYo6mxn9/T13xkP30O/xlafG/JKWGQD0Z/y4uBeE6yQWjyeE5ZN5ej3a615cX0crZ1VW3f7eunTeDoA+xt8Aq3D+FJZqUr5PxZQLW4vTe4avZMI+d8I4FJpPp2ZjrdNRY9LwtTO5K48GQmHWPBjhImfbYisrcZlis5xreBcVD763OgqoyNcCKv0cN8MoviV8O6rFm08qkycY9HiCQdzsp2m/8A/+AwAA//8BAAD//xfbcBIAAAEAAAACC4UwAY0lXw889QABA+gAAAAA2F2ghAAAAADdZi82/jf+xAhtA/EAAQADAAIAAAAAAAAAAQAAA9j+7wAACJj+N/43CG0AAQAAAAAAAAAAAAAAAAAAACh4nBzKMWrCYBjG8f/7BEJLA00hLemSof1A0JhVwWR4l2wfOOjgATyFoDfwJLq4egF3b+MSwf2nC0tuoG54qKfRjqhAVEbUnsamRKVEnWi0ImpLVM2/an71ydjuBHWMlBJsTakf/rTArWCmgFuFJxtcLa7Jy7odcbvybQe+NKfVB1nyRql3MuX0yqmswGE4PwEAAP//AQAA//+fCRXMAAAAAAAALAAsAFAAfACgALYAygD6AQYBFgFCAWQBigHKAdwCFAJAAnICpgLMAzQDVgNiA3oDlgPIA+oEFgRGBGYEogTIBOoFBgU+BW4FhgWyBb4F1AAAAAEAAAAoAJAADABjAAcAAQAAAAAAAAAAAAAAAAAEAAN4nJyUz24bVRTGf05s0wrBAkVVuonugkWR6NhUSdU2K4fUikUUB48LQkJIE8/4jzKeGXkmDuEJWPMWvEVXPATPgVij+Xzs2AXRJoqSfHfu+fOdc75zgR3+ZptK9SHwRz0xXGGvfm54iwf1E8PbtOtbhqs8qf1puEZYmxuu83mtZ/gj3lZ/M/yA/epPhh+yW20b/phn1R3Dn2w7/jL8Kfu8XeAKvOBXwxV2yQxvscOPhrd5hMWsVHlE03CNz9gzXGcP6DOhIGZCwgjHkAkjrpgRkeMTMWPCkIgQR4cWMYW+JgRCjtF/fg3wKZgRKOKYAkeMT0xAztgi/iKvlHNlHOo0s7sWBWMCLuRxSUCCI2VESkLEpeIUFGS8okGDnIH4ZhTkeORMiPFImTGiQZc2p/QZMyHH0VakkplPypCCawLld2ZRdmZAREJurK5ICMXTiV8k7w6nOLpksl2PfLoR4Usc38m75JbK9is8/bo1Zpt5l2wC5upnrK7EurnWBMe6LfO2+Fa44BXuXv3ZZPL+HoX6XyjyBVeaf6hJJWKS4NwuLXwpyHePcRzp3MFXR76nQ58Turyhr3OLHj1anNGnw2v5dunh+JouZxzLoyO8uGtLMWf8gOMbOrIpY0fWn8XEIn4mM3Xn4jhTHVMy9bxk7qnWSBXefcLlDqUb6sjlM9AelZZO80u0ZwEjU0UmhlP1cqmN3PoXmiKmqqWc7e19uQ1z273lFt+QaodLtS44lZNbMHrfVL13NHOtH4+AkJQLWQxImdKg4Ea8zwm4IsZxrO6daEsKWiufMs+NVBIxFYMOieLMyPQ3MN34xn2woXtnb0ko/5Lp5aqq+2Rx6tXtjN6oe8s737ocrU2gYVNN19Q0ENfEtB9pp9b5+/LN9bqlPOWIlJjwXy/AMzya7HPAIWNlGOhmbq9DUy9Ek5ccqvpLIlkNpefIIhzg8ZwDDnjJ83f6uGTijItbcVnP3eKYI7ocflAVC/suR7xeffv/rL+LaVO1OJ6uTi/uPcUnd1DrF9qz2/eyp4mVk5hbtNutOCNgWnJxu+s1ucd4/wAAAP//AQAA///0t09ReJxiYGYAg//nGIwYsAAAAAAA//8BAAD//y8BAgMAAAA=");
-}
-.d2-3300851763 .text-italic {
-	font-family: "d2-3300851763-font-italic";
+.d2-848158414 .text-bold {
+	font-family: "d2-848158414-font-bold";
 }
 @font-face {
-	font-family: d2-3300851763-font-italic;
-	src: url("data:application/font-woff;base64,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");
+	font-family: d2-848158414-font-bold;
+	src: url("data:application/font-woff;base64,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");
+}
+.d2-848158414 .text-italic {
+	font-family: "d2-848158414-font-italic";
+}
+@font-face {
+	font-family: d2-848158414-font-italic;
+	src: url("data:application/font-woff;base64,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");
 }]]></style><style type="text/css"><![CDATA[.shape {
   shape-rendering: geometricPrecision;
   stroke-linejoin: round;
@@ -259,82 +440,82 @@
   opacity: 0.5;
 }
 
-		.d2-3300851763 .fill-N1{fill:#0A0F25;}
-		.d2-3300851763 .fill-N2{fill:#676C7E;}
-		.d2-3300851763 .fill-N3{fill:#9499AB;}
-		.d2-3300851763 .fill-N4{fill:#CFD2DD;}
-		.d2-3300851763 .fill-N5{fill:#DEE1EB;}
-		.d2-3300851763 .fill-N6{fill:#EEF1F8;}
-		.d2-3300851763 .fill-N7{fill:#FFFFFF;}
-		.d2-3300851763 .fill-B1{fill:#0D32B2;}
-		.d2-3300851763 .fill-B2{fill:#0D32B2;}
-		.d2-3300851763 .fill-B3{fill:#E3E9FD;}
-		.d2-3300851763 .fill-B4{fill:#E3E9FD;}
-		.d2-3300851763 .fill-B5{fill:#EDF0FD;}
-		.d2-3300851763 .fill-B6{fill:#F7F8FE;}
-		.d2-3300851763 .fill-AA2{fill:#4A6FF3;}
-		.d2-3300851763 .fill-AA4{fill:#EDF0FD;}
-		.d2-3300851763 .fill-AA5{fill:#F7F8FE;}
-		.d2-3300851763 .fill-AB4{fill:#EDF0FD;}
-		.d2-3300851763 .fill-AB5{fill:#F7F8FE;}
-		.d2-3300851763 .stroke-N1{stroke:#0A0F25;}
-		.d2-3300851763 .stroke-N2{stroke:#676C7E;}
-		.d2-3300851763 .stroke-N3{stroke:#9499AB;}
-		.d2-3300851763 .stroke-N4{stroke:#CFD2DD;}
-		.d2-3300851763 .stroke-N5{stroke:#DEE1EB;}
-		.d2-3300851763 .stroke-N6{stroke:#EEF1F8;}
-		.d2-3300851763 .stroke-N7{stroke:#FFFFFF;}
-		.d2-3300851763 .stroke-B1{stroke:#0D32B2;}
-		.d2-3300851763 .stroke-B2{stroke:#0D32B2;}
-		.d2-3300851763 .stroke-B3{stroke:#E3E9FD;}
-		.d2-3300851763 .stroke-B4{stroke:#E3E9FD;}
-		.d2-3300851763 .stroke-B5{stroke:#EDF0FD;}
-		.d2-3300851763 .stroke-B6{stroke:#F7F8FE;}
-		.d2-3300851763 .stroke-AA2{stroke:#4A6FF3;}
-		.d2-3300851763 .stroke-AA4{stroke:#EDF0FD;}
-		.d2-3300851763 .stroke-AA5{stroke:#F7F8FE;}
-		.d2-3300851763 .stroke-AB4{stroke:#EDF0FD;}
-		.d2-3300851763 .stroke-AB5{stroke:#F7F8FE;}
-		.d2-3300851763 .background-color-N1{background-color:#0A0F25;}
-		.d2-3300851763 .background-color-N2{background-color:#676C7E;}
-		.d2-3300851763 .background-color-N3{background-color:#9499AB;}
-		.d2-3300851763 .background-color-N4{background-color:#CFD2DD;}
-		.d2-3300851763 .background-color-N5{background-color:#DEE1EB;}
-		.d2-3300851763 .background-color-N6{background-color:#EEF1F8;}
-		.d2-3300851763 .background-color-N7{background-color:#FFFFFF;}
-		.d2-3300851763 .background-color-B1{background-color:#0D32B2;}
-		.d2-3300851763 .background-color-B2{background-color:#0D32B2;}
-		.d2-3300851763 .background-color-B3{background-color:#E3E9FD;}
-		.d2-3300851763 .background-color-B4{background-color:#E3E9FD;}
-		.d2-3300851763 .background-color-B5{background-color:#EDF0FD;}
-		.d2-3300851763 .background-color-B6{background-color:#F7F8FE;}
-		.d2-3300851763 .background-color-AA2{background-color:#4A6FF3;}
-		.d2-3300851763 .background-color-AA4{background-color:#EDF0FD;}
-		.d2-3300851763 .background-color-AA5{background-color:#F7F8FE;}
-		.d2-3300851763 .background-color-AB4{background-color:#EDF0FD;}
-		.d2-3300851763 .background-color-AB5{background-color:#F7F8FE;}
-		.d2-3300851763 .color-N1{color:#0A0F25;}
-		.d2-3300851763 .color-N2{color:#676C7E;}
-		.d2-3300851763 .color-N3{color:#9499AB;}
-		.d2-3300851763 .color-N4{color:#CFD2DD;}
-		.d2-3300851763 .color-N5{color:#DEE1EB;}
-		.d2-3300851763 .color-N6{color:#EEF1F8;}
-		.d2-3300851763 .color-N7{color:#FFFFFF;}
-		.d2-3300851763 .color-B1{color:#0D32B2;}
-		.d2-3300851763 .color-B2{color:#0D32B2;}
-		.d2-3300851763 .color-B3{color:#E3E9FD;}
-		.d2-3300851763 .color-B4{color:#E3E9FD;}
-		.d2-3300851763 .color-B5{color:#EDF0FD;}
-		.d2-3300851763 .color-B6{color:#F7F8FE;}
-		.d2-3300851763 .color-AA2{color:#4A6FF3;}
-		.d2-3300851763 .color-AA4{color:#EDF0FD;}
-		.d2-3300851763 .color-AA5{color:#F7F8FE;}
-		.d2-3300851763 .color-AB4{color:#EDF0FD;}
-		.d2-3300851763 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="eIDAS"><g class="shape" ><rect x="0.000000" y="41.000000" width="1926.000000" height="412.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="963.000000" y="28.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">eIDAS Trust Framework</text></g><g id="GoodAir" class="participant"><g class="shape" ><rect x="81.000000" y="615.000000" width="333.000000" height="312.000000" fill="yellow" class=" stroke-B1" style="stroke-width:2;" /></g><text x="247.500000" y="602.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">GoodAir</text></g><g id="eIDAS.DE_TL"><g class="shape" ><rect x="20.000000" y="106.000000" width="858.000000" height="317.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="449.000000" y="94.000000" class="text fill-N1" style="text-anchor:middle;font-size:24px">Germany Trusted List</text></g><g id="eIDAS.SP_TL"><g class="shape" ><rect x="1114.000000" y="106.000000" width="792.000000" height="317.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="1510.000000" y="94.000000" class="text fill-N1" style="text-anchor:middle;font-size:24px">Spain Trusted List</text></g><g id="eIDAS.Other countries"><g class="shape" ><rect x="918.000000" y="214.000000" width="156.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="996.000000" y="252.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Other countries</text></g><g id="GoodAir.COO"><g class="shape" ><rect x="214.000000" y="644.000000" width="77.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="252.500000" y="682.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">COO</text></g><g id="GoodAir.Employee"><g class="shape" ><rect x="196.000000" y="831.000000" width="114.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="253.000000" y="869.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Employee</text></g><g id="eIDAS.DE_TL.RealTruth" class="participant"><g class="shape" ><rect x="40.000000" y="169.000000" width="432.000000" height="222.000000" fill="yellow" class=" stroke-B1" style="stroke-width:2;" /></g><text x="256.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">RealTruth TSP</text></g><g id="eIDAS.DE_TL.Other TSPs"><g class="shape" ><rect x="492.000000" y="169.000000" width="366.000000" height="222.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="675.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">Other TSPs</text></g><g id="eIDAS.SP_TL.TSP1"><g class="shape" ><rect x="1134.000000" y="169.000000" width="366.000000" height="222.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="1317.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP1</text></g><g id="eIDAS.SP_TL.TSP2"><g class="shape" ><rect x="1520.000000" y="169.000000" width="366.000000" height="222.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="1703.000000" y="158.000000" class="text fill-N1" style="text-anchor:middle;font-size:20px">TSP2</text></g><g id="eIDAS.DE_TL.RealTruth.Seal"><g class="shape" ><ellipse rx="69.500000" ry="69.500000" cx="149.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="149.500000" y="270.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="149.500000" dy="0.000000">Service</tspan><tspan x="149.500000" dy="17.666667">Certificate</tspan><tspan x="149.500000" dy="17.666667">for seal</tspan></text></g><g id="eIDAS.DE_TL.RealTruth.Sign"><g class="shape" ><ellipse rx="76.500000" ry="76.500000" cx="355.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="355.500000" y="270.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="355.500000" dy="0.000000">Service</tspan><tspan x="355.500000" dy="17.666667">certificate</tspan><tspan x="355.500000" dy="17.666667">for signature</tspan></text></g><g id="eIDAS.DE_TL.Other TSPs.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="588.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="588.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="588.500000" dy="0.000000">Cert</tspan><tspan x="588.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.DE_TL.Other TSPs.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="761.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="761.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="761.500000" dy="0.000000">Cert</tspan><tspan x="761.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.SP_TL.TSP1.S1"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1230.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1230.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1230.500000" dy="0.000000">Cert</tspan><tspan x="1230.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.SP_TL.TSP1.S2"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1403.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1403.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1403.500000" dy="0.000000">Cert</tspan><tspan x="1403.500000" dy="18.500000">for Seal</tspan></text></g><g id="eIDAS.SP_TL.TSP2.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1616.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1616.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1616.500000" dy="0.000000">Cert</tspan><tspan x="1616.500000" dy="18.500000">for Sign</tspan></text></g><g id="eIDAS.SP_TL.TSP2.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1789.500000" cy="280.500000" class="shape stroke-B1 fill-N7" style="stroke-width:2;" /></g><text x="1789.500000" y="278.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1789.500000" dy="0.000000">Cert</tspan><tspan x="1789.500000" dy="18.500000">for Seal</tspan></text></g><g id="(eIDAS.DE_TL.RealTruth.Seal -&gt; GoodAir)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 149.671202 351.972788 C 149.600000 352.400000 149.500000 363.000000 149.500000 378.000000 C 149.500000 393.000000 149.500000 413.000000 149.500000 428.000000 C 149.500000 443.000000 149.500000 533.900000 149.500000 611.500000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3300851763)" /><text x="150.000000" y="488.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Issue Cert for Seals</text></g><g id="(eIDAS.DE_TL.RealTruth.Sign -&gt; GoodAir.COO)[0]"><path d="M 355.751931 355.015444 C 355.600000 353.800000 355.500000 363.000000 355.500000 378.000000 C 355.500000 393.000000 355.500000 413.000000 355.500000 428.000000 C 355.500000 443.000000 355.500000 465.100000 355.500000 483.250000 C 355.500000 501.400000 342.500000 588.500000 293.170180 643.521722" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3300851763)" /><text x="354.000000" y="514.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">Issue Cert for Signatures</text></g><g id="GoodAir.(COO -&gt; Employee)[0]"><path d="M 252.500000 712.500000 C 252.500000 758.900000 252.500000 783.200000 252.500000 828.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-3300851763)" /><text x="252.500000" y="777.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:16px">LEARCredential</text></g><mask id="d2-3300851763" maskUnits="userSpaceOnUse" x="-101" y="-100" width="2128" height="1128">
-<rect x="-101" y="-100" width="2128" height="1128" fill="white"></rect>
-<rect x="88.000000" y="472.000000" width="124" height="21" fill="black"></rect>
-<rect x="274.000000" y="498.000000" width="160" height="21" fill="black"></rect>
-<rect x="202.000000" y="761.000000" width="101" height="21" fill="black"></rect>
+		.d2-848158414 .fill-N1{fill:#0A0F25;}
+		.d2-848158414 .fill-N2{fill:#676C7E;}
+		.d2-848158414 .fill-N3{fill:#9499AB;}
+		.d2-848158414 .fill-N4{fill:#CFD2DD;}
+		.d2-848158414 .fill-N5{fill:#DEE1EB;}
+		.d2-848158414 .fill-N6{fill:#EEF1F8;}
+		.d2-848158414 .fill-N7{fill:#FFFFFF;}
+		.d2-848158414 .fill-B1{fill:#0D32B2;}
+		.d2-848158414 .fill-B2{fill:#0D32B2;}
+		.d2-848158414 .fill-B3{fill:#E3E9FD;}
+		.d2-848158414 .fill-B4{fill:#E3E9FD;}
+		.d2-848158414 .fill-B5{fill:#EDF0FD;}
+		.d2-848158414 .fill-B6{fill:#F7F8FE;}
+		.d2-848158414 .fill-AA2{fill:#4A6FF3;}
+		.d2-848158414 .fill-AA4{fill:#EDF0FD;}
+		.d2-848158414 .fill-AA5{fill:#F7F8FE;}
+		.d2-848158414 .fill-AB4{fill:#EDF0FD;}
+		.d2-848158414 .fill-AB5{fill:#F7F8FE;}
+		.d2-848158414 .stroke-N1{stroke:#0A0F25;}
+		.d2-848158414 .stroke-N2{stroke:#676C7E;}
+		.d2-848158414 .stroke-N3{stroke:#9499AB;}
+		.d2-848158414 .stroke-N4{stroke:#CFD2DD;}
+		.d2-848158414 .stroke-N5{stroke:#DEE1EB;}
+		.d2-848158414 .stroke-N6{stroke:#EEF1F8;}
+		.d2-848158414 .stroke-N7{stroke:#FFFFFF;}
+		.d2-848158414 .stroke-B1{stroke:#0D32B2;}
+		.d2-848158414 .stroke-B2{stroke:#0D32B2;}
+		.d2-848158414 .stroke-B3{stroke:#E3E9FD;}
+		.d2-848158414 .stroke-B4{stroke:#E3E9FD;}
+		.d2-848158414 .stroke-B5{stroke:#EDF0FD;}
+		.d2-848158414 .stroke-B6{stroke:#F7F8FE;}
+		.d2-848158414 .stroke-AA2{stroke:#4A6FF3;}
+		.d2-848158414 .stroke-AA4{stroke:#EDF0FD;}
+		.d2-848158414 .stroke-AA5{stroke:#F7F8FE;}
+		.d2-848158414 .stroke-AB4{stroke:#EDF0FD;}
+		.d2-848158414 .stroke-AB5{stroke:#F7F8FE;}
+		.d2-848158414 .background-color-N1{background-color:#0A0F25;}
+		.d2-848158414 .background-color-N2{background-color:#676C7E;}
+		.d2-848158414 .background-color-N3{background-color:#9499AB;}
+		.d2-848158414 .background-color-N4{background-color:#CFD2DD;}
+		.d2-848158414 .background-color-N5{background-color:#DEE1EB;}
+		.d2-848158414 .background-color-N6{background-color:#EEF1F8;}
+		.d2-848158414 .background-color-N7{background-color:#FFFFFF;}
+		.d2-848158414 .background-color-B1{background-color:#0D32B2;}
+		.d2-848158414 .background-color-B2{background-color:#0D32B2;}
+		.d2-848158414 .background-color-B3{background-color:#E3E9FD;}
+		.d2-848158414 .background-color-B4{background-color:#E3E9FD;}
+		.d2-848158414 .background-color-B5{background-color:#EDF0FD;}
+		.d2-848158414 .background-color-B6{background-color:#F7F8FE;}
+		.d2-848158414 .background-color-AA2{background-color:#4A6FF3;}
+		.d2-848158414 .background-color-AA4{background-color:#EDF0FD;}
+		.d2-848158414 .background-color-AA5{background-color:#F7F8FE;}
+		.d2-848158414 .background-color-AB4{background-color:#EDF0FD;}
+		.d2-848158414 .background-color-AB5{background-color:#F7F8FE;}
+		.d2-848158414 .color-N1{color:#0A0F25;}
+		.d2-848158414 .color-N2{color:#676C7E;}
+		.d2-848158414 .color-N3{color:#9499AB;}
+		.d2-848158414 .color-N4{color:#CFD2DD;}
+		.d2-848158414 .color-N5{color:#DEE1EB;}
+		.d2-848158414 .color-N6{color:#EEF1F8;}
+		.d2-848158414 .color-N7{color:#FFFFFF;}
+		.d2-848158414 .color-B1{color:#0D32B2;}
+		.d2-848158414 .color-B2{color:#0D32B2;}
+		.d2-848158414 .color-B3{color:#E3E9FD;}
+		.d2-848158414 .color-B4{color:#E3E9FD;}
+		.d2-848158414 .color-B5{color:#EDF0FD;}
+		.d2-848158414 .color-B6{color:#F7F8FE;}
+		.d2-848158414 .color-AA2{color:#4A6FF3;}
+		.d2-848158414 .color-AA4{color:#EDF0FD;}
+		.d2-848158414 .color-AA5{color:#F7F8FE;}
+		.d2-848158414 .color-AB4{color:#EDF0FD;}
+		.d2-848158414 .color-AB5{color:#F7F8FE;}.appendix text.text{fill:#0A0F25}.md{--color-fg-default:#0A0F25;--color-fg-muted:#676C7E;--color-fg-subtle:#9499AB;--color-canvas-default:#FFFFFF;--color-canvas-subtle:#EEF1F8;--color-border-default:#0D32B2;--color-border-muted:#0D32B2;--color-neutral-muted:#EEF1F8;--color-accent-fg:#0D32B2;--color-accent-emphasis:#0D32B2;--color-attention-subtle:#676C7E;--color-danger-fg:red;}.sketch-overlay-B1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B2{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-B3{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-B6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-AA4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AA5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB4{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-AB5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N1{fill:url(#streaks-darker);mix-blend-mode:lighten}.sketch-overlay-N2{fill:url(#streaks-dark);mix-blend-mode:overlay}.sketch-overlay-N3{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N4{fill:url(#streaks-normal);mix-blend-mode:color-burn}.sketch-overlay-N5{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N6{fill:url(#streaks-bright);mix-blend-mode:darken}.sketch-overlay-N7{fill:url(#streaks-bright);mix-blend-mode:darken}.light-code{display: block}.dark-code{display: none}]]></style><g id="eIDAS"><g class="shape" ><rect x="656.000000" y="0.000000" width="239.000000" height="118.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><image href="images/eu_trust_mark.jpg" x="746.000000" y="29.500000" width="59" height="59" /><text x="775.500000" y="21.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">eIDAS Trust Framework</text></g><g id="DE_TL"><g class="shape" ><rect x="291.000000" y="218.000000" width="197.000000" height="66.000000" class=" stroke-B1 fill-B6" style="stroke-width:2;" /></g><text x="389.500000" y="256.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Germany Trusted List</text></g><g id="RealTruth" class="participant"><g class="shape" ><rect x="0.000000" y="425.000000" width="540.000000" height="172.000000" fill="aqua" class=" stroke-B1" style="stroke-width:2;" /></g><text x="270.000000" y="412.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">RealTruth TSP</text></g><g id="OtherG" class="multiple"><g class="shape" ><rect x="571.000000" y="415.000000" width="366.000000" height="172.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /><rect x="561.000000" y="425.000000" width="366.000000" height="172.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="744.000000" y="412.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">Other TSPs</text></g><g id="Other_Countries" class="multiple"><g class="shape" ><rect x="1156.000000" y="208.000000" width="181.000000" height="66.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /><rect x="1146.000000" y="218.000000" width="181.000000" height="66.000000" fill="transparent" class=" stroke-B1" style="stroke-width:2;" /></g><text x="1236.500000" y="256.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Other Trusted Lists</text></g><g id="TSP1"><g class="shape" ><rect x="947.000000" y="425.000000" width="366.000000" height="172.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="1130.000000" y="412.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">TSP1</text></g><g id="TSPn"><g class="shape" ><rect x="1333.000000" y="425.000000" width="366.000000" height="172.000000" class=" stroke-B1 fill-B4" style="stroke-width:2;" /></g><text x="1516.000000" y="412.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">TSPn</text></g><g id="GoodAir" class="participant"><g class="shape" ><rect x="45.000000" y="776.000000" width="428.000000" height="329.000000" fill="aqua" class=" stroke-B1" style="stroke-width:2;" /></g><text x="259.000000" y="763.000000" class="text fill-N1" style="text-anchor:middle;font-size:28px">GoodAir</text></g><g id="RealTruth.Seal"><g class="shape" ><ellipse rx="82.000000" ry="43.000000" cx="122.000000" cy="511.000000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="122.000000" y="508.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="122.000000" dy="0.000000">Certificate</tspan><tspan x="122.000000" dy="18.500000">for seal</tspan></text></g><g id="RealTruth.Sign"><g class="shape" ><ellipse rx="95.000000" ry="41.000000" cx="406.000000" cy="511.000000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="406.000000" y="508.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="406.000000" dy="0.000000">Certificate</tspan><tspan x="406.000000" dy="18.500000">for signature</tspan></text></g><g id="OtherG.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="657.500000" cy="510.500000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="657.500000" y="508.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="657.500000" dy="0.000000">Cert</tspan><tspan x="657.500000" dy="18.500000">for Sign</tspan></text></g><g id="OtherG.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="830.500000" cy="510.500000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="830.500000" y="508.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="830.500000" dy="0.000000">Cert</tspan><tspan x="830.500000" dy="18.500000">for Seal</tspan></text></g><g id="TSP1.S1"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1043.500000" cy="510.500000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="1043.500000" y="508.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1043.500000" dy="0.000000">Cert</tspan><tspan x="1043.500000" dy="18.500000">for Sign</tspan></text></g><g id="TSP1.S2"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1216.500000" cy="510.500000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="1216.500000" y="508.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1216.500000" dy="0.000000">Cert</tspan><tspan x="1216.500000" dy="18.500000">for Seal</tspan></text></g><g id="TSPn.S3"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1429.500000" cy="510.500000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="1429.500000" y="508.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1429.500000" dy="0.000000">Cert</tspan><tspan x="1429.500000" dy="18.500000">for Sign</tspan></text></g><g id="TSPn.S4"><g class="shape" ><ellipse rx="56.500000" ry="56.500000" cx="1602.500000" cy="510.500000" class="shape stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="1602.500000" y="508.000000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px"><tspan x="1602.500000" dy="0.000000">Cert</tspan><tspan x="1602.500000" dy="18.500000">for Seal</tspan></text></g><g id="GoodAir.COO"><g class="shape" ><rect x="225.000000" y="805.000000" width="77.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="263.500000" y="843.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">COO</text></g><g id="GoodAir.Employee"><g class="shape" ><rect x="207.000000" y="1009.000000" width="114.000000" height="66.000000" class=" stroke-B1 fill-B5" style="stroke-width:2;" /></g><text x="264.000000" y="1047.500000" class="text-bold fill-N1" style="text-anchor:middle;font-size:16px">Employee</text></g><g id="(DE_TL -&gt; RealTruth)[0]"><marker id="mk-3488378134" markerWidth="10.000000" markerHeight="12.000000" refX="7.000000" refY="6.000000" viewBox="0.000000 0.000000 10.000000 12.000000" orient="auto" markerUnits="userSpaceOnUse"> <polygon points="0.000000,0.000000 10.000000,6.000000 0.000000,12.000000" class="connection fill-B1" stroke-width="2" /> </marker><path d="M 289.089837 282.155303 C 155.800000 323.512523 122.000000 352.200000 122.000000 421.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /></g><g id="(DE_TL -&gt; OtherG)[0]"><path d="M 489.910163 282.155303 C 623.200000 323.512523 657.000000 352.200000 657.000000 421.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /></g><g id="(eIDAS -&gt; DE_TL)[0]"><path d="M 654.075268 93.288331 C 442.800000 152.948964 389.500000 178.000000 389.500000 214.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /></g><g id="(eIDAS -&gt; Other_Countries)[0]"><path d="M 896.946223 87.746229 C 1167.800000 151.857112 1236.000000 178.000000 1236.000000 214.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /></g><g id="(RealTruth.Seal -&gt; GoodAir)[0]"><path d="M 122.000000 557.000000 C 122.000000 588.600000 122.000000 688.000000 122.000000 772.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /><text x="122.000000" y="677.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:30px">Issue Cert for Seals</text></g><g id="(RealTruth.Sign -&gt; GoodAir.COO)[0]"><path d="M 405.977779 553.999877 C 405.600000 588.000000 405.500000 610.800000 405.500000 631.500000 C 405.500000 652.200000 384.850000 751.191358 305.397763 813.488676" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /><text x="394.500000" y="715.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:30px">Issue Cert for Signatures</text></g><g id="(Other_Countries -&gt; TSP1)[0]"><path d="M 1157.427756 284.790136 C 1066.253012 324.000000 1043.000000 352.200000 1043.000000 421.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /></g><g id="(Other_Countries -&gt; TSPn)[0]"><path d="M 1314.572244 284.790136 C 1405.746988 324.000000 1429.000000 352.200000 1429.000000 421.000000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /></g><g id="GoodAir.(COO -&gt; Employee)[0]"><path d="M 263.750000 873.500000 C 263.750000 926.700000 263.750000 954.300000 263.750000 1005.500000" fill="none" class="connection stroke-B1" style="stroke-width:2;" marker-end="url(#mk-3488378134)" mask="url(#d2-848158414)" /><text x="263.500000" y="952.000000" class="text-italic fill-N2" style="text-anchor:middle;font-size:30px">LEARCredential</text></g><mask id="d2-848158414" maskUnits="userSpaceOnUse" x="-101" y="-101" width="1901" height="1307">
+<rect x="-101" y="-101" width="1901" height="1307" fill="white"></rect>
+<rect x="7.000000" y="647.000000" width="230" height="38" fill="black"></rect>
+<rect x="246.000000" y="685.000000" width="297" height="38" fill="black"></rect>
+<rect x="169.000000" y="922.000000" width="189" height="38" fill="black"></rect>
 </mask></svg></svg>
 
     <section id='participant'><h2>GoodAir: the company that wants will perform the onboarding process</h2>
@@ -367,8 +548,8 @@
         <p>The above set of fields bind the legal identity of the COO with the identity of the business:
         </p>
         <ul>
-            <li id='list_212.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
-            <li id='list_212.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
+            <li id='list_291.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
+            <li id='list_291.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
         </ul>
 
         <p>Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
@@ -408,10 +589,10 @@
             <p>The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
             </p>
             <ul>
-                <li id='list_248.1'>The data concerning the business name or corporate name of the organisation.                </li>
-                <li id='list_248.2'>The data relating to the constitution and legal status of the subscriber.                </li>
-                <li id='list_248.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
-                <li id='list_248.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
+                <li id='list_327.1'>The data concerning the business name or corporate name of the organisation.                </li>
+                <li id='list_327.2'>The data relating to the constitution and legal status of the subscriber.                </li>
+                <li id='list_327.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
+                <li id='list_327.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
             </ul>
 
         </blockquote>
@@ -875,8 +1056,8 @@
         <p>In this profile we assume that the Issuer is composed of two components:
         </p>
         <ul>
-            <li id='list_553.1'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
-            <li id='list_553.2'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
+            <li id='list_632.1'>Authorization server: the backend component implementing the existing authentication/authorization functionalities for the Issuer entity.            </li>
+            <li id='list_632.2'>Issuer backend: the main server implementing the business logic as a web application and additional backend APIs required for issuance of credentials.            </li>
         </ul>
 
         <p>The Issuer backend and the Authorization server could be implemented as a single component in a real use case, but we assume here that they are separated to make the profile more general, especially for big entities and also when using Trust Service Providers for cloud signature and credential issuance, for example.
@@ -939,8 +1120,8 @@
             <p>This profile restricts the options available in section 4.1.1 of [[OpenID.VCI]]. The profile defines a Credential Offer object containing the following parameters:
             </p>
             <ul>
-                <li id='list_600.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
-                <li id='list_600.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                <div>
+                <li id='list_679.1'><code>credential_issuer</code>: REQUIRED. The URL of the Credential Issuer that will be used by the Wallet to obtain one or more Credentials.                </li>
+                <li id='list_679.2'><code>credentials</code>: REQUIRED. A JSON array, where every entry is a JSON string. To achieve interoperability faster, this profile defines a global Trusted Credential Schemas List where well-known credential schemas are defined, in addition to the individual credentials that each Issuer can define themselves. The string value MUST be one of the id values in one of the objects in the <code>credentials_supported</code> metadata parameter of the Trusted Credential Schemas List (described later), or one of the id values in one of the objects in the <code>credentials_supported</code> Credential Issuer metadata parameter provided by the Credential Issuer. When processing, the Wallet MUST resolve this string value to the respective object. The credentials defined in the global Trusted Credential Schema List have precedence over the ones defined by the Credential Issuer.                <div>
 
                     <aside class='note' title='LEARCredential'>
                         <p>The only credential being offered in our case is the LEARCredential, so this is the credential schema that should be specified here. The LEARCredential is a credential known globally to the DOME ecosystem, so its schema should be published and be available in the Trusted Credential Schemas List.
@@ -949,7 +1130,7 @@
 
                 </div>
                 </li>
-                <li id='list_600.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                <div>
+                <li id='list_679.3'><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.                <div>
                     <p>In other scenarios like when the wallet is a native mobile application and the user interacts with the Issuer exclusively with the mobile (without the laptop), then the Authorization Code Flow has to be used. This can be described in detail in a different profile.
                     </p>
                 </div>
@@ -959,8 +1140,8 @@
             <p>The grant object contains the following values:
             </p>
             <ul>
-                <li id='list_614.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
-                <li id='list_614.2'><code>user_pin_required</code>: REQUIRED. The [[OpenID.VCI]] standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
+                <li id='list_693.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the Credential Issuer's authorization for the Wallet to obtain Credentials of a certain type. This code MUST be short lived and single-use. This parameter value MUST be included in the subsequent Token Request with the Pre-Authorized Code Flow.                </li>
+                <li id='list_693.2'><code>user_pin_required</code>: REQUIRED. The [[OpenID.VCI]] standard says it is RECOMMENDED, but this profile specifies the user pin to achieve a greater level of security. This field is a boolean value specifying whether the Credential Issuer expects presentation of a user PIN along with the Token Request in a Pre-Authorized Code Flow. Default is false. This PIN is intended to bind the Pre-Authorized Code to a certain transaction in order to prevent replay of this code by an attacker that, for example, scanned the QR code while standing behind the legit user. It is RECOMMENDED to send a PIN via a separate channel. The PIN value MUST be sent in the <code>user_pin</code> parameter with the respective Token Request.                </li>
             </ul>
 
             <p>The following non-normative example shows a Credential Offer object where the Credential Issuer offers the issuance of one Credential ("LEARCredential"):
@@ -1031,9 +1212,9 @@
             <p>The object contained in <code>openid-credential-issuer</code> contains the following:
             </p>
             <ul>
-                <li id='list_674.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
-                <li id='list_674.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
-                <li id='list_674.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
+                <li id='list_753.1'><code>credential_issuer</code>: REQUIRED. The Credential Issuer's identifier.                </li>
+                <li id='list_753.2'><code>credential_endpoint</code>: REQUIRED. URL of the Credential Issuer's Credential Endpoint. This URL MUST use the https scheme and MAY contain port, path and query parameter components.                </li>
+                <li id='list_753.3'><code>credentials_supported</code>: REQUIRED. A JSON array containing a list of JSON objects, each of them representing metadata about a separate credential type that the Credential Issuer can issue. The JSON objects in the array MUST conform to the structure of the Section XXXX.                </li>
             </ul>
 
             <p>TODO: define a global directory of credentials supported to eliminate requirement for each individual Issuer to publish its own list.
@@ -1041,9 +1222,9 @@
             <p>This profile does not make use of the following parameters:
             </p>
             <ul>
-                <li id='list_685.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
-                <li id='list_685.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
-                <li id='list_685.3'><code>display</code> parameter.                </li>
+                <li id='list_764.1'><code>authorization_server</code> parameter, because it uses the <code>pre-authorized_code</code> Grant type.                </li>
+                <li id='list_764.2'><code>batch_credential_endpoint</code> parameter. It indicates that the Credential Issuer does not support the Batch Credential Endpoint.                </li>
+                <li id='list_764.3'><code>display</code> parameter.                </li>
             </ul>
 
         </section>
@@ -1056,7 +1237,7 @@
         <p>This specification also defines a new OAuth 2.0 Authorization Server metadata [[RFC8414]] parameter to publish whether the AS that the Credential Issuer relies on for authorization, supports anonymous Token Requests with the Pre-authorized Grant Type. It is defined as follows:
         </p>
         <ul>
-            <li id='list_697.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
+            <li id='list_776.1'><code>pre-authorized_grant_anonymous_access_supported</code>: OPTIONAL. A JSON Boolean indicating whether the issuer accepts a Token Request with a Pre-Authorized Code but without a client id. The default is false.            </li>
         </ul>
 
     </section>
@@ -1084,8 +1265,8 @@
             <p>The following are the extension parameters to the Token Request used in a Pre-Authorized Code Flow as used in this profile:
             </p>
             <ul>
-                <li id='list_716.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
-                <li id='list_716.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
+                <li id='list_795.1'><code>pre-authorized_code</code>: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.                </li>
+                <li id='list_795.2'><code>user_pin</code>: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).                </li>
             </ul>
 
             <p>In this profile the Wallet does not have to authenticate when using the Token Endpoint, because we are using the Pre-Authorized Code Grant Type, given the level of trust between the Issuer and the End User and that authentication was already performed at the beginning of the flow.
@@ -1111,8 +1292,8 @@
             <p>In addition to the response parameters defined in [[RFC6749]], the Authorization Server returns the following parameters:
             </p>
             <ul>
-                <li id='list_741.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
-                <li id='list_741.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+                <li id='list_820.1'><code>c_nonce</code>: REQUIRED. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. The Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_820.2'><code>c_nonce_expires_in</code>: REQUIRED. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
             </ul>
 
             <p>Below is a non-normative example of a Token Response:
@@ -1177,8 +1358,8 @@
             <p>The Wallet backend makes a Credential Request to the Credential Endpoint by sending the following parameters in the entity-body of an HTTP POST request using the `application/json` media type.
             </p>
             <ul>
-                <li id='list_793.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
-                <li id='list_793.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
+                <li id='list_872.1'><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_872.2'><code>proof</code>: OPTIONAL. JSON object containing proof of possession of the key material the issued Credential shall be bound to. The specification envisions use of different types of proofs for different cryptographic schemes. The proof object MUST contain a proof_type claim of type JSON string denoting the concrete proof type. This type determines the further claims in the proof object and its respective processing rules. Proof types are defined in Section 7.2.1.                </li>
             </ul>
 
             <p>The proof element MUST incorporate a c_nonce value generated by the Credential Issuer and the Credential Issuer Identifier (audience) to allow the Credential Issuer to detect replay. The way that data is incorporated depends on the proof type. In a JWT, for example, the c_nonce is conveyd in the nonce claims whereas the audience is conveyed in the aud claim. In a Linked Data proof, for example, the c_nonce is included as the challenge element in the proof object and the Credential Issuer (the intended audience) is included as the domain element.
@@ -1191,20 +1372,20 @@
                 <p><code>jwt</code>: objects of this type contain a single jwt element with a JWS [RFC7515] as proof of possession. The JWT MUST contain the following elements:
                 </p>
                     <ul>
-                        <li id='list_806.1'>in the JOSE Header,                        <div>
+                        <li id='list_885.1'>in the JOSE Header,                        <div>
                             <ul>
-                                <li id='list_809.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].                                </li>
-                                <li id='list_809.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
-                                <li id='list_809.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
+                                <li id='list_888.1'><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].                                </li>
+                                <li id='list_888.2'><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).                                </li>
+                                <li id='list_888.3'><code>kid</code>: REQUIRED. JOSE Header containing the key ID. The Credential will be bound to a DID, so the kid refers to a DID URL which identifies a particular key in the DID Document that the Credential will be bound to.                                </li>
                             </ul>
 
                         </div>
                         </li>
-                        <li id='list_806.2'>in the JWT body,                        <div>
+                        <li id='list_885.2'>in the JWT body,                        <div>
                             <ul>
-                                <li id='list_818.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
-                                <li id='list_818.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].                                </li>
-                                <li id='list_818.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
+                                <li id='list_897.1'><code>aud</code>: REQUIRED (string). The value of this claim MUST be the Credential Issuer URL of the Credential Issuer.                                </li>
+                                <li id='list_897.2'><code>iat</code>: REQUIRED (number). The value of this claim MUST be the time at which the proof was issued using the syntax defined in [[RFC7519]].                                </li>
+                                <li id='list_897.3'><code>nonce</code>: REQUIRED (string). The value type of this claim MUST be a string, where the value is the <code>c_nonce</code> provided by the Credential Issuer.                                </li>
                             </ul>
 
                         </div>
@@ -1249,10 +1430,10 @@
             <p>The following claims are used in the Credential Response:
             </p>
             <ul>
-                <li id='list_857.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
-                <li id='list_857.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
-                <li id='list_857.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
-                <li id='list_857.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
+                <li id='list_936.1'><code>format</code>: REQUIRED. JSON string denoting the format of the issued Credential. This profile uses the format identifier <code>jwt_vc_json</code>.                </li>
+                <li id='list_936.2'><code>credential</code>: REQUIRED. Contains issued Credential. MUST be a JSON string.                </li>
+                <li id='list_936.3'><code>c_nonce</code>: OPTIONAL. JSON string containing a nonce to be used to create a proof of possession of key material when requesting a Credential. When received, the Wallet MUST use this nonce value for its subsequent credential requests until the Credential Issuer provides a fresh nonce.                </li>
+                <li id='list_936.4'><code>c_nonce_expires_in</code>: OPTIONAL. JSON integer denoting the lifetime in seconds of the c_nonce.                </li>
             </ul>
 
             <p>Below is a non-normative example of a Credential Response:
@@ -1473,14 +1654,14 @@
 <rect x="385.000000" y="904.000000" width="237" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul class='plain'>
-            <li id='list_963.1'><a href='#list_963.1' class='selfref'><b>1</b></a> The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.            <div>
+            <li id='list_1042.1'><a href='#list_1042.1' class='selfref'><b>1</b></a> The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.            <div>
                 <p>We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
                 </p>
             </div>
             </li>
-            <li id='list_963.2'><a href='#list_963.2' class='selfref'><b>2</b></a> The browser sends a request to the Packet Delivery portal server.            </li>
-            <li id='list_963.3'><a href='#list_963.3' class='selfref'><b>3</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.            </li>
-            <li id='list_963.4'><a href='#list_963.4' class='selfref'><b>4</b></a> The Verifier generates and displays a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.            <div>
+            <li id='list_1042.2'><a href='#list_1042.2' class='selfref'><b>2</b></a> The browser sends a request to the Packet Delivery portal server.            </li>
+            <li id='list_1042.3'><a href='#list_1042.3' class='selfref'><b>3</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.            </li>
+            <li id='list_1042.4'><a href='#list_1042.4' class='selfref'><b>4</b></a> The Verifier generates and displays a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.            <div>
                 <p>A QR code is used because a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
                 </p>
 
@@ -1488,11 +1669,11 @@
 </span></span></code></pre>
             </div>
             </li>
-            <li id='list_963.5'><a href='#list_963.5' class='selfref'><b>5</b></a> The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.            </li>
-            <li id='list_963.6'><a href='#list_963.6' class='selfref'><b>6</b></a> The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.            </li>
-            <li id='list_963.7'><a href='#list_963.7' class='selfref'><b>7</b></a> The mobile performs a GET request to the url inside the QR. The reply to the GET request is an Authorization Request            </li>
-            <li id='list_963.8'><a href='#list_963.8' class='selfref'><b>8</b></a> The Verifier creates an Authorization Request. The process is described in detail in the next section            </li>
-            <li id='list_963.9'><a href='#list_963.9' class='selfref'><b>9</b></a> The Verifier replies to the wallet with the Authorization Request            </li>
+            <li id='list_1042.5'><a href='#list_1042.5' class='selfref'><b>5</b></a> The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.            </li>
+            <li id='list_1042.6'><a href='#list_1042.6' class='selfref'><b>6</b></a> The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.            </li>
+            <li id='list_1042.7'><a href='#list_1042.7' class='selfref'><b>7</b></a> The mobile performs a GET request to the url inside the QR. The reply to the GET request is an Authorization Request            </li>
+            <li id='list_1042.8'><a href='#list_1042.8' class='selfref'><b>8</b></a> The Verifier creates an Authorization Request. The process is described in detail in the next section            </li>
+            <li id='list_1042.9'><a href='#list_1042.9' class='selfref'><b>9</b></a> The Verifier replies to the wallet with the Authorization Request            </li>
         </ul>
 
     </section>
@@ -1505,15 +1686,15 @@
         <p>The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:
         </p>
             <ul>
-                <li id='list_998.response_type'><a href='#list_998.response_type' class='selfref'><b>response_type</b></a> REQUIRED. Must be <code>vp_token</code>. This parameter is defined in [[RFC6749]]> The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type <code>vp_token</code>. This response type asks the SIOP to return only a VP Token in the Authorization Response, which is what we want in our case.                </li>
-                <li id='list_998.scope'><a href='#list_998.scope' class='selfref'><b>scope</b></a> REQUIRED. This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <a href="#request_scope" class="xref">Request Scope</a> for more details. We use in this instance the value <code>dome.credentials.presentation.LEARCredential</code> which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type <code>LEARCredential</code>.                </li>
-                <li id='list_998.response_mode'><a href='#list_998.response_mode' class='selfref'><b>response_mode</b></a> REQUIRED. MUST be <code>direct_post</code>. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter <code>redirect_uri</code> described below.                </li>
-                <li id='list_998.redirect_uri'><a href='#list_998.redirect_uri' class='selfref'><b>redirect_uri</b></a> (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using <code>POST</code> and encoding `application/json`).                </li>
-                <li id='list_998.client_id'><a href='#list_998.client_id' class='selfref'><b>client_id</b></a> REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.                </li>
-                <li id='list_998.nonce'><a href='#list_998.nonce' class='selfref'><b>nonce</b></a> REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.                </li>
-                <li id='list_998.state'><a href='#list_998.state' class='selfref'><b>state</b></a> REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.                </li>
-                <li id='list_998.presentation_definition'><a href='#list_998.presentation_definition' class='selfref'><b>presentation_definition</b></a> CONDITIONAL. A string containing a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because <code>scope</code> already specifies the credential type.                </li>
-                <li id='list_998.presentation_definition_uri'><a href='#list_998.presentation_definition_uri' class='selfref'><b>presentation_definition_uri</b></a> CONDITIONAL. A string containing a URL pointing to a resource where a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because <code>scope</code> already specifies the credential type.                </li>
+                <li id='list_1077.response_type'><a href='#list_1077.response_type' class='selfref'><b>response_type</b></a> REQUIRED. Must be <code>vp_token</code>. This parameter is defined in [[RFC6749]]> The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type <code>vp_token</code>. This response type asks the SIOP to return only a VP Token in the Authorization Response, which is what we want in our case.                </li>
+                <li id='list_1077.scope'><a href='#list_1077.scope' class='selfref'><b>scope</b></a> REQUIRED. This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <a href="#request_scope" class="xref">Request Scope</a> for more details. We use in this instance the value <code>dome.credentials.presentation.LEARCredential</code> which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type <code>LEARCredential</code>.                </li>
+                <li id='list_1077.response_mode'><a href='#list_1077.response_mode' class='selfref'><b>response_mode</b></a> REQUIRED. MUST be <code>direct_post</code>. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter <code>redirect_uri</code> described below.                </li>
+                <li id='list_1077.redirect_uri'><a href='#list_1077.redirect_uri' class='selfref'><b>redirect_uri</b></a> (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using <code>POST</code> and encoding `application/json`).                </li>
+                <li id='list_1077.client_id'><a href='#list_1077.client_id' class='selfref'><b>client_id</b></a> REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.                </li>
+                <li id='list_1077.nonce'><a href='#list_1077.nonce' class='selfref'><b>nonce</b></a> REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.                </li>
+                <li id='list_1077.state'><a href='#list_1077.state' class='selfref'><b>state</b></a> REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.                </li>
+                <li id='list_1077.presentation_definition'><a href='#list_1077.presentation_definition' class='selfref'><b>presentation_definition</b></a> CONDITIONAL. A string containing a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because <code>scope</code> already specifies the credential type.                </li>
+                <li id='list_1077.presentation_definition_uri'><a href='#list_1077.presentation_definition_uri' class='selfref'><b>presentation_definition_uri</b></a> CONDITIONAL. A string containing a URL pointing to a resource where a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because <code>scope</code> already specifies the credential type.                </li>
             </ul>
 
             <p>Note: A request MUST contain either a <code>presentation_definition</code> or a <code>presentation_definition_uri</code> or a single <code>scope</code> value representing a presentation definition, those three ways to request credential presentation are mutually exclusive. We use here the <code>scope</code> mechanism, which is simpler and fits our use case.
@@ -1680,8 +1861,8 @@
 <rect x="370.000000" y="344.000000" width="237" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_1079.8'><a href='#list_1079.8' class='selfref'><b>8</b></a> Packet Delivery company RP creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:            </li>
-            <li id='list_1079.9'><a href='#list_1079.9' class='selfref'><b>9</b></a> The SIOP Authentication Request is returned to the mobile in the reply body of the GET request, as a JWT in JWS form ([[RFC7515]]), signed with the public key associated with the DID in the client_id field of the Authorization Request. The JWT MUST be generated according to the best practices described in [[RFC8725]].             </li>
+            <li id='list_1158.8'><a href='#list_1158.8' class='selfref'><b>8</b></a> Packet Delivery company RP creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:            </li>
+            <li id='list_1158.9'><a href='#list_1158.9' class='selfref'><b>9</b></a> The SIOP Authentication Request is returned to the mobile in the reply body of the GET request, as a JWT in JWS form ([[RFC7515]]), signed with the public key associated with the DID in the client_id field of the Authorization Request. The JWT MUST be generated according to the best practices described in [[RFC8725]].             </li>
         </ul>
 
     </section>
@@ -1822,9 +2003,9 @@
 <rect x="180.000000" y="436.000000" width="301" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_1119.10'><a href='#list_1119.10' class='selfref'><b>10</b></a> Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.            </li>
-            <li id='list_1119.11'><a href='#list_1119.11' class='selfref'><b>11</b></a> Verification that the DID in the <code>client_id</code> field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.            </li>
-            <li id='list_1119.12'><a href='#list_1119.12' class='selfref'><b>12</b></a> Verification that the entity identified in the <code>client_id</code> field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the <code>client_id</code> field.            <div>
+            <li id='list_1198.10'><a href='#list_1198.10' class='selfref'><b>10</b></a> Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.            </li>
+            <li id='list_1198.11'><a href='#list_1198.11' class='selfref'><b>11</b></a> Verification that the DID in the <code>client_id</code> field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.            </li>
+            <li id='list_1198.12'><a href='#list_1198.12' class='selfref'><b>12</b></a> Verification that the entity identified in the <code>client_id</code> field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the <code>client_id</code> field.            <div>
                 <p>The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard. In the case of DOME, the DOME onboarding service is a well-known entity and it is easy to verify that the DID corresponds to the DOME onboarding service.
                 </p>
                 <p>In the case that the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the DOME onboarding service.
@@ -1977,7 +2158,7 @@
 <rect x="345.000000" y="554.000000" width="294" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_1172.13'><a href='#list_1172.13' class='selfref'><b>13</b></a> The wallet creates an Authentication Response to be posted in the <code>redirect_uri</code> specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authentication Response are described below.            <div>
+            <li id='list_1251.13'><a href='#list_1251.13' class='selfref'><b>13</b></a> The wallet creates an Authentication Response to be posted in the <code>redirect_uri</code> specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authentication Response are described below.            <div>
                 <p>The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only <code>vp_token</code> as the <code>response_type</code>, the VP Token is provided directly in the Authorization Response and a separate <code>id_token</code> is not needed.
                 </p>
                 <p>The contents of the Authentication Response in our specific use case are (shown here with the POST parameters needed to send it):
@@ -2013,7 +2194,7 @@
                 </p>
             </div>
             </li>
-            <li id='list_1172.14'><a href='#list_1172.14' class='selfref'><b>14</b></a> The wallet sends the Authentication Response to the endpoint received in the <code>redirect_uri</code> parameter of the Authentication Request, sending an HTTP <code>POST</code> request using the encoding `application/x-www-form-urlencoded`.            </li>
+            <li id='list_1251.14'><a href='#list_1251.14' class='selfref'><b>14</b></a> The wallet sends the Authentication Response to the endpoint received in the <code>redirect_uri</code> parameter of the Authentication Request, sending an HTTP <code>POST</code> request using the encoding `application/x-www-form-urlencoded`.            </li>
         </ul>
 
     </section>
@@ -2162,10 +2343,10 @@
 <rect x="430.000000" y="624.000000" width="391" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_1254.15_and_16'><a href='#list_1254.15_and_16' class='selfref'><b>15 and 16</b></a> The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:            <div>
+            <li id='list_1333.15_and_16'><a href='#list_1333.15_and_16' class='selfref'><b>15 and 16</b></a> The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:            <div>
                 <ol>
-                    <li id='list_1257.1'>That the DID of the entity which is the issuer of the VC is a trusted entity.                    </li>
-                    <li id='list_1257.2'>That the VC was signed by that participant.                    </li>
+                    <li id='list_1336.1'>That the DID of the entity which is the issuer of the VC is a trusted entity.                    </li>
+                    <li id='list_1336.2'>That the VC was signed by that participant.                    </li>
                 </ol>
 
                 <p>Both verifications can be done by performing DID resolution, checking that the resulting DID Document contains the public key corresponding to the one specified in the Verifiable Credential, and by verifying the digital signature of the credential against that public key.
@@ -2174,8 +2355,8 @@
                 </p>
             </div>
             </li>
-            <li id='list_1254.17'><a href='#list_1254.17' class='selfref'><b>17</b></a> After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier <code>id</code> field inside the <code>credentialSubject</code> structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.            </li>
-            <li id='list_1254.18'><a href='#list_1254.18' class='selfref'><b>18</b></a> The Verifier creates an Access Token for the user so he can use it to access services in the DOME onboarding portal. The Access Token is generated in JWT format and signed by the RP component. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].            <div>
+            <li id='list_1333.17'><a href='#list_1333.17' class='selfref'><b>17</b></a> After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier <code>id</code> field inside the <code>credentialSubject</code> structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.            </li>
+            <li id='list_1333.18'><a href='#list_1333.18' class='selfref'><b>18</b></a> The Verifier creates an Access Token for the user so he can use it to access services in the DOME onboarding portal. The Access Token is generated in JWT format and signed by the RP component. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].            <div>
                 <p>For our use case, the payload of the JWT access token looks like:
                 </p>
 
@@ -2194,21 +2375,21 @@
                 <p>Where, according to [[RFC9068]]:
                 </p>
                 <ul>
-                    <li id='list_1286.1'><code>iss</code> and <code>client_id</code> have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.                    </li>
-                    <li id='list_1286.2'><code>sub</code> identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received                    </li>
-                    <li id='list_1286.3'><code>aud</code> identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.                    </li>
-                    <li id='list_1286.4'><code>kid</code> in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.                    </li>
-                    <li id='list_1286.5'><code>scope</code> has the same value as the equivalent <code>scope</code> parameter in the initial Authorization Request.                    </li>
-                    <li id='list_1286.6'><code>verifiableCredential</code> contains the Verifiable Credential that was received, specifically the value of the first element of the field <code>verifiableCredential</code> of the Verifiable Presentation.                    </li>
+                    <li id='list_1365.1'><code>iss</code> and <code>client_id</code> have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.                    </li>
+                    <li id='list_1365.2'><code>sub</code> identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received                    </li>
+                    <li id='list_1365.3'><code>aud</code> identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.                    </li>
+                    <li id='list_1365.4'><code>kid</code> in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.                    </li>
+                    <li id='list_1365.5'><code>scope</code> has the same value as the equivalent <code>scope</code> parameter in the initial Authorization Request.                    </li>
+                    <li id='list_1365.6'><code>verifiableCredential</code> contains the Verifiable Credential that was received, specifically the value of the first element of the field <code>verifiableCredential</code> of the Verifiable Presentation.                    </li>
                 </ul>
 
             </div>
             </li>
-            <li id='list_1254.19'><a href='#list_1254.19' class='selfref'><b>19</b></a> The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.            </li>
-            <li id='list_1254.20'><a href='#list_1254.20' class='selfref'><b>20</b></a> The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:            <div>
+            <li id='list_1333.19'><a href='#list_1333.19' class='selfref'><b>19</b></a> The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.            </li>
+            <li id='list_1333.20'><a href='#list_1333.20' class='selfref'><b>20</b></a> The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:            <div>
                 <ul>
-                    <li id='list_1303.1'>The <code>state</code> nonce that was generated by the portal when it generated the QR code. The portal uses the <code>state</code> nonce to know what login session is notified.                    </li>
-                    <li id='list_1303.2'>The access token generated before.                    </li>
+                    <li id='list_1382.1'>The <code>state</code> nonce that was generated by the portal when it generated the QR code. The portal uses the <code>state</code> nonce to know what login session is notified.                    </li>
+                    <li id='list_1382.2'>The access token generated before.                    </li>
                 </ul>
 
                 <p>The notification is a simple POST request with both parameters in the body:
@@ -2225,7 +2406,7 @@
                 </p>
             </div>
             </li>
-            <li id='list_1254.21'><a href='#list_1254.21' class='selfref'><b>21</b></a> The DOM portal refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent by the browser to the DOME portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.            </li>
+            <li id='list_1333.21'><a href='#list_1333.21' class='selfref'><b>21</b></a> The DOM portal refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent by the browser to the DOME portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.            </li>
         </ul>
 
     </section>
