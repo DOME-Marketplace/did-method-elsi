@@ -19,7 +19,8 @@ copyright: >
    Creative Commons Attribution 4.0 International Public License</a>
 
 latestVersion: "https://alastria.github.io/did-method-elsi/onboarding.html"
-github: "https://github.com/alastria/did-method-elsi"
+edDraftURI: "https://alastria.github.io/did-method-elsi/onboarding.html"
+github: "https://github.com/alastria/did-method-elsi/blob/main/onboarding.html"
 og_description: >
     Onboarding example with LEARCredential using did:elsi
 og_site_name: LEARCredential and DID:ELSI Method
