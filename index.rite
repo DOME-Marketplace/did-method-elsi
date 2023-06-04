@@ -35,6 +35,8 @@ github: "https://github.com/alastria/did-method-elsi"
 og_description: >
     A DID method for legal persons, maximising at the same time regulatory compliance, decentralisation and privacy for W3C Verifiable Credentials in the European Union.
 og_site_name: DID:ELSI Method
+rite:
+    codeStyle: dracula
 
 localBiblio:
    "ETSI-CERTOVERVIEW":
@@ -78,7 +80,7 @@ localBiblio:
     
     The `did:elsi` method facilitates the use of <a href="https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf">JAdES digital signatures</a> with Verifiable Credentials, and so it can be used to meet the requirements of <b>electronic signatures, advanced electronic signatures, qualified electronic signatures, electronic seals, advanced electronic seals, and qualified electronic seals</b> as defined in Regulation (EU) No 910/2014 (eIDAS).
 
-    <aside .note>
+    <x-warning>
         <b>Natural persons MUST not</b> use this DID method, or for that matter, any DID method that registers anything related to personal information in any type of Verifiable Registry or shared data store.
 
         A good DID method for natural persons is `did:key` which is a perfect complement to `did:elsi` to build ecosystems that maximise privacy, regulatory compliance, safety, scalability, and decentralisation. 
@@ -176,14 +178,14 @@ localBiblio:
 
         Some examples of DIDs are:
 
-        <pre .example title="Example ELSI Method DIDs">
-            Gaia-X: did:elsi:VATBE-0762747721
-            International Data Spaces Association: did:elsi:VATDE-325984196
-            Alastria: did:elsi:VATES-G87936159
-            IN2: did:elsi:VATES-B60645900
-            Digitel TS: did:elsi:VATES-B47447560
-            FIWARE Foundation: did:elsi:VATDE-309937516
-            TNO: did:elsi:LEIXG-724500AZSGBRY55MNS59
+        <x-code .ini>
+            Gaia-X = did:elsi:VATBE-0762747721
+            International Data Spaces Association = did:elsi:VATDE-325984196
+            Alastria = did:elsi:VATES-G87936159
+            IN2 = did:elsi:VATES-B60645900
+            Digitel TS = did:elsi:VATES-B47447560
+            FIWARE Foundation = did:elsi:VATDE-309937516
+            TNO = did:elsi:LEIXG-724500AZSGBRY55MNS59
 
     <section>Proving control of the DID
 
@@ -208,7 +210,7 @@ localBiblio:
 
         Reading a `did:elsi` value consists on deterministically expanding the value to a minimalist DID Document, like the following:
 
-        <pre .example title="Minimum DID document">
+        <x-code .json>
             {
               "@context": [
                 "https://www.w3.org/ns/did/v1"

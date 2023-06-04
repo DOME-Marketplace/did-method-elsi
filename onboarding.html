@@ -337,17 +337,6 @@
 <rect x="202.000000" y="761.000000" width="101" height="21" fill="black"></rect>
 </mask></svg></svg>
 
-    <section><h2>DOME: an instance of a Data Space for Smart Cities</h2>
-
-        <p>DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
-        </p>
-        <p>The DOME Data Space has an onboarding service that allows external entities to perform onboarding in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
-        </p>
-        <p>In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
-        </p>
-    </section>
-
-
     <section id='participant'><h2>GoodAir: the company that wants will perform the onboarding process</h2>
 
         <p>The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
@@ -378,8 +367,8 @@
         <p>The above set of fields bind the legal identity of the COO with the identity of the business:
         </p>
         <ul>
-            <li id='list_221.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
-            <li id='list_221.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
+            <li id='list_212.1'><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).            </li>
+            <li id='list_212.2'><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.            </li>
         </ul>
 
         <p>Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
@@ -419,10 +408,10 @@
             <p>The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
             </p>
             <ul>
-                <li id='list_257.1'>The data concerning the business name or corporate name of the organisation.                </li>
-                <li id='list_257.2'>The data relating to the constitution and legal status of the subscriber.                </li>
-                <li id='list_257.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
-                <li id='list_257.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
+                <li id='list_248.1'>The data concerning the business name or corporate name of the organisation.                </li>
+                <li id='list_248.2'>The data relating to the constitution and legal status of the subscriber.                </li>
+                <li id='list_248.3'><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>                </li>
+                <li id='list_248.4'>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.                </li>
             </ul>
 
         </blockquote>
@@ -578,6 +567,17 @@
         <p>As its name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decision. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating to him the capabilities to perform onboarding in the DOME and some other associated tasks. That means that John Doe will not be empowered to perform other actions like onboarding on other Data Spaces or signing contracts or invoices on behalf of GoodAir.
         </p>
         <p>To perform the nomination, the COO of GoodAir (a legal representative of GoodAir) will issue a special credential to John Doe and will sign the credential with his certificate for signatures as legal representative of GoodAir. The details are described later in this document.
+        </p>
+    </section>
+
+
+    <section><h2>DOME: an instance of a Data Space for Smart Cities</h2>
+
+        <p>DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
+        </p>
+        <p>The DOME Data Space has an onboarding service that allows external entities to perform onboarding in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
+        </p>
+        <p>In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
         </p>
     </section>
 
