@@ -50,6 +50,12 @@
                     email: "oriol.canades@in2.es",
                     name: "Oriol Canades",
                 },
+                {
+                    company: "nicos AG",
+                    companyURL: "https://www.nicos-ag.com/",
+                    email: "jlangkau@nicos-ag.com",
+                    name: "Jörg Langkau ",
+                },
             ],
             localBiblio: {
                 "DEP-DSS": {
@@ -167,13 +173,13 @@
         <p>Some example DIDs are the following:
         </p>
         <ul>
-            <li id='list_107.1'>Gaia-X: `did:elsi:VATBE-0762747721`            </li>
-            <li id='list_107.2'>International Data Spaces Association: `did:elsi:VATDE-325984196`            </li>
-            <li id='list_107.3'>Alastria: `did:elsi:VATES-G87936159`            </li>
-            <li id='list_107.4'>IN2: `did:elsi:VATES-B60645900`            </li>
-            <li id='list_107.5'>Digitel TS: `did:elsi:VATES-B47447560`            </li>
-            <li id='list_107.6'>FIWARE Foundation: `did:elsi:VATDE-309937516`            </li>
-            <li id='list_107.7'>TNO: `did:elsi:LEIXG-724500AZSGBRY55MNS59`            </li>
+            <li id='list_111.1'>Gaia-X: `did:elsi:VATBE-0762747721`            </li>
+            <li id='list_111.2'>International Data Spaces Association: `did:elsi:VATDE-325984196`            </li>
+            <li id='list_111.3'>Alastria: `did:elsi:VATES-G87936159`            </li>
+            <li id='list_111.4'>IN2: `did:elsi:VATES-B60645900`            </li>
+            <li id='list_111.5'>Digitel TS: `did:elsi:VATES-B47447560`            </li>
+            <li id='list_111.6'>FIWARE Foundation: `did:elsi:VATDE-309937516`            </li>
+            <li id='list_111.7'>TNO: `did:elsi:LEIXG-724500AZSGBRY55MNS59`            </li>
         </ul>
 
         <p>The corresponding DID Documents are described later in this document.
@@ -203,10 +209,10 @@
             in Recommendation ITU-T X.520:
             </p>
             <ul>
-                <li id='list_135.1'>countryName                </li>
-                <li id='list_135.2'>organizationName                </li>
-                <li id='list_135.3'><strong>organizationIdentifier</strong>                </li>
-                <li id='list_135.4'>commonName                </li>
+                <li id='list_139.1'>countryName                </li>
+                <li id='list_139.2'>organizationName                </li>
+                <li id='list_139.3'><strong>organizationIdentifier</strong>                </li>
+                <li id='list_139.4'>commonName                </li>
             </ul>
 
         </blockquote>
@@ -231,20 +237,20 @@
             information using the following structure in the presented order:
             </p>
             <ul>
-                <li id='list_156.1'>3 character legal person identity type reference                </li>
-                <li id='list_156.2'>2 character ISO 3166 [2] country code                </li>
-                <li id='list_156.3'>hyphen-minus "-" (0x2D (ASCII), U+002D (UTF-8)) and                </li>
-                <li id='list_156.4'>identifier (according to country and identity type reference)                </li>
+                <li id='list_160.1'>3 character legal person identity type reference                </li>
+                <li id='list_160.2'>2 character ISO 3166 [2] country code                </li>
+                <li id='list_160.3'>hyphen-minus "-" (0x2D (ASCII), U+002D (UTF-8)) and                </li>
+                <li id='list_160.4'>identifier (according to country and identity type reference)                </li>
             </ul>
 
             <p>The three initial characters shall have one of the following defined values:
             </p>
             <ol>
-                <li id='list_164.1'><code>VAT</code> for identification based on a national value added tax identification number.                </li>
-                <li id='list_164.2'><code>NTR</code> for identification based on an identifier from a national trade register.                </li>
-                <li id='list_164.3'><code>PSD</code> for identification based on the national authorization number of a payment service provider under Payments Services Directive (EU) 2015/2366 [i.13]. This shall use the extended structure as defined in ETSI TS 119 495 [3], clause 5.2.1.                </li>
-                <li id='list_164.4'><code>LEI</code> for a global Legal Entity Identifier as specified in ISO 17442 [4]. The 2 character ISO 3166 [2] country code shall be set to 'XG'.                </li>
-                <li id='list_164.5'>Two characters according to local definition within the specified country and name registration authority, identifying a national scheme that is considered appropriate for national and European level, followed by the character ":" (colon).                </li>
+                <li id='list_168.1'><code>VAT</code> for identification based on a national value added tax identification number.                </li>
+                <li id='list_168.2'><code>NTR</code> for identification based on an identifier from a national trade register.                </li>
+                <li id='list_168.3'><code>PSD</code> for identification based on the national authorization number of a payment service provider under Payments Services Directive (EU) 2015/2366 [i.13]. This shall use the extended structure as defined in ETSI TS 119 495 [3], clause 5.2.1.                </li>
+                <li id='list_168.4'><code>LEI</code> for a global Legal Entity Identifier as specified in ISO 17442 [4]. The 2 character ISO 3166 [2] country code shall be set to 'XG'.                </li>
+                <li id='list_168.5'>Two characters according to local definition within the specified country and name registration authority, identifying a national scheme that is considered appropriate for national and European level, followed by the character ":" (colon).                </li>
             </ol>
 
             <p>Other initial character sequences are reserved for future amendments of the present document. In case "VAT" legal person identity type reference is used in combination with the "EU" transnational country code, the identifier value should comply with Council Directive 2006/112/EC [i.12], article 215.
@@ -345,8 +351,8 @@
         <p>Essentially, JAdES specifies a JSON [[RFC8259]] format for AdES signatures (JAdES signatures) built on JSON Web Signatures (JWS) as specified in [[RFC7515]]:
         </p>
         <ul>
-            <li id='list_247.1'>Extends the JSON Web Signatures specified in [[RFC7515]] by defining an additional set of JSON header parameters that can be incorporated in the JOSE Header.            </li>
-            <li id='list_247.2'>Specifies the mechanisms for incorporating the above JSON components in JSON Web Signatures to build JAdES signatures, offering the same features as CAdES and XAdES in JSON syntax, and therefore fulfilling the same requirements.            </li>
+            <li id='list_251.1'>Extends the JSON Web Signatures specified in [[RFC7515]] by defining an additional set of JSON header parameters that can be incorporated in the JOSE Header.            </li>
+            <li id='list_251.2'>Specifies the mechanisms for incorporating the above JSON components in JSON Web Signatures to build JAdES signatures, offering the same features as CAdES and XAdES in JSON syntax, and therefore fulfilling the same requirements.            </li>
         </ul>
 
     </section>
@@ -361,9 +367,9 @@
         <p>The algorithm [[DEP-DSS]] focuses on determining 3 sub-conclusions:
         </p>
         <ol>
-            <li id='list_260.1'>Whether the certificate is qualified            </li>
-            <li id='list_260.2'>What is the type of this certificate            </li>
-            <li id='list_260.3'>Whether the corresponding private key is protected by a QSCD.            </li>
+            <li id='list_264.1'>Whether the certificate is qualified            </li>
+            <li id='list_264.2'>What is the type of this certificate            </li>
+            <li id='list_264.3'>Whether the corresponding private key is protected by a QSCD.            </li>
         </ol>
 
         <p>To achieve a high level of trust in the validation, this can be delegated to Qualified Trust Service Providers (QTSPs) that offer services specifically for this purpose.
@@ -398,10 +404,10 @@
         <p>Actually, the EU regulatory environment requires that identities (and identifiers) of any legal person be completely public and subject to public scrutiny, whether from regulators, consumer organisations, industry watchdogs or any other interested party. Some examples:
         </p>
         <ul>
-            <li id='list_287.1'>Any of the 30 million businesses in the EU is required by law to register with the appropriate national or international body before being able to engage in any relevant activity. During the process, an identifier is assigned to the business. The registration process and the way to obtain the identifier varies depending on the industry regulation (e.g., banking, telco, health, ...) and other factors.            </li>
-            <li id='list_287.2'>The identities of businesses are public and anybody can access all related information from the relevant registries. Even if in some EU countries access is not free, it is public. Information includes many details about the business, including identifier, ownership and place of establishment.            </li>
-            <li id='list_287.3'>Businesses are required to include those identifiers in any relevant transaction, whether they are electronic or offline. When citizens buy any product or service, they have the right to obtain documentation about the purchase including the identifier of the company.            </li>
-            <li id='list_287.4'>Any relevant process in the real economy (agrifood, health, manufacturing, transportation, ...) imposes requirements on traceability of the supply chain, related among others with safety, health and consumer protection and the ability to react properly to emergencies. Information recorded and on custody by all businesses participating in the chain has to use the legally valid identifiers of each business.            </li>
+            <li id='list_291.1'>Any of the 30 million businesses in the EU is required by law to register with the appropriate national or international body before being able to engage in any relevant activity. During the process, an identifier is assigned to the business. The registration process and the way to obtain the identifier varies depending on the industry regulation (e.g., banking, telco, health, ...) and other factors.            </li>
+            <li id='list_291.2'>The identities of businesses are public and anybody can access all related information from the relevant registries. Even if in some EU countries access is not free, it is public. Information includes many details about the business, including identifier, ownership and place of establishment.            </li>
+            <li id='list_291.3'>Businesses are required to include those identifiers in any relevant transaction, whether they are electronic or offline. When citizens buy any product or service, they have the right to obtain documentation about the purchase including the identifier of the company.            </li>
+            <li id='list_291.4'>Any relevant process in the real economy (agrifood, health, manufacturing, transportation, ...) imposes requirements on traceability of the supply chain, related among others with safety, health and consumer protection and the ability to react properly to emergencies. Information recorded and on custody by all businesses participating in the chain has to use the legally valid identifiers of each business.            </li>
         </ul>
 
     </section>
@@ -418,8 +424,8 @@
     <p>To provide appropriate levels of legal certainty and security, the onboarding process requires that the natural person driving the process demonstrates that she is either:
     </p>
     <ul>
-        <li id='list_305.1'>a legal representative of the new participant or        </li>
-        <li id='list_305.2'>a natural person that has been delegated by a legal representative at least the powers required to perform the onboarding process on behalf of the legal entity.        </li>
+        <li id='list_309.1'>a legal representative of the new participant or        </li>
+        <li id='list_309.2'>a natural person that has been delegated by a legal representative at least the powers required to perform the onboarding process on behalf of the legal entity.        </li>
     </ul>
 
     <p>The onboarding process described here is based on a special type of Verifiable Credential that we will call LEARCredential (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative), given its purpose. We require that the user driving the process uses a LEARCredential and that the user proves control of the `did:elsi` identifier which is the subject of the credential (the details of how this is done using eIDAS certificates are described below).
@@ -456,9 +462,9 @@
         <p>Based on the eIDAS regulation, some TSPs (Trust Service Providers) in the EU provide several types of certificates for electronic signatures and seals:
         </p>
         <ul>
-            <li id='list_339.1'><b>Natural Person</b> certificate for electronic signatures            </li>
-            <li id='list_339.2'><b>Legal Person</b> certificate for electronic seals            </li>
-            <li id='list_339.3'><b>Natural Person as Legal Entity Representative</b> certificate for electronic signatures            </li>
+            <li id='list_343.1'><b>Natural Person</b> certificate for electronic signatures            </li>
+            <li id='list_343.2'><b>Legal Person</b> certificate for electronic seals            </li>
+            <li id='list_343.3'><b>Natural Person as Legal Entity Representative</b> certificate for electronic signatures            </li>
         </ul>
 
 
@@ -485,15 +491,15 @@
         <p>To facilitate the explanation below, we will use the following terminology:
         </p>
             <ul>
-                <li id='list_363.1'><b>NP</b>: Natural Person holding a certificate for electronic signature.                </li>
-                <li id='list_363.2'><b>LE</b>: the Legal Entity that is being onboarded, holding a certificate for electronic seal.                </li>
-                <li id='list_363.3'><b>LER</b>: the Natural Person as Legal Entity Representative, holding a certificate for electronic signature when acting as legal representative of a legal entity.                </li>
+                <li id='list_367.1'><b>NP</b>: Natural Person holding a certificate for electronic signature.                </li>
+                <li id='list_367.2'><b>LE</b>: the Legal Entity that is being onboarded, holding a certificate for electronic seal.                </li>
+                <li id='list_367.3'><b>LER</b>: the Natural Person as Legal Entity Representative, holding a certificate for electronic signature when acting as legal representative of a legal entity.                </li>
             </ul>
 
         <p>The above concepts have a one-to-one relationship with the legal entities in eIDAS. However, we need a little bit more flexibility with respect to the person/employee that can initiate and drive the onboarding process of the legal person in the ecosystem. Even in a big company there are not many employees that have the power of legal representation. We define here an additional concept that is being used already in many other contexts:
         </p>
             <ul>
-                <li id='list_370.1'><b>LEAR</b>: Legal Entity Appointed Representative, a natural person that has been nominated (appointed) by a legal representative to act on behalf of the organisation to perform a limited set of processes, in our case the onboarding process (and maybe some additional tasks).                </li>
+                <li id='list_374.1'><b>LEAR</b>: Legal Entity Appointed Representative, a natural person that has been nominated (appointed) by a legal representative to act on behalf of the organisation to perform a limited set of processes, in our case the onboarding process (and maybe some additional tasks).                </li>
             </ul>
 
         <p>Instead of using traditional X.509 certificates, we require that the LEAR receives a special type of Verifiable Credential called <b>LEARCredential</b> with proof that the person has the  power to represent the legal person in some limited capacity. This credential is described later in this document.
@@ -509,10 +515,10 @@
             <p>The LEAR role, which <b>can be performed by any member of the organisation</b> (typically from the central administration), is key. They are formally nominated to manage your organisation's use of the Portal and thus bear the final responsibility for all your actions in the Portal. Once validated, they will be responsible for:
             </p>
             <ul>
-                <li id='list_385.1'>keeping an overview of all the proposals/projects/contracts your organisation is involved in                </li>
-                <li id='list_385.2'>managing all the legal and financial information about your organisation                </li>
-                <li id='list_385.3'>managing the access rights at organisation-level (and read-only access at project-level)                </li>
-                <li id='list_385.4'>appointing the persons which will be able to electronically sign grants/contracts (Legal Signatories — LSIGNs) and cost claims/invoices (Financial Signatories — FSIGNs).                </li>
+                <li id='list_389.1'>keeping an overview of all the proposals/projects/contracts your organisation is involved in                </li>
+                <li id='list_389.2'>managing all the legal and financial information about your organisation                </li>
+                <li id='list_389.3'>managing the access rights at organisation-level (and read-only access at project-level)                </li>
+                <li id='list_389.4'>appointing the persons which will be able to electronically sign grants/contracts (Legal Signatories — LSIGNs) and cost claims/invoices (Financial Signatories — FSIGNs).                </li>
             </ul>
 
         </aside>
@@ -525,9 +531,9 @@
         <p>The LEARCredential can be generated in different ways, using the different eIDAS certificates described in section <a href="#typesofcertificates"></a> and the Trust Service Providers:
         </p>
         <ul>
-            <li id='list_396.1'><b>Using the LE certificate</b>. The person controlling the LE certificate issues a Verifiable Credential to a natural person which typically is an employee of a department in charge of managing the onboarding processes and the relationship with a given ecosystem. The Verifiable Credential includes a description of the actual powers that are being delegated (the required ones have to be defined by the ecosystem). The Verifiable Credential is sealed with the certificate of the LE. This VC is then called a LEARCredential and the person controlling it can use it to authenticate in the onboarding process and act as LEAR.            </li>
-            <li id='list_396.2'><b>Using the LER certificate</b>. The main difference with the above is that in this case the Verifiable Credential is signed with a LER certificate. This tends to be easier, especially in big companies because there are normally more than one LER depending on the company structure. As a special case, the LER can issue a LEARCredential to herself and then become a LEAR. This can be used when the LER wants to be the one performing the onboarding process.            </li>
-            <li id='list_396.3'><b>Using a trusted entity before onboarding</b>. When neither LE nor LER certificates are already available in the company, a TSP or other trusted entity accepted by the ecosystem could generate and sign the Verifiable Credential directly, instead of generating a LER certificate.            <div>
+            <li id='list_400.1'><b>Using the LE certificate</b>. The person controlling the LE certificate issues a Verifiable Credential to a natural person which typically is an employee of a department in charge of managing the onboarding processes and the relationship with a given ecosystem. The Verifiable Credential includes a description of the actual powers that are being delegated (the required ones have to be defined by the ecosystem). The Verifiable Credential is sealed with the certificate of the LE. This VC is then called a LEARCredential and the person controlling it can use it to authenticate in the onboarding process and act as LEAR.            </li>
+            <li id='list_400.2'><b>Using the LER certificate</b>. The main difference with the above is that in this case the Verifiable Credential is signed with a LER certificate. This tends to be easier, especially in big companies because there are normally more than one LER depending on the company structure. As a special case, the LER can issue a LEARCredential to herself and then become a LEAR. This can be used when the LER wants to be the one performing the onboarding process.            </li>
+            <li id='list_400.3'><b>Using a trusted entity before onboarding</b>. When neither LE nor LER certificates are already available in the company, a TSP or other trusted entity accepted by the ecosystem could generate and sign the Verifiable Credential directly, instead of generating a LER certificate.            <div>
                 <p>The main difference with the previous scenarios is that the LEARCredential is signed by a trusted entity and that it has to be involved before the onboarding process starts, making the process somewhat more cumbersome and less self-service.
                 </p>
             </div>
@@ -636,8 +642,8 @@
     <p>This is also true of `did:elsi`, which is designed only for legal persons. Two other DID methods that may be appropriate for the other types of entities are:
     </p>
     <ul>
-        <li id='list_471.1'>`did:key` for natural persons        </li>
-        <li id='list_471.2'>`did:web` for machines (servers, sensors, ...)        </li>
+        <li id='list_475.1'>`did:key` for natural persons        </li>
+        <li id='list_475.2'>`did:web` for machines (servers, sensors, ...)        </li>
     </ul>
 
     <p>The next section provides some reasoning on why `did:web` is not adequate for the same use cases as `did:elsi`.
@@ -652,15 +658,15 @@
         <p>One possibility could be to put an eIDAS certificate as one of the elements of the `"verificationMethod"` object in the DID document. But this has several problems:
         </p>
         <ul>
-            <li id='list_485.1'>The verifiable credentials should use the `did:web` identifier, with still no relationship to the legal person or its legal representative, unless a level of indirection is performed, accessing the web server when a verification of the credential is needed.            </li>
-            <li id='list_485.2'>Once this access to the web server is done, the same verification process as in `did:elsi` has to be performed, making the mechanism more complex without adding any real value. In essence, the entity has to prove control of the web server and also of the eIDAS certificate.            </li>
+            <li id='list_489.1'>The verifiable credentials should use the `did:web` identifier, with still no relationship to the legal person or its legal representative, unless a level of indirection is performed, accessing the web server when a verification of the credential is needed.            </li>
+            <li id='list_489.2'>Once this access to the web server is done, the same verification process as in `did:elsi` has to be performed, making the mechanism more complex without adding any real value. In essence, the entity has to prove control of the web server and also of the eIDAS certificate.            </li>
         </ul>
 
         <p>Furthermore, the need to access the web server to get the DID document and the embedded eIDAS certificate presents additional problems:
         </p>
         <ul>
-            <li id='list_491.1'>Less resiliency, as verification of a credential with a `did:web` identifier may fail if the web server is not available at that moment. This may be a big problem if the ecosystem includes many entities with low guarantees of availability of their web servers. Please note that signing the credential with the eIDAS certificate and including it in the credential but using `did:web` is just a convoluted implementation of the simpler `did:elsi`: in `did:elsi` you just sign the credential using the standard format (JAdES) and use the same identifier inside the certificate for the did identifier. No additional web server access is required.            </li>
-            <li id='list_491.2'>Less privacy, as the web server of the issuer of a credential has to be accessed every time that a credential is verified (a sensible caching could be used, but there is a risk that the DID document has been changed by the web server in the meantime). This privacy risk does not happen with `did:elsi` because no access to the web server is required. Given that root anchors for eIDAS certificates would be stored in the Trust Framework, privacy is very high with `did:elsi`.            </li>
+            <li id='list_495.1'>Less resiliency, as verification of a credential with a `did:web` identifier may fail if the web server is not available at that moment. This may be a big problem if the ecosystem includes many entities with low guarantees of availability of their web servers. Please note that signing the credential with the eIDAS certificate and including it in the credential but using `did:web` is just a convoluted implementation of the simpler `did:elsi`: in `did:elsi` you just sign the credential using the standard format (JAdES) and use the same identifier inside the certificate for the did identifier. No additional web server access is required.            </li>
+            <li id='list_495.2'>Less privacy, as the web server of the issuer of a credential has to be accessed every time that a credential is verified (a sensible caching could be used, but there is a risk that the DID document has been changed by the web server in the meantime). This privacy risk does not happen with `did:elsi` because no access to the web server is required. Given that root anchors for eIDAS certificates would be stored in the Trust Framework, privacy is very high with `did:elsi`.            </li>
         </ul>
 
     </section>

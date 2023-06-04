@@ -12,6 +12,10 @@ authors:
      email: "hesusruiz@gmail.com"
      company: "JesusRuiz"
      companyURL: "https://hesusruiz.github.io/hesusruiz"
+   - name: "Jörg Langkau "
+     email: "jlangkau@nicos-ag.com"
+     company: "nicos AG"
+     companyURL: "https://www.nicos-ag.com/"
 
 copyright: >
    Copyright © 2023 the document editors/authors. Text is available under the

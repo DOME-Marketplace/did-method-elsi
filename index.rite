@@ -24,6 +24,10 @@ authors:
      email: "oriol.canades@in2.es"
      company: "IN2"
      companyURL: "https://www.in2.es/"
+   - name: "Jörg Langkau "
+     email: "jlangkau@nicos-ag.com"
+     company: "nicos AG"
+     companyURL: "https://www.nicos-ag.com/"
 
 copyright: >
    Copyright © 2023 the document editors/authors. Text is available under the
