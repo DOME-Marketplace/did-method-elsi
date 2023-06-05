@@ -106,21 +106,58 @@ localBiblio:
 ---
 
 <section #abstract>
-    This is an example of an onboarding process performed with the LEARCredential using the `did:elsi` method.
+
+    A common problem in ecosystems like Data Spaces is how organisations can onboard the ecosystem in a trusted and automated way, avoiding manual paperwork.
+
+    This document describes how the process of onboarding can be performed by an employee of an organisation, who has been appointed to do so by a legal representative of the organisation using eIDAS certificates and Verifiable Credentials.
+    
+    The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
+
+    Any Verifier that trusts the eIDAS Trust Framework will be able to verify that:
+
+    <ul>
+        - <b>The person presenting the LEARCredential is the same as the one identified in the credential</b>
+        - <b>A legal representative of the organisation has attested that the person has the powers described in the credential</b>
+
+    This enables the person presenting the LEARCredential to start the onboarding process and also to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the onboarding requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X). 
 
 <section id="conformance">
 
 <section>Introduction
 
-    The onboarding process will be performed by an employee of an organisation which has received a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
+    A common problem in ecosystems like Data Spaces is how organisations can onboard the ecosystem in a trusted and automated way, avoiding manual paperwork.
 
-    The LEARCredential must be signed with an eIDAS certificate which is either:
+    This document describes how the process of onboarding can be performed by an employee of an organisation, who has been appointed to do so by a legal representative of the organisation using eIDAS certificates and Verifiable Credentials.
+    
+    The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
+
+    To achieve a high level of legal certainty under eIDAS, the LEARCredential is:
+    
+    <ul>
+        - signed or sealed with an eIDAS certificate which is either:
+
+            <ul>
+                - a <b>certificate for electronic seals</b> issued to a legal person by a Qualified Trust Service Provider, or
+                - a <b>certificate for electronic signatures</b>, issued to a <b>legal representative of the legal person</b> by a Qualified Trust Service Provider.
+        - signed using the <b>JSON Advanced Electronic Signature</b> format described in [[[ETSI-JADES]]]
+
+    The LEARCredential includes claims identifying the employee and a description of the concrete powers that have been delegated by the legal representative of the organisation.
+
+    By signing/sealing the credential with an eIDAS certificate, the legal representative attests that the powers described in the credential have been delegated to the employee (maybe under some conditions, also described in the credential).
+
+    In this way, the LEARCredential has the same legal status as any other document in other formats (e.g., PDF) signed in an eIDAS-compliant way, but with all the advantages provided by the Verifiable Credential format.
+
+    In addition, the LEARCredential includes cryptographic material that allows the appointed employee to <b>use the credential as an online authentication mechanism</b> in an onboarding portal, by proving that the holder of the credential is the same person identified in the credential.
+
+    Any Verifier that trusts the eIDAS Trust Framework will be able to verify that:
 
     <ul>
-        - a <b>certificate for electronic seals</b> issued to a legal person by a Qualified Trust Service Provider, or
-        - a <b>certificate for electronic signatures</b>, issued to a legal representative of the legal person by a Qualified Trust Service Provider.
+        - <b>The person presenting the LEARCredential is the same as the one identified in the credential</b>
+        - <b>A legal representative of the organisation has attested that the person has the powers described in the credential</b>
 
-    Both types of certificates are an electronic attestation <b>that links electronic seal/signature validation data to a legal person and confirms the name of that person</b>. This way, the certificate, usually linked to the sealed/signed document, can be used to verify the identity of the creator of the seal/signature and whether the document has been sealed/signed using the corresponding private key.
+    This enables the person presenting the LEARCredential to start the onboarding process and also to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the onboarding requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X). 
+
+    Both types of eIDAS certificates mentioned above are an electronic attestation <b>that links electronic seal/signature validation data to a legal person and confirms the name of that person</b>. This way, the certificate, usually linked to the sealed/signed document, can be used to verify the identity of the creator of the seal/signature and whether the document has been sealed/signed using the corresponding private key.
 
     Before issuing a certificate like the above, the Qualified Trust Service Provider (QTSP) performs validations against `Authentic Sources` to authenticate the identity of the organisation:
 
