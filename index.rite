@@ -43,38 +43,42 @@ rite:
     codeStyle: dracula
 
 localBiblio:
-   "ETSI-CERTOVERVIEW":
-      title: "ETSI EN 319 412-1 V1.4.2 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 1: Overview and common data structures"
-      href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941201/01.04.02_20/en_31941201v010402a.pdf"
-      date: "2020-07"
-      publisher: "ETSI"
-   "ETSI-LEGALPERSON":
-      title: "ETSI EN 319 412-3 V1.2.1 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 3: Certificate profile for certificates issued to legal persons"
-      href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941203/01.02.01_60/en_31941203v010201p.pdf"
-      date: "2020-07"
-      publisher: "ETSI"
-   "ETSI-JADES":
-      title: "ETSI TS 119 182-1 V1.1.1 (2021-03) - Electronic Signatures and Infrastructures (ESI); JAdES digital signatures; Part 1: Building blocks and JAdES baseline signatures"
-      href: "https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf"
-      date: "2021-03"
-      publisher: "ETSI"
-   "DEP-DSS":
-      title: "Algorithm for Validation of qualified and advanced signatures and seals"
-      href: "https://ec.europa.eu/digital-building-blocks/wikis/display/DIGITAL/Qualified+electronic+signature+-+QES+validation+algorithm"
-      date: "2019-10"
-      publisher: "European Commission"
-   "DID-PRIMER":
-      title: "DID Primer"
-      href: "https://github.com/WebOfTrustInfo/rebooting-the-web-of-trust-fall2017/blob/master/topics-and-advance-readings/did-primer.md"
-      publisher: "Rebooting the Web of Trust 2017"
-   "DID-DNS":
-      title: "The Decentralized Identifier (DID) in the DNS"
-      href: "https://tools.ietf.org/html/draft-mayrhofer-did-dns-01"
-      status: "Internet Draft"
-      publisher: "IETF"
-   "OWASP-TRANSPORT":
-      title: "Transport Layer Protection Cheatsheet"
-      href: "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
+    "ETSI-CERTOVERVIEW":
+        title: "ETSI EN 319 412-1 V1.4.2 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 1: Overview and common data structures"
+        href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941201/01.04.02_20/en_31941201v010402a.pdf"
+        date: "2020-07"
+        publisher: "ETSI"
+    "ETSI-LEGALPERSON":
+        title: "ETSI EN 319 412-3 V1.2.1 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 3: Certificate profile for certificates issued to legal persons"
+        href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941203/01.02.01_60/en_31941203v010201p.pdf"
+        date: "2020-07"
+        publisher: "ETSI"
+    "ETSI-JADES":
+        title: "ETSI TS 119 182-1 V1.1.1 (2021-03) - Electronic Signatures and Infrastructures (ESI); JAdES digital signatures; Part 1: Building blocks and JAdES baseline signatures"
+        href: "https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf"
+        date: "2021-03"
+        publisher: "ETSI"
+    "DEP-DSS":
+        title: "Algorithm for Validation of qualified and advanced signatures and seals"
+        href: "https://ec.europa.eu/digital-building-blocks/wikis/display/DIGITAL/Qualified+electronic+signature+-+QES+validation+algorithm"
+        date: "2019-10"
+        publisher: "European Commission"
+    "DID-PRIMER":
+        title: "DID Primer"
+        href: "https://github.com/WebOfTrustInfo/rebooting-the-web-of-trust-fall2017/blob/master/topics-and-advance-readings/did-primer.md"
+        publisher: "Rebooting the Web of Trust 2017"
+    "DID-DNS":
+        title: "The Decentralized Identifier (DID) in the DNS"
+        href: "https://tools.ietf.org/html/draft-mayrhofer-did-dns-01"
+        status: "Internet Draft"
+        publisher: "IETF"
+    "OWASP-TRANSPORT":
+        title: "Transport Layer Protection Cheatsheet"
+        href: "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"
+    "DID-ONBOARDING":
+        title: "Onboarding example with LEARCredential using did:elsi"
+        href: "https://alastria.github.io/did-method-elsi/onboarding.html"
+        date: "04 June 2023"
 ---
 
 <section #abstract>
@@ -300,17 +304,24 @@ localBiblio:
 
 <section .informative>Example: `did:elsi` and onboarding with Verifiable Credentials
 
+    A common problem in ecosystems like Data Spaces is how organisations can onboard the ecosystem in a trusted and automated way, avoiding manual paperwork.
+
     To illustrate the usefulness of the `did:elsi` method, this section describes the relationship of the `did:elsi` method with a special type of Verifiable Credential that we call <b>LEARCredential</b> and which can be very useful to perform, among others, the onboarding process in ecosystems like Data Spaces with compliance to the eIDAS regulation.
 
-    The objective of the onboarding process in an ecosystem is to identify and register a legal entity as a new participant. However, in most cases the process is initiated and driven by a natural person.
-
-    To provide appropriate levels of legal certainty and security, the onboarding process requires that the natural person driving the process demonstrates that she is either:
+    This section describes how the process of onboarding can be performed by an employee of an organisation, who has been appointed to do so by a legal representative of the organisation using eIDAS certificates and Verifiable Credentials.
     
-    <ul>
-        - a legal representative of the new participant or
-        - a natural person that has been delegated by a legal representative at least the powers required to perform the onboarding process on behalf of the legal entity.
+    The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
 
-    The onboarding process described here is based on a special type of Verifiable Credential that we will call LEARCredential (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative), given its purpose. We require that the user driving the process uses a LEARCredential and that the user proves control of the `did:elsi` identifier which is the subject of the credential (the details of how this is done using eIDAS certificates are described below).
+    Any Verifier that trusts the eIDAS Trust Framework will be able to verify that:
+
+    <ul>
+        - <b>The person presenting the LEARCredential is the same as the one identified in the credential</b>
+        - <b>A legal representative of the organisation has attested that the person has the powers described in the credential</b>
+
+    This enables the person presenting the LEARCredential to start the onboarding process and also to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the onboarding requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X). 
+
+    <x-note>Detailed example of onboarding with the LEARCredential
+        To see a much more `detailed` description of the LEARCredential, its issuance process and its usage for authenticating in an onboarding portal, see <b>[[[DID-ONBOARDING]]]</b>.
 
     <section>A little bit about onboarding
 
