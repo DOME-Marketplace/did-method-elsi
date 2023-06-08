@@ -1460,6 +1460,11 @@
                 <li id='list_827.response_mode'><a href='#list_827.response_mode' class='selfref'><b>response_mode</b></a> REQUIRED. MUST be <code>direct_post</code>. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter <code>redirect_uri</code> described below.                </li>
                 <li id='list_827.redirect_uri'><a href='#list_827.redirect_uri' class='selfref'><b>redirect_uri</b></a> (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using <code>POST</code> and encoding `application/json`).                </li>
                 <li id='list_827.client_id'><a href='#list_827.client_id' class='selfref'><b>client_id</b></a> REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.                </li>
+                <li id='list_827.client_id_scheme'><a href='#list_827.client_id_scheme' class='selfref'><b>client_id_scheme</b></a> REQUIRED. MUST have the value <code>did</code>. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[ETSI-JADES]] format, which defines the mechanism to identify the public key.                <div>
+                    <p>All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
+                    </p>
+                </div>
+                </li>
                 <li id='list_827.nonce'><a href='#list_827.nonce' class='selfref'><b>nonce</b></a> REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.                </li>
                 <li id='list_827.state'><a href='#list_827.state' class='selfref'><b>state</b></a> REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.                </li>
                 <li id='list_827.presentation_definition'><a href='#list_827.presentation_definition' class='selfref'><b>presentation_definition</b></a> CONDITIONAL. A string containing a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because <code>scope</code> already specifies the credential type.                </li>
@@ -1630,8 +1635,8 @@
 <rect x="370.000000" y="344.000000" width="237" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_908.8'><a href='#list_908.8' class='selfref'><b>8</b></a> Packet Delivery company RP creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:            </li>
-            <li id='list_908.9'><a href='#list_908.9' class='selfref'><b>9</b></a> The SIOP Authentication Request is returned to the mobile in the reply body of the GET request, as a JWT in JWS form ([[RFC7515]]), signed with the public key associated with the DID in the client_id field of the Authorization Request. The JWT MUST be generated according to the best practices described in [[RFC8725]].             </li>
+            <li id='list_912.8'><a href='#list_912.8' class='selfref'><b>8</b></a> Packet Delivery company RP creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:            </li>
+            <li id='list_912.9'><a href='#list_912.9' class='selfref'><b>9</b></a> The SIOP Authentication Request is returned to the mobile in the reply body of the GET request, as a JWT in JWS form ([[RFC7515]]), signed with the public key associated with the DID in the client_id field of the Authorization Request. The JWT MUST be generated according to the best practices described in [[RFC8725]].             </li>
         </ul>
 
     </section>
@@ -1772,9 +1777,9 @@
 <rect x="180.000000" y="436.000000" width="301" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_948.10'><a href='#list_948.10' class='selfref'><b>10</b></a> Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.            </li>
-            <li id='list_948.11'><a href='#list_948.11' class='selfref'><b>11</b></a> Verification that the DID in the <code>client_id</code> field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.            </li>
-            <li id='list_948.12'><a href='#list_948.12' class='selfref'><b>12</b></a> Verification that the entity identified in the <code>client_id</code> field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the <code>client_id</code> field.            <div>
+            <li id='list_952.10'><a href='#list_952.10' class='selfref'><b>10</b></a> Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.            </li>
+            <li id='list_952.11'><a href='#list_952.11' class='selfref'><b>11</b></a> Verification that the DID in the <code>client_id</code> field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.            </li>
+            <li id='list_952.12'><a href='#list_952.12' class='selfref'><b>12</b></a> Verification that the entity identified in the <code>client_id</code> field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the <code>client_id</code> field.            <div>
                 <p>The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard. In the case of DOME, the DOME onboarding service is a well-known entity and it is easy to verify that the DID corresponds to the DOME onboarding service.
                 </p>
                 <p>In the case that the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the DOME onboarding service.
@@ -1927,7 +1932,7 @@
 <rect x="345.000000" y="554.000000" width="294" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_1001.13'><a href='#list_1001.13' class='selfref'><b>13</b></a> The wallet creates an Authentication Response to be posted in the <code>redirect_uri</code> specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authentication Response are described below.            <div>
+            <li id='list_1005.13'><a href='#list_1005.13' class='selfref'><b>13</b></a> The wallet creates an Authentication Response to be posted in the <code>redirect_uri</code> specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authentication Response are described below.            <div>
                 <p>The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only <code>vp_token</code> as the <code>response_type</code>, the VP Token is provided directly in the Authorization Response and a separate <code>id_token</code> is not needed.
                 </p>
                 <p>The contents of the Authentication Response in our specific use case are (shown here with the POST parameters needed to send it):
@@ -1963,7 +1968,7 @@
                 </p>
             </div>
             </li>
-            <li id='list_1001.14'><a href='#list_1001.14' class='selfref'><b>14</b></a> The wallet sends the Authentication Response to the endpoint received in the <code>redirect_uri</code> parameter of the Authentication Request, sending an HTTP <code>POST</code> request using the encoding `application/x-www-form-urlencoded`.            </li>
+            <li id='list_1005.14'><a href='#list_1005.14' class='selfref'><b>14</b></a> The wallet sends the Authentication Response to the endpoint received in the <code>redirect_uri</code> parameter of the Authentication Request, sending an HTTP <code>POST</code> request using the encoding `application/x-www-form-urlencoded`.            </li>
         </ul>
 
     </section>
@@ -2112,10 +2117,10 @@
 <rect x="430.000000" y="624.000000" width="391" height="21" fill="black"></rect>
 </mask></svg></svg>
         <ul>
-            <li id='list_1083.15_and_16'><a href='#list_1083.15_and_16' class='selfref'><b>15 and 16</b></a> The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:            <div>
+            <li id='list_1087.15_and_16'><a href='#list_1087.15_and_16' class='selfref'><b>15 and 16</b></a> The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:            <div>
                 <ol>
-                    <li id='list_1086.1'>That the DID of the entity which is the issuer of the VC is a trusted entity.                    </li>
-                    <li id='list_1086.2'>That the VC was signed by that participant.                    </li>
+                    <li id='list_1090.1'>That the DID of the entity which is the issuer of the VC is a trusted entity.                    </li>
+                    <li id='list_1090.2'>That the VC was signed by that participant.                    </li>
                 </ol>
 
                 <p>Both verifications can be done by performing DID resolution, checking that the resulting DID Document contains the public key corresponding to the one specified in the Verifiable Credential, and by verifying the digital signature of the credential against that public key.
@@ -2124,8 +2129,8 @@
                 </p>
             </div>
             </li>
-            <li id='list_1083.17'><a href='#list_1083.17' class='selfref'><b>17</b></a> After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier <code>id</code> field inside the <code>credentialSubject</code> structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.            </li>
-            <li id='list_1083.18'><a href='#list_1083.18' class='selfref'><b>18</b></a> The Verifier creates an Access Token for the user so he can use it to access services in the DOME onboarding portal. The Access Token is generated in JWT format and signed by the RP component. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].            <div>
+            <li id='list_1087.17'><a href='#list_1087.17' class='selfref'><b>17</b></a> After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier <code>id</code> field inside the <code>credentialSubject</code> structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.            </li>
+            <li id='list_1087.18'><a href='#list_1087.18' class='selfref'><b>18</b></a> The Verifier creates an Access Token for the user so he can use it to access services in the DOME onboarding portal. The Access Token is generated in JWT format and signed by the RP component. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].            <div>
                 <p>For our use case, the payload of the JWT access token looks like:
                 </p>
 
@@ -2144,21 +2149,21 @@
                 <p>Where, according to [[RFC9068]]:
                 </p>
                 <ul>
-                    <li id='list_1115.1'><code>iss</code> and <code>client_id</code> have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.                    </li>
-                    <li id='list_1115.2'><code>sub</code> identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received                    </li>
-                    <li id='list_1115.3'><code>aud</code> identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.                    </li>
-                    <li id='list_1115.4'><code>kid</code> in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.                    </li>
-                    <li id='list_1115.5'><code>scope</code> has the same value as the equivalent <code>scope</code> parameter in the initial Authorization Request.                    </li>
-                    <li id='list_1115.6'><code>verifiableCredential</code> contains the Verifiable Credential that was received, specifically the value of the first element of the field <code>verifiableCredential</code> of the Verifiable Presentation.                    </li>
+                    <li id='list_1119.1'><code>iss</code> and <code>client_id</code> have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.                    </li>
+                    <li id='list_1119.2'><code>sub</code> identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received                    </li>
+                    <li id='list_1119.3'><code>aud</code> identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.                    </li>
+                    <li id='list_1119.4'><code>kid</code> in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.                    </li>
+                    <li id='list_1119.5'><code>scope</code> has the same value as the equivalent <code>scope</code> parameter in the initial Authorization Request.                    </li>
+                    <li id='list_1119.6'><code>verifiableCredential</code> contains the Verifiable Credential that was received, specifically the value of the first element of the field <code>verifiableCredential</code> of the Verifiable Presentation.                    </li>
                 </ul>
 
             </div>
             </li>
-            <li id='list_1083.19'><a href='#list_1083.19' class='selfref'><b>19</b></a> The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.            </li>
-            <li id='list_1083.20'><a href='#list_1083.20' class='selfref'><b>20</b></a> The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:            <div>
+            <li id='list_1087.19'><a href='#list_1087.19' class='selfref'><b>19</b></a> The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.            </li>
+            <li id='list_1087.20'><a href='#list_1087.20' class='selfref'><b>20</b></a> The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:            <div>
                 <ul>
-                    <li id='list_1132.1'>The <code>state</code> nonce that was generated by the portal when it generated the QR code. The portal uses the <code>state</code> nonce to know what login session is notified.                    </li>
-                    <li id='list_1132.2'>The access token generated before.                    </li>
+                    <li id='list_1136.1'>The <code>state</code> nonce that was generated by the portal when it generated the QR code. The portal uses the <code>state</code> nonce to know what login session is notified.                    </li>
+                    <li id='list_1136.2'>The access token generated before.                    </li>
                 </ul>
 
                 <p>The notification is a simple POST request with both parameters in the body:
@@ -2175,7 +2180,7 @@
                 </p>
             </div>
             </li>
-            <li id='list_1083.21'><a href='#list_1083.21' class='selfref'><b>21</b></a> The DOM portal refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent by the browser to the DOME portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.            </li>
+            <li id='list_1087.21'><a href='#list_1087.21' class='selfref'><b>21</b></a> The DOM portal refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent by the browser to the DOME portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.            </li>
         </ul>
 
     </section>
@@ -2407,9 +2412,9 @@
 <rect x="146.000000" y="1114.000000" width="90" height="21" fill="black"></rect>
 </mask></svg></svg>
     <ul>
-        <li id='list_1266.1'><a href='#list_1266.1' class='selfref'><b>1</b></a> The user interacts with the browser to access a protected resource.        </li>
-        <li id='list_1266.2'><a href='#list_1266.2' class='selfref'><b>2</b></a> The PEP intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.        </li>
-        <li id='list_1266.3'><a href='#list_1266.3' class='selfref'><b>3</b></a> The PEP requests a decision from the PEP. The request from the PEP to the PDP consists of subject attributes (typically for the user who issued the request), resource attributes (the resource for which access is sought), action attributes (the operations to be performed on the resource), and environment attributes.        </li>
+        <li id='list_1270.1'><a href='#list_1270.1' class='selfref'><b>1</b></a> The user interacts with the browser to access a protected resource.        </li>
+        <li id='list_1270.2'><a href='#list_1270.2' class='selfref'><b>2</b></a> The PEP intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.        </li>
+        <li id='list_1270.3'><a href='#list_1270.3' class='selfref'><b>3</b></a> The PEP requests a decision from the PEP. The request from the PEP to the PDP consists of subject attributes (typically for the user who issued the request), resource attributes (the resource for which access is sought), action attributes (the operations to be performed on the resource), and environment attributes.        </li>
     </ul>
 
     <p>Some of the above attributes are obtained by the PEP from the original request received from the browser. For example, the HTTP verb (GET, POST, PUT, PATCH, DELETE) and the URL and possibly the body of the request provide action attributes.
@@ -2479,17 +2484,17 @@
     <p>The set of information and data stored in the PIP and PRP comprise the access control data and collectively define the current authorization state, which the PDP will use to compute its decision.
     </p>
     <ul>
-        <li id='list_1342.4'><a href='#list_1342.4' class='selfref'><b>4</b></a> Query policy rules applicable to this request.        </li>
-        <li id='list_1342.5'><a href='#list_1342.5' class='selfref'><b>5</b></a> Reply with policy rules        </li>
-        <li id='list_1342.6'><a href='#list_1342.6' class='selfref'><b>6</b></a> The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, including the set of Trusted Issuers Lists to query.        </li>
-        <li id='list_1342.7'><a href='#list_1342.7' class='selfref'><b>7</b></a> Query additional attributes        </li>
-        <li id='list_1342.8'><a href='#list_1342.8' class='selfref'><b>8</b></a> Reply with attributes        </li>
-        <li id='list_1342.9'><a href='#list_1342.9' class='selfref'><b>9</b></a> The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP and also the attributes received from the PIP, and computes a decision.        </li>
-        <li id='list_1342.10'><a href='#list_1342.10' class='selfref'><b>10</b></a> The PDP returns the decision to the PEP, which will enforce it.        </li>
-        <li id='list_1342.11'><a href='#list_1342.11' class='selfref'><b>11</b></a> If the decision from the PDP is Reject, the PEP returns an error to the browser in the laptop of the user. Otherwise, it forwards the original request to the Resource.        </li>
-        <li id='list_1342.12'><a href='#list_1342.12' class='selfref'><b>12</b></a> The resource executes the request and returns the result        </li>
-        <li id='list_1342.13'><a href='#list_1342.13' class='selfref'><b>13</b></a> The PEP returns the result to the laptop of the user.        </li>
-        <li id='list_1342.14'><a href='#list_1342.14' class='selfref'><b>14</b></a> The laptop displays the result to the user.        </li>
+        <li id='list_1346.4'><a href='#list_1346.4' class='selfref'><b>4</b></a> Query policy rules applicable to this request.        </li>
+        <li id='list_1346.5'><a href='#list_1346.5' class='selfref'><b>5</b></a> Reply with policy rules        </li>
+        <li id='list_1346.6'><a href='#list_1346.6' class='selfref'><b>6</b></a> The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, including the set of Trusted Issuers Lists to query.        </li>
+        <li id='list_1346.7'><a href='#list_1346.7' class='selfref'><b>7</b></a> Query additional attributes        </li>
+        <li id='list_1346.8'><a href='#list_1346.8' class='selfref'><b>8</b></a> Reply with attributes        </li>
+        <li id='list_1346.9'><a href='#list_1346.9' class='selfref'><b>9</b></a> The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP and also the attributes received from the PIP, and computes a decision.        </li>
+        <li id='list_1346.10'><a href='#list_1346.10' class='selfref'><b>10</b></a> The PDP returns the decision to the PEP, which will enforce it.        </li>
+        <li id='list_1346.11'><a href='#list_1346.11' class='selfref'><b>11</b></a> If the decision from the PDP is Reject, the PEP returns an error to the browser in the laptop of the user. Otherwise, it forwards the original request to the Resource.        </li>
+        <li id='list_1346.12'><a href='#list_1346.12' class='selfref'><b>12</b></a> The resource executes the request and returns the result        </li>
+        <li id='list_1346.13'><a href='#list_1346.13' class='selfref'><b>13</b></a> The PEP returns the result to the laptop of the user.        </li>
+        <li id='list_1346.14'><a href='#list_1346.14' class='selfref'><b>14</b></a> The laptop displays the result to the user.        </li>
     </ul>
 
 </section>

@@ -836,6 +836,10 @@ localBiblio:
 
                 -(client_id) REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
 
+                -(client_id_scheme) REQUIRED. MUST have the value `did`. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[ETSI-JADES]] format, which defines the mechanism to identify the public key.
+               
+                    All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
+
                 -(nonce) REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
 
                 -(state) REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
