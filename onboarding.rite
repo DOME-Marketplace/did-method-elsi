@@ -178,42 +178,24 @@ localBiblio:
         - Includes claims stating the delegation of specific powers to perform onboarding on behalf of the organisation
         - Includes a public key where the corresponding private key is controlled by the employee, enabling him to prove that he is the holder of the credential when it is being used in an authentication process like the onboarding process described in this document.
 
-    The LEARCredential uses the `did:elsi` method for the identifiers of legal persons involved in the process, to facilitate the DID resolution and linkage with the eIDAS certificates. The `did:elsi` method is specified in [[[DID-ELSI]]].    
 
-    <x-diagram .seqdiag>Testing the diagram
-        seqdiag {
-        browser  -> webserver [label = "GET /index.html"];
-        browser <-- webserver;
-        browser  -> webserver [label = "POST /blog/comment"];
-                    webserver  -> database [label = "INSERT comment"];
-                    webserver <-- database;
-        browser <-- webserver;
-        }
-    
+    The LEARCredential uses the `did:elsi` method for the identifiers of legal persons involved in the process, to facilitate the DID resolution and linkage with the eIDAS certificates. The `did:elsi` method is specified in [[[DID-ELSI]]].    
+  
     The high-level view of the process is described in the following diagram, when a COO (Chief Operating Officer) appoints an employee to perform the onboarding process:
 
-    <x-diagram .d2>
-        shape: sequence_diagram
+    <x-diagram .plantuml>High level view of issuance of LEARCredential
+        box "Company" #WhiteSmoke
+            actor "Employee of company" as employee
+            participant "COO of company" as COO
+        end box
+        control "Trust Service Provider" as TSP
+        database "Authentic Sources" as registry
 
-        # Definition of the participants
-        employee: Employee of company {
-            icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-        }
-        COO: COO of company {
-            icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-        }
-        TSP: Trust Service Provider {
-            icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg
-        }
-        registry: Authentic Sources {
-            icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg
-        }
-
-        COO -> TSP: Request a\ncertificate for signatures
+        COO -> TSP ++: Request a\ncertificate for signatures
 
         TSP <-> registry: Verify trusted data
         
-        TSP -> COO: Provide certificate for signature
+        TSP -> COO --: Provide certificate for signature
 
         COO -> employee: Issue LEARCredential
 
@@ -398,31 +380,6 @@ localBiblio:
             Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
             
             Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
-
-        <x-diagram .d2>
-            shape: sequence_diagram
-
-            # Definition of the participants
-            COO: COO of GoodAir {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            TSP: Trust Service Provider {
-                icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg
-            }
-            registry: Authentic Sources {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg
-            }
-
-            COO -> TSP: Request a\ncertificate for signatures
-
-            Verification {
-                TSP."Data about the legal status of the company and powers of representation of the applicant"
-                TSP <-> registry: Verify trusted data
-
-            }
-            
-
-            TSP -> COO: Provide certificate for signature
 
 
         In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
@@ -623,10 +580,47 @@ localBiblio:
         Not all types of Verifiable Credentials can be used for authentication, so for the purpose of this discussion we use the
         same taxonomy as <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
 
-        <figure #vc_taxonomy>
-            <img src="images/login_in_DOME/verifiable_data_model.png" alt="" />
+        <x-diagram .ditaa>The LEARCredential is a Verifiable Authorisation and a VerifiableID
+                               +-----------------+
+                               |                 |
+                               |  W3C Verifiable |
+                               |    Credential   |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                               +--------+--------+
+                               |                 |
+                               |   Verifiable    |
+                               |  Attestation    |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                   /--------------------+-------------------\
+                   |                    |                   |
+            +------+--------+    +------+-------+    +------+--------+
+            |               |    |              |    |    Other      |
+            |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
+            | Authorisation |    |     ID       |    |  Attestations |
+            |               |    |              |    |               |
+            +---------------+    +--------------+    +---------------+
+                    ^                    ^
+                    |       extends      |
+                    \---------+----------/
+                              |
+                     +--------+---------+
+                     |                  |
+                     |                  |
+                     |  LEARCredential  |
+                     |                  |
+                     |cGRE              |
+                     +------------------+
 
-            <figcaption>Request and receive Credential.
 
         The full explanation is in the EBSI site, but for our purposes an example is enough.
 
