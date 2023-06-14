@@ -192,43 +192,32 @@ localBiblio:
     
     The high-level view of the process is described in the following diagram, when a COO (Chief Operating Officer) appoints an employee to perform some processes:
 
-    <x-diagram .d2>
-        shape: sequence_diagram
 
-        # Definition of the participants
-        employee: Employee of company {
-            icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-        }
-        COO: COO of company {
-            icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-        }
-        TSP: Trust Service Provider {
-            icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg
-        }
-        registry: Authentic Sources {
-            icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg
-        }
+    <x-diagram .plantuml>High level view of issuance of LEARCredential
+        box "Company" #WhiteSmoke
+            actor "Employee of company" as employee
+            participant "COO of company" as COO
+        end box
+        control "Trust Service Provider" as TSP
+        database "Authentic Sources" as registry
 
-        COO -> TSP: Request a\ncertificate for signatures
+        COO -> TSP ++: Request a\ncertificate for signatures
 
         TSP <-> registry: Verify trusted data
         
-        TSP -> COO: Provide certificate for signature
+        TSP -> COO --: Provide certificate for signature
 
         COO -> employee: Issue LEARCredential
 
-
 <section>Participants
 
-    Here we introduce the actors of the reference use case we are going to have. The main actors are marked in yellow in the following diagram.
+    Here we introduce the actors of the reference use case we are going to use. The main actors are marked in yellow in the following diagram.
     
     RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
 
     RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
 
     The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
-
-
 
     <x-diagram .d2>
         classes: {
@@ -635,103 +624,129 @@ localBiblio:
 
     <section>Overview
 
-    The following diagram describes the whole process of authenticating with the LEARCredential. Each of the steps of the process indicated by the grey boxes are described in more detail in the sections below.
+    The diagram below is describes the high level logical architecture that we will be use as a reference for the detailed explanations in the next sections.
 
-        <x-diagram .d2>
-            shape: sequence_diagram
+    The diagram uses the logical concepts also used in the XACML reference architecture, but the description is agnostic to the actual policy language used in a concrete implementation.
 
-            # Definition of the participants
-            user: John Doe {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            mobile: Webapp {
-                icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
-            }
-            browser: Laptop {
-                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-            }
-            portal: Portal {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
-            }
-            verifier: VC Verifier {
-                icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
-            }
-            # ==================================================
-
-            Starting the OpenID for Verifiable Presentations flow {
-
-                # (1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
-                user -> browser: (1) Access DOM portal {
-                    style.stroke-dash: 5
-                }
-            
-                # (2) The browser sends a request to the Packet Delivery portal server.
-                browser -> portal.t: (2) Access DOM portal
-
-                # (3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-                portal.t -> browser.t: (3) HTTP 302 (redirect)
-                browser.t -> verifier.t: (3) Access Login page
-
-                # (4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
-                verifier.t -> verifier.t: (4) Generate QR code
-                verifier.t -> browser: (5) Display QR code
-
-                # (6) The user starts the scan with the wallet
-                user -> mobile.t: (6) Start QR scan {
-                    style.stroke-dash: 5
-                }
-                browser -> mobile.t: (6) Scan QR code {
-                    style.stroke-dash: 5
-                }
-
-                # (7) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
-                mobile.t -> verifier.ar: (7) GET /authentication-requests
-
-            }
-
-            Generating the Authorization Request {
-
-                verifier.ar -> verifier.ar: (8) Create Authorization Request
-                verifier.ar -> mobile.var: (9) Reply with Authorization Request
-
-            }
-
-            Verification of the Authorization Request {
-
-                mobile.var -> mobile.var: (10) Verification of signature of Authorization Request
-
-                mobile.var -> mobile.var: (11) Verification of the identity of the Relying Party
-
-                mobile.var -> mobile.var: (12) Verification of the trusted nature of the RP
-
-            }
-
-            Creating and sending the Authentication Response {
-
-                mobile.car -> mobile.car: (13) Create Authentication Response
-            
-                mobile.car -> verifier.resp: (14) POST /api/siop/authentication_response
-
-            }
-
-            Authenticating the user with the LEARCredential {
-
-                verifier.resp -> verifier.resp: (15 and 16) Verify signature and issuer of LEARCredential
-
-                verifier.resp -> verifier.resp: (17) Verify sender of the Authentication Response
-
-                verifier.resp -> verifier.resp: (18) Generate Access Token
-
-                verifier.resp -> mobile: (19) HTTP 200 with <access token>
-
-                verifier.resp -> portal.refresh: (20) Notify with <access token> and <state>
-
-                portal.refresh -> browser: (21) Refresh screen with services and include <access token>
-
-            }
+    In this description we assume that the user is a natural person who wants to access a protected resource. However, the architecture support machine-to-machine (M2M) interactions. The differences will be described in the description when they are relevant.
 
 
-    <section>Starting the OpenID for Verifiable Presentations flow
+    <x-img @images/login_in_DOME/authn_architecture.drawio.png>Architecture overview 
+
+
+    // <x-diagram .d2>
+    //     shape: sequence_diagram
+
+    //     # Definition of the participants
+    //     user: John Doe {
+    //         icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+    //     }
+    //     mobile: Webapp {
+    //         icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
+    //     }
+    //     browser: Laptop {
+    //         icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+    //     }
+    //     portal: Portal {
+    //         icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
+    //     }
+    //     verifier: VC Verifier {
+    //         icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
+    //     }
+    //     # ==================================================
+
+    //     Starting the OpenID for Verifiable Presentations flow {
+
+    //         # (1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
+    //         user -> browser: (1) Access DOM portal {
+    //             style.stroke-dash: 5
+    //         }
+        
+    //         # (2) The browser sends a request to the Packet Delivery portal server.
+    //         browser -> portal.t: (2) Access DOM portal
+
+    //         # (3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+    //         portal.t -> browser.t: (3) HTTP 302 (redirect)
+    //         browser.t -> verifier.t: (3) Access Login page
+
+    //         # (4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
+    //         verifier.t -> verifier.t: (4) Generate QR code
+    //         verifier.t -> browser: (5) Display QR code
+
+    //         # (6) The user starts the scan with the wallet
+    //         user -> mobile.t: (6) Start QR scan {
+    //             style.stroke-dash: 5
+    //         }
+    //         browser -> mobile.t: (6) Scan QR code {
+    //             style.stroke-dash: 5
+    //         }
+
+    //         # (7) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
+    //         mobile.t -> verifier.ar: (7) GET /authentication-requests
+
+    //     }
+
+    //     Generating the Authorization Request {
+
+    //         verifier.ar -> verifier.ar: (8) Create Authorization Request
+    //         verifier.ar -> mobile.var: (9) Reply with Authorization Request
+
+    //     }
+
+    //     Verification of the Authorization Request {
+
+    //         mobile.var -> mobile.var: (10) Verification of signature of Authorization Request
+
+    //         mobile.var -> mobile.var: (11) Verification of the identity of the Relying Party
+
+    //         mobile.var -> mobile.var: (12) Verification of the trusted nature of the RP
+
+    //     }
+
+    //     Creating and sending the Authentication Response {
+
+    //         mobile.car -> mobile.car: (13) Create Authentication Response
+        
+    //         mobile.car -> verifier.resp: (14) POST /api/siop/authentication_response
+
+    //     }
+
+    //     Authenticating the user with the LEARCredential {
+
+    //         verifier.resp -> verifier.resp: (15 and 16) Verify signature and issuer of LEARCredential
+
+    //         verifier.resp -> verifier.resp: (17) Verify sender of the Authentication Response
+
+    //         verifier.resp -> verifier.resp: (18) Generate Access Token
+
+    //         verifier.resp -> mobile: (19) HTTP 200 with <access token>
+
+    //         verifier.resp -> portal.refresh: (20) Notify with <access token> and <state>
+
+    //         portal.refresh -> browser: (21) Refresh screen with services and include <access token>
+
+    //     }
+
+
+    <section>Send a request to access a protected resource
+
+        The user sends a request to perform a protected operation, which we define as any operation that requires authorisation.
+
+        An example is an operation on resources controlled by Company A, where Company A allows a subset of employees of Company B to perform the operation. Another similar example is when Company A allows a subset of machines/devices of Company B to perform the operation.
+
+        There are several high level scenarios which are possible:
+
+        <ul>
+            <li>The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
+
+            <li>The user tries to access the protected resource directly (maybe using a specific URL, or invoking and endpoint with input data identifying the resource).
+
+                If the user is not authenticated, the system will reject the request. If the user is a natural person accessing the portal via an Internet browser, the typical approach is to redirect the browser to the Login page using an HTTP Status of 302. The redirection includes enough information so the authentication component can send back the user to the original request if the user completes authentication successfully.
+
+                If the user is a machine using an API, the system can simply reject the request or reject it including information in the response that the caller can interpret to perform the login and retry.
+
+
+    <section>AuthenticationStarting the OpenID for Verifiable Presentations flow
 
         The process starts an OpenID for Verifiable Presentations flow combined with combined with the Self-Issued OP v2 specification [[OpenID.SIOP2]], where the Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP.
         
