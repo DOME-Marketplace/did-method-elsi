@@ -123,7 +123,7 @@ localBiblio:
     This document describes how:
     
     <ul>
-        - An organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer
+        - An organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer.
         - Other organisations can accept those Verifiable Credentials to perform authentication and access control.
         
     We assume that all organisations have onboarded in the ecosystem using the mechanisms described in [[[DID-ELSI]]] and [[[DID-ONBOARDING]]].
@@ -208,6 +208,98 @@ localBiblio:
         TSP -> COO --: Provide certificate for signature
 
         COO -> employee: Issue LEARCredential
+
+<section>The LEARCredential
+
+    We assume here that a Service Provider organisation wants to provide access to some protected resources to a subset of employees of a Service Consumer organisation.
+    An example use case is when the Consumer organisation has contracted a service from the Provider and wants to make the service available to some employees under the conditions of the contract. In addition, it maybe that not all employees that can access the services can do it in the same conditions or with the same privileges. For example, some employees can create/update/read some data while others can only read.
+
+    The case when all employees of the Service Consumer can access the protected resources with the same privileges is just a special case of the more general scenario.
+
+    Another example is onboarding. In this case, instead of a Service Provider we have an Onboarding Entity, which wants to enable access to the automatic onboarding service only to the employees of an organisation who have been explicitly granted powers to do so by a legal representative of the organisation.
+
+    In general, when an entity (a legal person, or a natural person acting on behalf of a legal person) wants to perform an action on a protected resource, we use Verifiable Credentials to perform <b>authentication</b> of the entity and then <b>access control</b> based on the content of the Verifiable Credential(s) presented by that entity, and possibly additional authorisation information that the Relying Party considers relevant for controlling access to the protected resource (for example, the contractual status of the resource, time of the day or other context information).
+
+
+    <section>A taxonomy of Verifiable Credentials
+
+        Not all types of Verifiable Credentials can be used for authentication, so for the purpose of this discussion we use the
+        same taxonomy as <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
+
+        <x-diagram .ditaa>The LEARCredential is a Verifiable Authorisation and a VerifiableID
+                               +-----------------+
+                               |                 |
+                               |  W3C Verifiable |
+                               |    Credential   |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                               +--------+--------+
+                               |                 |
+                               |   Verifiable    |
+                               |  Attestation    |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                   /--------------------+-------------------\
+                   |                    |                   |
+            +------+--------+    +------+-------+    +------+--------+
+            |               |    |              |    |    Other      |
+            |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
+            | Authorisation |    |     ID       |    |  Attestations |
+            |               |    |              |    |               |
+            +---------------+    +--------------+    +---------------+
+                    ^                    ^
+                    |       extends      |
+                    \---------+----------/
+                              |
+                     +--------+---------+
+                     |                  |
+                     |                  |
+                     |  LEARCredential  |
+                     |                  |
+                     |cGRE              |
+                     +------------------+
+
+
+        The LEARCredential is a type of Verifiable Credential which is at the same time a
+
+        <ul>
+            -(VerifiableID) to be used as an authentication mechanism, attesting that the person presenting the LEARCredential is the same as the one identified in the credential.
+
+            -(Verifiable Authorisation) to attest that a legal representative of the organisation issuing the credential has attested that the person has the powers described in the credential. The information inside the credential can be used to allow/limit access to protected resources according to the agreement with the issuing organisation.
+
+        The most common type of Verifiable Credentials in use cases with legal implications are what we call <b>Verifiable Attestations</b>. For example, in the case of a Diploma as a Verifiable Credential (a Verifiable Diploma), the credential is a Verifiable Attestation which indicates that the subject has certain skills or has achieved certain learning outcomes through formal or non-formal learning context. However, as in the case with normal Diplomas in paper of PDF format, this credential can be presented by anyone that holds the credential. The credential binds the identity of the subject with the claims inside the credential, but does not bind the identity of the holder of the credential with the identity of the subject of the credential, which requires a special mechanism in the issuance process.
+
+        To be used as a mechanism for authentication we need a <b>`VerifiableID`, which is a special form of a Verifiable Credential that a natural or legal person can use in an electronic identification process as evidence of whom he/she/it is</b> (comparable with a passport, physical IDcard, driving licence, social security card, member-card…).
+    
+        In general, in an authentication and access control process, the entity willing to perform an action has to present (in a Verifiable Presentation) a VerifiableID and possibly one or more additional Verifiable Attestations. Of course, if the VerifiableID already contains all the information required by the Relying Party, then only one credential is required in the process.
+
+        Most Verifiable Credentials will be issued as Verifiable Attestations, acting as efficient machine-processable and verifiable equivalent to their analog counterparts. Their purpose is to attest some attributes about the subject of the credential and not act as a mechanism for online authentication.
+
+        VerifiableIDs can be of different types and be issued by different entities with different levels of assurance (in eIDAS terminology). They are issued with the purpose of serving as authentication mechanisms in online processes. In the near future, VerifiableIDs of the highest level of assurance (LoA High) will be issued to citizens and businesses by their governments under eIDAS2.
+
+        In addition to authentication, if the Relying Party accepting the credential wants to limit access to protected resources to a subset of employees of the organisation issuing the credential, the credential has to contain attestations about the powers that a legal representative of the organisation has delegated on to the subject identified in the credential. The system is very flexible: different employees can have different powers and so the powers included in the credentials issued to different employees can be different.
+
+        In this respect, we can say that the legal representative of the issuing organisation `appoints` employees empowering them to perform specific tasks on behalf of the organisation, and which are binding with respect to the organisation.
+
+        This is the origin of the name of the `LEARCredential` or <b>Legal Entity Appointed Representative Credential</b>. That is, the credential identifies a representative of the legal entity (organisation) who has been appointed for some specific tasks.
+
+    <section>The LEARCredential for some identification processes
+        But <b>any entity can issue VerifiableIDs</b>, though the acceptance by Relying Parties can not be ensured because it is the Relying Party the only one deciding if it trusts on the issuer and its process for generating the VerifiableID.
+        
+        DOME will make use of the future eIDAS2 VerifiableIDs when they are available and when they make sense in the context of DOME. But DOME defines some specific types of VerifiableIDs that are derived from eIDAS certificates for signatures/seals using the regulated standards for signatures, achieving a level of assurance that provides an acceptable level of legal certainty and reduced risk of repudiation.
+        
+        An example is the LEARCredential described in a section above, which has the same level of legal certainty as any document signed with the same certificates (like a contract or an invoice).
+
+        Similarly, a Product provider (like GoodAir) who decides to use the DOME Trust and IAM framework or a compatible one for managing access to associated services by customers of their products will typically define specific types of VerifiableIDs if the standard ones in DOME or the existing and widely accepted ones are not suitable for the provider. In general, if a provider can use an existing and already used VerifiableID then it will facilitate potential customers access to its product because issuers of the VerifiableID do not have to modify or adapt their existing issuing processes.
+
 
 <section>Participants
 
@@ -388,32 +480,6 @@ localBiblio:
             
             Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
 
-        <x-diagram .d2>
-            shape: sequence_diagram
-
-            # Definition of the participants
-            COO: COO of GoodAir {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            TSP: Trust Service Provider {
-                icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg
-            }
-            registry: Authentic Sources {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg
-            }
-
-            COO -> TSP: Request a\ncertificate for signatures
-
-            Verification {
-                TSP."Data about the legal status of the company and powers of representation of the applicant"
-                TSP <-> registry: Verify trusted data
-
-            }
-            
-
-            TSP -> COO: Provide certificate for signature
-
-
         In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
 
     <section>John Doe: an administrative employee of GoodAir
@@ -433,7 +499,7 @@ localBiblio:
         In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
 
 
-<section>The LEARCredential
+<section>The LEARCredential in detail
 
     We use here a LEARCredential, described in detail in [[DID-ONBOARDING]], with different roles and duties embedded into the credential. The credential enables the employee (or subcontractor) to perform a specific sets of processes in the ecosystem, including interacting with other organisations in the ecosystem.
 
