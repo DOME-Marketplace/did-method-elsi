@@ -634,99 +634,6 @@ localBiblio:
         <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
 
 
-        // <x-diagram .d2>
-        //     shape: sequence_diagram
-
-        //     # Definition of the participants
-        //     user: John Doe {
-        //         icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-        //     }
-        //     mobile: Webapp {
-        //         icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
-        //     }
-        //     browser: Laptop {
-        //         icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-        //     }
-        //     portal: Portal {
-        //         icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
-        //     }
-        //     verifier: VC Verifier {
-        //         icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
-        //     }
-        //     # ==================================================
-
-        //     Starting the OpenID for Verifiable Presentations flow {
-
-        //         # (1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
-        //         user -> browser: (1) Access DOM portal {
-        //             style.stroke-dash: 5
-        //         }
-            
-        //         # (2) The browser sends a request to the Packet Delivery portal server.
-        //         browser -> portal.t: (2) Access DOM portal
-
-        //         # (3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-        //         portal.t -> browser.t: (3) HTTP 302 (redirect)
-        //         browser.t -> verifier.t: (3) Access Login page
-
-        //         # (4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
-        //         verifier.t -> verifier.t: (4) Generate QR code
-        //         verifier.t -> browser: (5) Display QR code
-
-        //         # (6) The user starts the scan with the wallet
-        //         user -> mobile.t: (6) Start QR scan {
-        //             style.stroke-dash: 5
-        //         }
-        //         browser -> mobile.t: (6) Scan QR code {
-        //             style.stroke-dash: 5
-        //         }
-
-        //         # (7) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
-        //         mobile.t -> verifier.ar: (7) GET /authentication-requests
-
-        //     }
-
-        //     Generating the Authorization Request {
-
-        //         verifier.ar -> verifier.ar: (8) Create Authorization Request
-        //         verifier.ar -> mobile.var: (9) Reply with Authorization Request
-
-        //     }
-
-        //     Verification of the Authorization Request {
-
-        //         mobile.var -> mobile.var: (10) Verification of signature of Authorization Request
-
-        //         mobile.var -> mobile.var: (11) Verification of the identity of the Relying Party
-
-        //         mobile.var -> mobile.var: (12) Verification of the trusted nature of the RP
-
-        //     }
-
-        //     Creating and sending the Authentication Response {
-
-        //         mobile.car -> mobile.car: (13) Create Authentication Response
-            
-        //         mobile.car -> verifier.resp: (14) POST /api/siop/authentication_response
-
-        //     }
-
-        //     Authenticating the user with the LEARCredential {
-
-        //         verifier.resp -> verifier.resp: (15 and 16) Verify signature and issuer of LEARCredential
-
-        //         verifier.resp -> verifier.resp: (17) Verify sender of the Authentication Response
-
-        //         verifier.resp -> verifier.resp: (18) Generate Access Token
-
-        //         verifier.resp -> mobile: (19) HTTP 200 with <access token>
-
-        //         verifier.resp -> portal.refresh: (20) Notify with <access token> and <state>
-
-        //         portal.refresh -> browser: (21) Refresh screen with services and include <access token>
-
-        //     }
-
 
         We assume here that the user sends a request to perform a protected operation, which we define as any operation that requires authorisation.
 
@@ -765,105 +672,91 @@ localBiblio:
                 participant "VC Verifier" as verifier
             end box
 
-            # -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
             user -> browser ++: (1) Access DOM portal
-        
-            # -(2) The browser sends a request to the Packet Delivery portal server.
-            browser -> portal --++: (2) Access DOM portal
-
-            # (3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-            portal -> browser --++: (3) HTTP 302 (redirect)
-            browser -> verifier --++: (3) Access Login page
-
-            # (4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
-            verifier -> verifier: (4) Generate QR code
-            verifier -> browser --: (5) Display QR code
-
-            # (6) The user starts the scan with the wallet
-            user -> mobile ++: (6) Start QR scan
-            browser -> mobile: (6) Scan QR code
-
-            # (7) After confirmation by the user, the wallet performs a `GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
-            mobile -> verifier --++: (7) GET /authentication-requests
-            verifier -> verifier: (8) Create Authorization Request
-            verifier -> mobile --: (9) Reply with Authorization Request
-
-
-        <ul .plain>
-
-            -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
+            # -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
 
                 We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
 
-            -(2) The browser sends a request to the Packet Delivery portal server.
+            browser -> portal --++: (2) Access DOM portal
+            # -(2) The browser sends a request to the Packet Delivery portal server.
 
-            -(3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-        
-            
-            -(4) The Verifier generates and displays a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
+            portal -> browser --++: (3) HTTP 302 (redirect)
+            browser -> verifier --++: (3) Access Login page
+            # -(3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+
+            verifier -> verifier: (4) Generate QR code
+            # -(4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
 
                 A QR code is used because a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
 
                 <x-code .ini>
                     https://verifier.dome-marketplace.eu/authentication-requests?state=af0ifjsldkj
 
-            -(5) The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
+            # -(5) The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
+            verifier -> browser --: (5) Display QR code
 
-            -(6) The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
-                
-            -(7) The mobile performs a GET request to the url inside the QR. The reply to the GET request is an Authorization Request
+            # -(6) The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
+            user -> mobile ++: (6) Start QR scan
+            browser -> mobile: (6) Scan QR code
 
-            -(8) The Verifier creates an Authorization Request. The process is described in detail in the next section
+            mobile -> verifier --++: (7) GET /authentication-requests
+            # -(7) After confirmation by the user, the wallet performs a `GET /authentication-requests` to the endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
 
-            -(9) The Verifier replies to the wallet with the Authorization Request
+
+            verifier -> verifier: (8) Create Authorization Request
+            # -(8) The Verifier creates an Authorization Request. The process is described in detail in the next section
+
+            verifier -> mobile --: (9) Reply with Authorization Request
+            # -(9) The Verifier replies to the wallet with the Authorization Request
+
 
 
     <section>Generating the Authorization Request
 
         The Authorization Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service.
 
-        The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:
+        The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular taking into account that this is a cross-device interaction:
 
-            <ul>
+        <ul>
 
-                -(response_type) REQUIRED. Must be `vp_token`. This parameter is defined in [[RFC6749]]> The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type `vp_token`. This response type asks the SIOP to return only a VP Token in the Authorization Response, which is what we want in our case.
+            -(response_type) (REQUIRED). Must be `vp_token`. This parameter is defined in [[RFC6749]]. The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type `vp_token`. This response type asks the Wallet to return only a VP Token in the Authorization Response, which is what we want in our case.
 
-                -(scope) REQUIRED. This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <a href="#request_scope" class="xref">Request Scope</a> for more details. We use in this instance the value `dome.credentials.presentation.LEARCredential` which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type `LEARCredential`.
+            -(scope) (REQUIRED). This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <x-ref request_scope> for more details. We use in this instance the value `dome.credentials.presentation.LEARCredential` which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type `LEARCredential`.
 
-                -(response_mode) REQUIRED. MUST be `direct_post`. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter `redirect_uri` described below.
+            -(response_mode) REQUIRED. MUST be `direct_post`. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter `redirect_uri` described below.
 
-                -(redirect_uri) (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using `POST` and encoding `application/json`).
+            -(redirect_uri) (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using `POST` and encoding `application/json`).
 
-                -(client_id) REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
+            -(client_id) REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
 
-                -(client_id_scheme) REQUIRED. MUST have the value `did`. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[ETSI-JADES]] format, which defines the mechanism to identify the public key.
-               
-                    All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
+            -(client_id_scheme) REQUIRED. MUST have the value `did`. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[ETSI-JADES]] format, which defines the mechanism to identify the public key.
+            
+                All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
 
-                -(nonce) REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
+            -(nonce) REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
 
-                -(state) REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
+            -(state) REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
 
-                -(presentation_definition) CONDITIONAL. A string containing a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because `scope` already specifies the credential type.
+            -(presentation_definition) CONDITIONAL. A string containing a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because `scope` already specifies the credential type.
 
-                -(presentation_definition_uri) CONDITIONAL. A string containing a URL pointing to a resource where a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because `scope` already specifies the credential type.
+            -(presentation_definition_uri) CONDITIONAL. A string containing a URL pointing to a resource where a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because `scope` already specifies the credential type.
 
 
-            Note: A request MUST contain either a `presentation_definition` or a `presentation_definition_uri` or a single `scope` value representing a presentation definition, those three ways to request credential presentation are mutually exclusive. We use here the `scope` mechanism, which is simpler and fits our use case.
+        Note: A request MUST contain either a `presentation_definition` or a `presentation_definition_uri` or a single `scope` value representing a presentation definition, those three ways to request credential presentation are mutually exclusive. We use here the `scope` mechanism, which is simpler and fits our use case.
 
-            This is an example request:
+        This is an example request:
 
-            <x-code .ini>
-                openid://?
-                scope=dome.credentials.presentation.LEARCredential&
-                response_type=vp_token&
-                response_mode=direct_post&
-                client_id=did:elsi:VATFR-99999999&
-                redirect_uri=https://verifier.dome-marketplace.eu/api/authentication_response&
-                state=af0ifjsldkj&
-                nonce=n-0S6_WzA2Mj
+        <x-code .ini>
+            openid://?
+            scope=dome.credentials.presentation.LEARCredential&
+            response_type=vp_token&
+            response_mode=direct_post&
+            client_id=did:elsi:VATFR-99999999&
+            redirect_uri=https://verifier.dome-marketplace.eu/api/authentication_response&
+            state=af0ifjsldkj&
+            nonce=n-0S6_WzA2Mj
 
-            (URL encoding removed, line breaks and leading spaces added for readability).
+        (URL encoding removed, line breaks and leading spaces added for readability).
 
         As mentioned above, the Authentication Request is returned to the wallet in the reply body of the GET request, as a JWT in JWS form [[RFC7515]]), signed with eIDAS certificate of the DOM onboarding legal person.
 
@@ -904,7 +797,7 @@ localBiblio:
             }
             # ==================================================
 
-            # (7) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
+            # -(7) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
             mobile.t -> verifier.ar: (7) GET /authentication-requests
             verifier.ar -> verifier.ar: (8) Create Authorization Request
             verifier.ar -> mobile: (9) Reply with Authorization Request
