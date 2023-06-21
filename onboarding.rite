@@ -123,7 +123,9 @@ localBiblio:
         - <b>The person presenting the LEARCredential is the same as the one identified in the credential</b>
         - <b>A legal representative of the organisation has attested that the person has the powers described in the credential</b>
 
-    This enables the person presenting the LEARCredential to start the onboarding process and also to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the onboarding requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X). 
+    This enables the person presenting the LEARCredential to start the onboarding process and also to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the onboarding requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X).
+
+    The concept of LEARCredential is not limited to onboarding, even though in this document we focus on that specific use case. But LEARCredentials of different types can be used for delegating some limited powers to employees for other use cases.
 
 <section id="conformance">
 
