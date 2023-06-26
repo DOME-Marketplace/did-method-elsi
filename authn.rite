@@ -973,75 +973,21 @@ localBiblio:
 
         The same mechanism can be used by any participant in the ecosystem, if they want to use an advanced IAM mechanism which is aligned with the EU strategy on digital identity based on Verifiable Credential and eIDAS2.
 
-        For the explanation we will use the following figure from [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve enforcement the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
+        For the explanation we will use the following figure which is based on [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve enforcement the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
 
         <figure #authn-reference>
             <img src="images/login_in_DOME/authn_architecture_authorization.drawio.png" alt="" />
 
-            <figcaption>Authentication reference architecture (NIST)
+            <figcaption>High level Authentication logical architecture
 
 
-    <section>Authorization process in detail
+    <section>Determine the Authorization Policies which apply to the request 
 
-        For our use case we convert the reference architecture into a sequence diagram.        
+        Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point), and to know if the request should be authorised or not, the PEP asks to the PDP (Policy Decision Point) for a decision. The PDP needs to know what are the policy rules that should be applied to the request, and it uses the PRP (Policy Retrieval Point) to retrieve those policies.
 
-
-        <x-diagram .d2>
-            shape: sequence_diagram
-
-            # Definition of the participants
-            user: John Doe {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            browser: Laptop {
-                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-            }
-            pep: PEP {
-                icon: https://icons.terrastruct.com/azure%2FIdentity%20Service%20Color%2FConditional%20Access.svg
-            }
-            pdp: PDP {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FLogic%20Apps%20Custom%20Connector.svg
-            }
-            prp: PRP {
-                icon: https://icons.terrastruct.com/aws%2FManagement%20&%20Governance%2FAmazon-CloudWatch_Rule_light-bg.svg
-            }
-            pip: PIP {
-                icon: https://icons.terrastruct.com/azure%2FGeneral%20Service%20Icons%2FInformation.svg
-            }
-            resource: Resource {
-                icon: https://icons.terrastruct.com/essentials%2F117-database.svg
-            }
-            # ==================================================
-
-            user -> browser.req: (1) Access protected resource
-
-            browser.req -> pep.1: (2) PEP intercepts the call
-
-            pep.1 -> pdp.1: (3) Request a decision
-
-            pdp.1 -> prp.req: (4) Query policies
-            prp.req -> pdp.2: (5) Reply with policies
-
-            pdp.2 -> pdp.2: (6) Initial evaluation of the policies
-
-            pdp.2 -> pip.req: (7) Query additional attributes
-            pip.req -> pdp.3: (8) Reply with attributes
-
-            pdp.3 -> pdp.3: (9) Final evaluation of the policies
-
-            pdp.3 -> pep.2: (10) Return decision
-
-            pep.2 -> resource.req: (11) Perform operation
-            resource.req -> pep.3: (12) Return result
-
-            pep.3 -> browser.resp: (13) Return result
-            browser.resp -> user: Display result
-
-
-        <x-diagram .plantuml>Starting the authentication phase
+        <x-diagram .plantuml>Determine the Authorization Policies
             box "Company" #WhiteSmoke
-                actor "User" as user
-                participant "Laptop" as browser
+                participant "User" as user
             end box
             box "Relying Party" #WhiteSmoke
                 participant "PEP" as pep
@@ -1050,128 +996,254 @@ localBiblio:
                 participant "PIP" as pip
                 participant "Resource" as resource
             end box
-            # ==================================================
+            participant "Trust Framework" as trust
 
-            user -> browser ++: (1) Access protected resource
-            # -(1) The user interacts with the browser to access a protected resource. This step is needed only when the user is a natural person browsing the portal of the Relying Party. For other direct interactions, the flow starts in the next step.
+            user -> pep --++: **(1)** Access protected resource
+            # -(1) The user (natural person or machine) sends a request to access a protected resource, and the PEP (Policy Enforcement Point) component intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.
 
-            browser -> pep --++: (2) PEP intercepts the call
-            # -(2) The PEP (Policy Enforcement Point) intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.
-
-            pep -> pdp --++: (3) Request a decision
-            # -(3) The PEP requests a decision from the PEP. The request from the PEP to the PDP consists of subject attributes (typically for the user who issued the request), resource attributes (the resource for which access is sought), action attributes (the operations to be performed on the resource), and environment attributes.
-
-            pdp.1 -> prp.req: (4) Query policies
-            prp.req -> pdp.2: (5) Reply with policies
-
-            pdp.2 -> pdp.2: (6) Initial evaluation of the policies
-
-            pdp.2 -> pip.req: (7) Query additional attributes
-            pip.req -> pdp.3: (8) Reply with attributes
-
-            pdp.3 -> pdp.3: (9) Final evaluation of the policies
-
-            pdp.3 -> pep.2: (10) Return decision
-
-            pep.2 -> resource.req: (11) Perform operation
-            resource.req -> pep.3: (12) Return result
-
-            pep.3 -> browser.resp: (13) Return result
-            browser.resp -> user: Display result
-
-        <ul>
-
-
-
-        Some of the above attributes are obtained by the PEP from the original request received from the browser. For example, the HTTP verb (GET, POST, PUT, PATCH, DELETE) and the URL and possibly the body of the request provide action attributes.
-
-        The access token generated during authentication provides some subject attributes (identification data and roles assigned by the issuer of the credential).
-
-        An example access token would be:
-
-        <x-code .json>
-            {
-                "token_type": "Bearer",
-                "expires_in": 3600,
-                "access_token": "ewogICJhbGciOiAiRVMyNTYiLAogICJraWQiOiAiV09IRnU0SFo1OVNNODUzQzdlTjBPdmxLR3JNZWVyRENwSE9VUm9UUXdIdyIsCiAgInR5cCI6ICJKV1QiCn0.ewogICJAY29udGV4dCI6IFsKICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIKICBdLAogICJ0eXBlIjogWwogICAgIlZlcmlmaWFibGVQcmVzZW50YXRpb24iCiAgXSwKICAidmVyaWZpYWJsZUNyZWRlbnRpYWwiOiBbCiAgICB7CiAgICAgICJ0eXBlcyI6IFsKICAgICAgICAiUGFja2V0RGVsaXZlcnlTZXJ2aWNlIiwKICAgICAgICAiVmVyaWZpYWJsZUNyZWRlbnRpYWwiCiAgICAgIF0sCiAgICAgICJAY29udGV4dCI6IFsKICAgICAgICAiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiLAogICAgICAgICJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L3N1aXRlcy9qd3MtMjAyMC92MSIKICAgICAgXSwKICAgICAgImNyZWRlbnRpYWxzU3ViamVjdCI6IHt9LAogICAgICAiYWRkaXRpb25hbFByb3AxIjoge30KICAgIH0KICBdLAogICJpZCI6ICJlYmM2ZjFjMiIsCiAgImhvbGRlciI6IHsKICAgICJpZCI6ICJkaWQ6a2V5Ono2TWtzOW05aWZMd3kzSldxSDRjNTdFYkJRVlMyU3BSQ2pmYTc5d0hiNXZXTTZ2aCIKICB9LAogICJwcm9vZiI6IHsKICAgICJ0eXBlIjogIkpzb25XZWJTaWduYXR1cmUyMDIwIiwKICAgICJjcmVhdG9yIjogImRpZDprZXk6ejZNa3M5bTlpZkx3eTNKV3FINGM1N0ViQlFWUzJTcFJDamZhNzl3SGI1dldNNnZoIiwKICAgICJjcmVhdGVkIjogIjIwMjMtMDEtMDZUMDc6NTE6MzZaIiwKICAgICJ2ZXJpZmljYXRpb25NZXRob2QiOiAiZGlkOmtleTp6Nk1rczltOWlmTHd5M0pXcUg0YzU3RWJCUVZTMlNwUkNqZmE3OXdIYjV2V002dmgjejZNa3M5bTlpZkx3eTNKV3FINGM1N0ViQlFWUzJTcFJDamZhNzl3SGI1dldNNnZoIiwKICAgICJqd3MiOiAiZXlKaU5qUWlPbVpoYkhObExDSmpjbWwwSWpwYkltSTJOQ0pkTENKaGJHY2lPaUpGWkVSVFFTSjkuLjZ4U3FvWmphME53akYwYWY5WmtucXgzQ2JoOUdFTnVuQmY5Qzh1TDJ1bEdmd3VzM1VGTV9abmhQald0SFBsLTcyRTlwM0JUNWYycHRab1lrdE1LcERBIgogIH0KfQ"
-            }
-
-        Decoding the `access_token` field we could see a Verifiable Presentation including the LEARCredential that the user presented when authenticating:
-
-        <x-code .json>
-            {
-                "@context": [
-                    "https://www.w3.org/2018/credentials/v1",
-                    "https://dome-marketplace.eu//2022/credentials/learcredential/v1"
-                ],
-                "id": "urn:did:elsi:25159389-8dd17b796ac0",
-                "type": ["VerifiableCredential", "LEARCredential"],
-                "issuer": {
-                    "id": "did:elsi:VATES-12345678"
-                },
-                "issuanceDate": "2022-03-22T14:00:00Z",
-                "validFrom": "2022-03-22T14:00:00Z",
-                "expirationDate": "2023-03-22T14:00:00Z",
-                "credentialSubject": {
-                    "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-                    "title": "Mr.",
-                    "first_name": "John",
-                    "last_name": "Doe",
-                    "gender": "M",
-                    "postal_address": "",
-                    "email": "johndoe@goodair.com",
-                    "telephone": "",
-                    "fax": "",
-                    "mobile_phone": "+34787426623",
-                    "legalRepresentative": {
-                        "cn": "56565656V Jesus Ruiz",
-                        "serialNumber": "56565656V",
-                        "organizationIdentifier": "VATES-12345678",
-                        "o": "GoodAir",
-                        "c": "ES"
-                    },
-                    "rolesAndDuties": [
-                        {
-                            "type": "LEARCredential",
-                            "id": "https://dome-marketplace.eu//lear/v1/6484994n4r9e990494"
-                        }
-                    ]
-                }
-            }
-
-
-
-
-        Environmental attributes, which depend on the availability of system sensors that can detect and report values, are somewhat different from subject and resource attributes, which are administratively created. Environmental attributes are not properties of the subject or resources, but are measurable characteristics that pertain to the operational or situational context in which access requests occur. These environmental characteristics are subject and resource independent, and may include the current time, day of the week, or threat level.
-
-        The PDP computes decisions to permit or deny subject requests to perform actions on resources. In computing a decision, the PDP queries policies stored in a PRP.
-        
-        If the attributes of the request are not sufficient for rule and policy evaluation, the PDP may need to search the PIP for additional attributes. The PIP is shown as one logical store, but in fact may comprise multiple physical stores of different types. In our case, the logical PIP includes one or more Trusted Issuers Lists (to check if the issuer of the credential is included in them as a trusted issuer of that type of credential), and also the Authorization Registry (AR), which can check for finer granularity authorisation records which may be very dynamic in nature (e.g. if some resource usage by employees and machines owned by the issuer have exceeded some quota this month).
-
-        The actual Trusted Issuers Lists that the PDP needs to check is determined by the policy rules retrieved from the PRP. Those policy rules also determine the additional queries performed to the PIP data stores.
+            pep -> pdp --++: **(2)** Request a decision
+            # -(2) If the request is not authenticated it is rejected with an error. Depending on the use case, the error returned can contain additional information that enables the user agent to be redirected to perform authentication.
             
-        The set of information and data stored in the PIP and PRP comprise the access control data and collectively define the current authorization state, which the PDP will use to compute its decision.
+                After inspecting the request, the PEP requests a decision from the PDP passing a series of attributes. In general, the request from the PEP to the PDP consists of <b>subject</b> attributes (typically for the user who issued the request), <b>resource</b> attributes (the resource for which access is sought), <b>action</b> attributes (the operations to be performed on the resource), and <b>environment</b> attributes.
 
-        <ul>
-            -(4) Query policy rules applicable to this request.
-            -(5) Reply with policy rules
+                Some of the above attributes are obtained by the PEP from the original request received from the user. For example, the HTTP verb (GET, POST, PUT, PATCH, DELETE) and the URL and possibly the body of the request provide action attributes. Specifically, in the case of an NGSI-LD request those attributes are formally specified in the NGSI-LD standard.
 
-            -(6) The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, including the set of Trusted Issuers Lists to query.
+                The subject attributes most relevant for access control are located in the access token received with the request. In particular, the access token includes the Verifiable Credentials that were employed for authentication, and the claims in those credentials can be used to evaluate access control policies. This includes (but is not limited to) the roles object that may be included in the VerifiableID credential used for authentication.
 
-            -(7) Query additional attributes
-            -(8) Reply with attributes
+                An example access token would be:
 
-            -(9) The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP and also the attributes received from the PIP, and computes a decision.
+                <x-code .json>
+                    {
+                        "token_type": "Bearer",
+                        "expires_in": 3600,
+                        "access_token": "ewogICJhbGciOiAiR...ERBIgogIH0KfQ"
+                    }
 
-            -(10) The PDP returns the decision to the PEP, which will enforce it.
+                Decoding the `access_token` field we could see a Verifiable Presentation including the LEARCredential that the user presented when authenticating:
 
-            -(11) If the decision from the PDP is Reject, the PEP returns an error to the browser in the laptop of the user. Otherwise, it forwards the original request to the Resource.
+                <x-code .json>
+                    {
+                        "@context": [
+                            "https://www.w3.org/2018/credentials/v1",
+                            "https://dome-marketplace.eu//2022/credentials/learcredential/v1"
+                        ],
+                        "id": "urn:did:elsi:25159389-8dd17b796ac0",
+                        "type": ["VerifiableCredential", "LEARCredential"],
+                        "issuer": {
+                            "id": "did:elsi:VATES-12345678"
+                        },
+                        "issuanceDate": "2022-03-22T14:00:00Z",
+                        "validFrom": "2022-03-22T14:00:00Z",
+                        "expirationDate": "2023-03-22T14:00:00Z",
+                        "credentialSubject": {
+                            "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+                            "title": "Mr.",
+                            "first_name": "John",
+                            "last_name": "Doe",
+                            "gender": "M",
+                            "postal_address": "",
+                            "email": "johndoe@goodair.com",
+                            "telephone": "",
+                            "fax": "",
+                            "mobile_phone": "+34787426623",
+                            "legalRepresentative": {
+                                "cn": "56565656V Jesus Ruiz",
+                                "serialNumber": "56565656V",
+                                "organizationIdentifier": "VATES-12345678",
+                                "o": "GoodAir",
+                                "c": "ES"
+                            },
+                            "rolesAndDuties": [
+                                {
+                                    "type": "LEARCredential",
+                                    "id": "https://dome-marketplace.eu//lear/v1/6484994n4r9e990494"
+                                }
+                            ]
+                        }
+                    }
 
-            -(12) The resource executes the request and returns the result
 
-            -(13) The PEP returns the result to the laptop of the user.
+                Environmental attributes, which depend on the availability of system sensors that can detect and report values, are somewhat different from subject and resource attributes, which are administratively created. Environmental attributes are not properties of the subject or resources, but are measurable characteristics that pertain to the operational or situational context in which access requests occur. These environmental characteristics are subject and resource independent, and may include the current time, day of the week, or threat level.
 
-            -(14) The laptop displays the result to the user.
+                The PDP computes decisions to permit or deny subject requests to perform actions on resources. In computing a decision, the PDP queries policies stored in a PRP (Policy Retrieval Point).
+                
+                If the attributes of the request are not sufficient for rule and policy evaluation, the PDP may need to search the PIP for additional attributes. The PIP is shown as one logical store, but in fact may comprise multiple physical stores of different types.
+                
+                In addition to the PIP, the PDP uses one or more Trusted Issuers Lists (to check if the issuer of the credential is included in them as a trusted issuer of that type of credential), and also the Authorization Registry (AR), which can check for finer granularity authorisation records which may be very dynamic in nature (e.g. if some resource usage by employees and machines owned by the issuer have exceeded some quota this month).
+
+                The actual Trusted Issuers Lists that the PDP needs to check is determined by the policy rules retrieved from the PRP. Those policy rules also determine the additional queries performed to the PIP data stores.
+                    
+                The set of information and data stored in the PIP and PRP comprise the access control data and collectively define the current authorization state, which the PDP will use to compute its decision.
+
+
+            pdp -> prp --++: **(3)** Query policies
+            # -(3) The PDP asks the PRP for the policy rules applicable to this request. The policy rules may be specified using different policy languages, like ODRL, XACML or Rego. It is very difficult to make the interface between the PDP and the PRP completely transparent and independent from the concrete policy language used in an implementation. However, The PDP can be modularised in order to minimise the dependency and reduce the cost of migration to other policy language in the future.
+
+            prp -> pdp --++: **(4)** Reply with policies
+            # -(4) The PDP receives the policy rules to apply for the current request.
+
+    <section>Determine which Trusted Issuer Lists should be queried
+
+        After retrieving the policies from the PRP, the PDP determines what are the attributes needed by the policy rules to perform its evaluation. Some of those attributes can be determined from the request received (e.g., claims inside the Verifiable Credential(s) in the access token). But in general, the policy rules require additional attributes that have to be retrieved from other sources.
+
+        The two logical sources of those attributes are the PIP and the Trusted Issuers Lists in the Trust Anchor Framework.
+
+        The concept of the PIP is the same as in the standard XACML logical architecture, essentially enabling the PDP to retrieve environmental attributes required for policy evaluation.
+
+        In our approach using Verifiable Credentials for authentication and authorization, we use a Trust Framework to determine if the credentials received in the request are issued by authorised issuers of those credentials.
+
+        The PDP does not have hardcoded the actual Trusted Lists to query, but they are determined dynamically from the policies retrieved from the PRP. In simple use cases there may be one or two lists to query which are the same for all requests. But the mechanism described here can cater for very complex scenarios where the lists may be different depending on the requests and also from the dynamic environmental information retrieved from the PIP.
+
+        <x-diagram .plantuml>Determine Trusted Issuer Lists to query
+            box "Company" #WhiteSmoke
+                participant "User" as user
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "PEP" as pep
+                participant "PDP" as pdp
+                participant "PRP" as prp
+                participant "PIP" as pip
+                participant "Resource" as resource
+            end box
+            participant "Trust Framework" as trust
+
+
+            prp -> pdp --++: **(4)** Reply with policies
+            # -(4) The PDP receives the policy rules to apply for the current request.
+
+            pdp -> pdp: **(5)** Initial evaluation of the policies
+            # -(5) The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, and also the set of Trusted Issuers Lists to query. The concrete Trusted Lists to query are dynamic and depend on the specific policies associated to the request.
+
+            pdp -> pip --++: **(6)** Query additional attributes
+            pip -> pdp --++: Reply with attributes
+            # -(6) Based on the policies and the attributes of the request, the PDP queries the PIP for additional attributes needed for the policy evaluation.
+
+                Now that the PDP has the policy rules to apply and the attributes from the request and the ones retrieved from the PIP, the PDP can determine the actual Trusted Lists that have to be queried in order to be able to evaluate the policies.
+
+
+    <section>Query the Trusted Issuer Lists
+
+        The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
+
+        The Trust Framework is composed of one or more Trusted Lists where each list is specialised in some specific domain of trust.
+
+        For example, the Trust Framework contains Trusted Lists with the schema definitions used for the well-known types of Verifiable Credentials in the ecosystem. In this way, if the Verifiable Registry used for the Trust Framework is based on a Blockchain network (or several federated networks), the schemas can be published in a trusted and resilient manner reducing the risk of malicious tampering and keeping a record of the history of modifications.
+
+        But the most interesting Trusted Lists in the Trust Framework are the Trusted Issuers Lists, which provide the mechanism to efficiently and securely verify that the issuer of a given credential is a Trusted Issuer of that type of credentials.
+
+        It has to be noticed that even though most Trusted Issuer Lists are global (used by all participants in the ecosystem) and have essentially public information, there may be some specialised lists that are private to one or more organisations and specialised in some specific requirement.
+
+        In this way, there may be some lists that are specific to the products that one organisation provides to other participants in the ecosystem. For example, there may be a Trusted Issuer List private to one organisation which is updated with the identity of a participant when that participant acquires access to some product provided by that organisation.
+
+        For example, this "product-specific" Trusted Issuer List is queried when performing authorization if the related policy rules specify that the issuer of the Verifiable Credential received in the request should have acquired the product that the request is trying to access.
+
+        However, as mentioned before, the set of "internal" and "external" Trusted Lists to query is not hardcoded but it depends on the specific policy rules that should be applied to the request when computing the decision to grant access or not.
+
+        In this way, the system provides a great deal of flexibility on how access control is performed.
+
+        For simplicity, the diagram below shows the query of the Trusted Issuer Lists as a single interaction to a single box, but the actual interactions can be very complex if required. In addition, the diagram does not specify whether the list is "private" or "global".
+
+
+        <x-diagram .plantuml>Query the Trusted Issuer Lists
+            box "Company" #WhiteSmoke
+                participant "User" as user
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "PEP" as pep
+                participant "PDP" as pdp
+                participant "PRP" as prp
+                participant "PIP" as pip
+                participant "Resource" as resource
+            end box
+            participant "Trust Framework" as trust
+
+
+            pdp -> pip --++: **(6)** Query additional attributes
+            pip -> pdp --++: Reply with attributes
+            # -(6) Based on the policies and the attributes of the request, the PDP queries the PIP for additional attributes needed for the policy evaluation.
+
+            pdp -> trust --++: **(7)** Query the Trusted Issuer List(s)
+            trust -> pdp --++: Reply with results
+            # -(7) Based on the policies and the attributes of the request, the PDP queries one or more Trusted Issuer Lists to check that the credentials received comply with the requirements specified in the policies.
+
+
+    <section>Compute the decision and allow (or not) access
+
+        Once the PDP has all the attributes required for policy evaluation, it computes a decision and returns that decision to the PEP which will enforce it.        
+
+        <x-diagram .plantuml>Compute the decision
+            box "Company" #WhiteSmoke
+                participant "User" as user
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "PEP" as pep
+                participant "PDP" as pdp
+                participant "PRP" as prp
+                participant "PIP" as pip
+                participant "Resource" as resource
+            end box
+            participant "Trust Framework" as trust
+
+            trust -> pdp --++: Reply with results
+
+            pdp -> pdp: **(8)** Final evaluation of the policies
+            # -(8) The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP, the attributes received from the PIP, and the Trusted Issuers Lists queried. After the evaluation the PDP computes a decision, either to accept or to reject the request.
+
+            pdp -> pep --++: **(9)** Return decision
+            # -(9) The PDP returns the decision to the PEP, which will enforce it.
+
+            pep -> resource --++: **(10)** Perform operation
+            # -(10) If the decision from the PDP is to reject the request, the PEP returns an error to the user. Otherwise, it forwards the original request to the Resource for execution.
+
+            resource -> pep --++: **(11)** Return result
+            # -(11) The resource executes the request and returns the result.
+
+            pep -> user --++: **(12)** Return result
+            # -(12) The PEP returns the result to the user.
+
+
+    <section>Summary of the authorization process
+
+        The following diagram combines all the steps in a single one to provide an overall view of the authorization process.
+
+        <x-diagram .plantuml>Summary of the Authorization process
+            box "Company" #WhiteSmoke
+                participant "User" as user
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "PEP" as pep
+                participant "PDP" as pdp
+                participant "PRP" as prp
+                participant "PIP" as pip
+                participant "Resource" as resource
+            end box
+            participant "Trust Framework" as trust
+
+            user -> pep --++: **(1)** Access protected resource
+
+            pep -> pdp --++: **(2)** Request a decision
+
+            pdp -> prp --++: **(3)** Query policies
+
+            prp -> pdp --++: **(4)** Reply with policies
+
+            pdp -> pdp: **(5)** Initial evaluation of the policies
+
+            pdp -> pip --++: **(6)** Query additional attributes
+            pip -> pdp --++: Reply with attributes
+
+            pdp -> trust --++: **(7)** Query the Trusted Issuer List(s)
+            trust -> pdp --++: Reply with results
+
+            pdp -> pdp: **(8)** Final evaluation of the policies
+
+            pdp -> pep --++: **(9)** Return decision
+
+            pep -> resource --++: **(10)** Perform operation
+
+            resource -> pep --++: **(11)** Return result
+
+            pep -> user --++: **(12)** Return result
 
 
 <section .appendix #request_scope>Request Scope
