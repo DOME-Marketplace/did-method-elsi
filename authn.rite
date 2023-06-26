@@ -1,5 +1,5 @@
 ---
-title: Authentication and Authorization with Verifiable Credentials using using did:elsi
+title: Authentication and Authorization with Verifiable Credentials using did:elsi
 
 editors:
    - name: "Jesus Ruiz"
@@ -29,7 +29,7 @@ og_description: >
     Authentication and Authorization with Verifiable Credentials using using did:elsi
 og_site_name: Authn with Verifiable Credentials
 rite:
-    codeStyle: dracula
+    codeStyle: github
 
 localBiblio:
     "ETSI-CERTOVERVIEW":
@@ -234,7 +234,7 @@ localBiblio:
         }
 
         eIDAS: eIDAS Trust Framework {
-            icon: images/eu_trust_mark.jpg
+            icon: /images/eu_trust_mark.jpg
         }
         eIDAS.style.fill: transparent
 
@@ -387,32 +387,6 @@ localBiblio:
             Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
             
             Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
-
-        <x-diagram .d2>
-            shape: sequence_diagram
-
-            # Definition of the participants
-            COO: COO of GoodAir {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            TSP: Trust Service Provider {
-                icon: https://icons.terrastruct.com/azure%2FWeb%20Service%20Color%2FApp%20Service%20Certificates.svg
-            }
-            registry: Authentic Sources {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FAzure%20Data%20Catalog.svg
-            }
-
-            COO -> TSP: Request a\ncertificate for signatures
-
-            Verification {
-                TSP."Data about the legal status of the company and powers of representation of the applicant"
-                TSP <-> registry: Verify trusted data
-
-            }
-            
-
-            TSP -> COO: Provide certificate for signature
-
 
         In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
 
@@ -672,48 +646,53 @@ localBiblio:
                 participant "VC Verifier" as verifier
             end box
 
-            user -> browser ++: (1) Access DOM portal
+            user -> browser ++: **(1)** Access DOM portal
             # -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
 
                 We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
 
-            browser -> portal --++: (2) Access DOM portal
+            browser -> portal --++: **(2)** Access DOM portal
             # -(2) The browser sends a request to the Packet Delivery portal server.
 
-            portal -> browser --++: (3) HTTP 302 (redirect)
-            browser -> verifier --++: (3) Access Login page
+            portal -> browser --++: **(3)** HTTP 302 (redirect)
+            browser -> verifier --++: **(3 cont)** Access Login page
             # -(3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
 
-            verifier -> verifier: (4) Generate QR code
+            verifier -> verifier: **(4)** Generate QR code
             # -(4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
 
                 A QR code is used because a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
 
                 <x-code .ini>
-                    https://verifier.dome-marketplace.eu/authentication-requests?state=af0ifjsldkj
+                    https://verifier.dome-marketplace.eu/authorization-requests?state=af0ifjsldkj
 
             # -(5) The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
-            verifier -> browser --: (5) Display QR code
+
+                <figure #qr_code_authreq>
+                    <img src="images/qrcode-authreq.png" alt="" />
+
+                    <figcaption>QR code with the example Authorization Request endpoint inside
+
+            verifier -> browser --: **(5)** Display QR code
 
             # -(6) The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
-            user -> mobile ++: (6) Start QR scan
-            browser -> mobile: (6) Scan QR code
+            user -> mobile ++: **(6)** Start QR scan
+            browser --> mobile: Scan QR code
 
-            mobile -> verifier --++: (7) GET /authentication-requests
+            mobile -> verifier --++: **(7)** GET /authorization-requests
             # -(7) After confirmation by the user, the wallet performs a `GET /authentication-requests` to the endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
 
 
-            verifier -> verifier: (8) Create Authorization Request
-            # -(8) The Verifier creates an Authorization Request. The process is described in detail in the next section
+            verifier -> verifier: **(8)** Create Authorization Request
+            # -(8) The VC Verifier creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are described in detail in the next section
 
-            verifier -> mobile --: (9) Reply with Authorization Request
+            verifier -> mobile --: **(9)** Reply with Authorization Request
             # -(9) The Verifier replies to the wallet with the Authorization Request
-
 
 
     <section>Generating the Authorization Request
 
-        The Authorization Request travels in the response to the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service.
+        The Authorization Request travels in the response body of the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service and with the JAdES signature format.
 
         The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular taking into account that this is a cross-device interaction:
 
@@ -744,7 +723,7 @@ localBiblio:
 
         Note: A request MUST contain either a `presentation_definition` or a `presentation_definition_uri` or a single `scope` value representing a presentation definition, those three ways to request credential presentation are mutually exclusive. We use here the `scope` mechanism, which is simpler and fits our use case.
 
-        This is an example request:
+        This is an example request object using the definitions above:
 
         <x-code .ini>
             openid://?
@@ -772,145 +751,80 @@ localBiblio:
                 "auth_request": "openid://?scope=...&amp;response_type=vp_token&amp;...",
             }
 
-        Where the claims `iss` and `sub` MUST be the DID of the RP (in this case DOME onboarding) and MUST correspond exactly with the `client_id` parameter in the Authentication Request. The claim `auth_request` contains the Authentication Request as a string. The expiration time in claim `exp` avoids replays and can be very short because it is used by the SIOP just on reception of the Authentication Request.
+        Where the claims `iss` and `sub` MUST be the DID of the RP (in this case DOME onboarding) and MUST correspond exactly with the `client_id` parameter in the Authorization Request. The claim `auth_request` contains the Authentication Request as a string. The expiration time in claim `exp` avoids replays and can be very short because it is used by the Wallet just on reception of the Authentication Request. The expiration time should be enough for the user to review the Authorization Request, decide the credential(s) to send to the RP and instruct the Wallet to send the Authorization Reply to the RP.
 
-        The following diagram describes the process of generating the Authorization Request.
-
-        <x-diagram .d2>
-            shape: sequence_diagram
-
-            # Definition of the participants
-            user: John Doe {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            mobile: Webapp {
-                icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
-            }
-            browser: Laptop {
-                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-            }
-            portal: Portal {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
-            }
-            verifier: VC Verifier {
-                icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
-            }
-            # ==================================================
-
-            # -(7) After confirmation by the user, the wallet performs a ` GET /authentication-requests` endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
-            mobile.t -> verifier.ar: (7) GET /authentication-requests
-            verifier.ar -> verifier.ar: (8) Create Authorization Request
-            verifier.ar -> mobile: (9) Reply with Authorization Request
-
-        <ul>
-            -(8) Packet Delivery company RP creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular that this is a cross-device interaction:
-
-            -(9) The SIOP Authentication Request is returned to the mobile in the reply body of the GET request, as a JWT in JWS form ([[RFC7515]]), signed with the public key associated with the DID in the client_id field of the Authorization Request. The JWT MUST be generated according to the best practices described in [[RFC8725]]. 
 
     <section>Verification of the Authorization Request
 
 
         Before sending the Authentication Response, the wallet should verify that the Authorization Request is correct. The most important verifications are described here:
 
-        <x-diagram .d2>
-            shape: sequence_diagram
+        <x-diagram .plantuml>Starting the authentication phase
+            box "Company" #WhiteSmoke
+                actor "User" as user
+                participant "Wallet" as mobile
+                participant "Laptop" as browser
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "Portal" as portal
+                participant "VC Verifier" as verifier
+            end box
 
-            # Definition of the participants
-            user: John Doe {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            mobile: Webapp {
-                icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
-            }
-            browser: Laptop {
-                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-            }
-            portal: Portal {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
-            }
-            verifier: VC Verifier {
-                icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
-            }
-            # ==================================================
 
-            verifier.ar -> mobile.var: (9) Reply with Authorization Request
+            verifier -> mobile --++: **(9)** Reply with Authorization Request
 
-            mobile.var -> mobile.var: (10) Verification of signature of Authorization Request
+            mobile -> mobile: **(10)** Verification of signature of Authorization Request
+            # -(10) Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
 
-            mobile.var -> mobile.var: (11) Verification of the identity of the Relying Party
+            mobile -> mobile: **(11)** Verification of the identity of the Relying Party
+            # -(11) Verification that the DID in the `client_id` field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.
 
-            mobile.var -> mobile.var: (12) Verification of the trusted nature of the RP
-        
+            mobile -> mobile: **(12)** Verification of the trusted nature of the RP
+            # -(12) Verification that the entity identified in the `client_id` field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID in the `client_id` field.
 
-        <ul>
-            -(10) Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
-
-            -(11) Verification that the DID in the `client_id` field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.
-
-            -(12) Verification that the entity identified in the `client_id` field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID of in the `client_id` field.
-
-                The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard. In the case of DOME, the DOME onboarding service is a well-known entity and it is easy to verify that the DID corresponds to the DOME onboarding service.
-
-                In the case that the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the DOME onboarding service.
+                The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard.
                 
-                In this case, to check if the DID is a participant on the DOME ecosystem, the wallet sends a `GET /api/did/v1/identifiers/did:elsi:VATFR-9999999` request to the endpoint of one of several trusted servers implementing the query Trusted Participant Registry functionality. The API returns a JSON document as a DID Document DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the DOME ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the wallet of the user.
+                If the Relying Party is a well known entity (like the DOME onboarding service in the case of DOME), it is easy to verify that the DID corresponds to the Relying Party.
 
+                In most other cases, for example when the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the onboarding service (meaning that the Wallet user trusts on the onboarding service, in the same way as all other participants).
+                
+                In this case, to check if the DID is a participant on the ecosystem, the wallet sends a `GET /api/did/v1/identifiers/{did-to-verify}` request to the endpoint of one of several trusted servers implementing the functionality to query the Trusted Participant Registry, where `{did-to-verify}` is the actual DID the Wallet wants to check (in our example it would be `did:elsi:VATFR-99999999`, corresponding to the RP) . The API returns a JSON document as a DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the Wallet user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the Wallet of the user, to facilitate the use of the wallet.
 
+    <section>Creating and sending the Authorization Response 
 
-    <section>Creating and sending the Authentication Response 
+        Once the Authorization Request has been validated, the Wallet creates an Authorization Response to be posted in the `redirect_uri` specified by teh RP in the Authorization Request. For completeness, we describe in the following figure the complete process from reception of Authorization Request until sending the Authorization Response.
 
-        Once the Authorization Request has been validated, the wallet creates an Authentication Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request. The complete process from reception of Authorization Request until sending the Authorization Response is described in the diagram below.
+        <x-diagram .plantuml>Starting the authentication phase
+            box "Company" #WhiteSmoke
+                actor "User" as user
+                participant "Wallet" as mobile
+                participant "Laptop" as browser
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "Portal" as portal
+                participant "VC Verifier" as verifier
+            end box
 
-        <x-diagram .d2>
-            shape: sequence_diagram
+            verifier -> mobile --++: **(9)** Reply with Authorization Request
 
-            # Definition of the participants
-            user: John Doe {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            mobile: Webapp {
-                icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
-            }
-            browser: Laptop {
-                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-            }
-            portal: Portal {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
-            }
-            verifier: VC Verifier {
-                icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
-            }
-            # ==================================================
+            mobile -> mobile: **(10)** Verification of signature of Authorization Request
 
-            verifier.ar -> mobile.var: (9) Reply with Authorization Request
+            mobile -> mobile: **(11)** Verification of the identity of the Relying Party
 
-            mobile.var -> mobile.var: (10) Verification of signature of Authorization Request
+            mobile -> mobile: **(12)** Verification of the trusted nature of the RP
 
-            mobile.var -> mobile.var: (11) Verification of the identity of the Relying Party
-
-            mobile.var -> mobile.var: (12) Verification of the trusted nature of the RP
-
-            mobile.car -> mobile.car: (13) Create Authentication Response
-        
-            mobile.car -> verifier.resp: (14) POST /api/siop/authentication_response
-
-
-        <ul>
-            -(13) The wallet creates an Authentication Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authentication Response are described below.
+            mobile -> mobile: **(13)** Create Authorization Response
+            # -(13) The wallet creates an Authorization Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authorization Response are described below.
 
                 The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only `vp_token` as the `response_type`, the VP Token is provided directly in the Authorization Response and a separate `id_token` is not needed.
 
-                The contents of the Authentication Response in our specific use case are (shown here with the POST parameters needed to send it):
+                The contents of the Authorization Response in our specific use case are:
 
-                <x-code .http>
-                    POST /api/siop/authentication_response HTTP/1.1
-                    Host: verifier.dome-onboarding.org
-                    Content-Type: application/x-www-form-urlencoded
-
+                <x-code .ini>
                     presentation_submission=[see definition below]
                     &vp_token=[see definition below]
 
-                The content of the `presentation_submission` parameter in the above Authentication Request is:
+                The content of the `presentation_submission` parameter in the above Authorization Response is:
 
                 <x-code .json>
                     {
@@ -931,7 +845,16 @@ localBiblio:
 
                 Which complies with [[DIF.PresentationExchange]] and refers to the Verifiable Presentation in the `vp_token` parameter provided in the same response. In our example, the Verifiable Presentation includes the LEARCredential that was described in the previous sections.
 
-            -(14) The wallet sends the Authentication Response to the endpoint received in the `redirect_uri` parameter of the Authentication Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
+            mobile -> verifier ++: **(14)** POST /api/siop/authorization_response
+            # -(14) The wallet sends the Authorization Response to the endpoint received in the `redirect_uri` parameter of the Authorization Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
+
+                <x-code .http>
+                    POST /api/siop/authorization_response HTTP/1.1
+                    Host: verifier.dome-onboarding.org
+                    Content-Type: application/x-www-form-urlencoded
+
+                    presentation_submission=[see definition below]
+                    &vp_token=[see definition below]
 
 
     <section>Authenticating the user with the LEARCredential
@@ -940,45 +863,21 @@ localBiblio:
 
         The process of verifying the Authorization Response and authenticating the user with the LEARCredential is the following:
 
-        <x-diagram .d2>
-            shape: sequence_diagram
+        <x-diagram .plantuml>Starting the authentication phase
+            box "Company" #WhiteSmoke
+                actor "User" as user
+                participant "Wallet" as mobile
+                participant "Laptop" as browser
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "Portal" as portal
+                participant "VC Verifier" as verifier
+            end box
 
-            # Definition of the participants
-            user: John Doe {
-                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-            }
-            mobile: Webapp {
-                icon: https://icons.terrastruct.com/tech%2F052-smartphone-3.svg
-            }
-            browser: Laptop {
-                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-            }
-            portal: Portal {
-                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FSoftware%20as%20a%20Service%20%28SaaS%29.svg
-            }
-            verifier: VC Verifier {
-                icon: https://icons.terrastruct.com/azure%2FSecurity%20Service%20Color%2FSecurity%20Center.svg
-            }
-            # ==================================================
-      
-            mobile.car -> verifier.resp: (14) POST /api/siop/authentication_response
+            mobile -> verifier ++: (14) POST /api/siop/authorization_response
 
-            verifier.resp -> verifier.resp: (15 and 16) Verify signature and issuer of LEARCredential
-
-            verifier.resp -> verifier.resp: (17) Verify sender of the Authentication Response
-
-            verifier.resp -> verifier.resp: (18) Generate Access Token
-
-            verifier.resp -> mobile: (19) HTTP 200 with <access token>
-
-            verifier.resp -> portal.refresh: (20) Notify with <access token> and <state>
-
-            portal.refresh -> browser: (21) Refresh screen with services and include <access token>
-
-
-
-        <ul>
-            -(15 and 16) The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
+            verifier -> verifier: (15 and 16) Verify signature\nand issuer of\nLEARCredential
+            # -(15 and 16) The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
 
                 <ol>
                     - That the DID of the entity which is the issuer of the VC is a trusted entity.
@@ -988,9 +887,11 @@ localBiblio:
 
                 In our case the LEARCredential was issued using the `did:elsi` method, so resolution is very simple and is specified in [[DID-ELSI]].
 
-            -(17) After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
+            verifier -> verifier: (17) Verify sender of the\nAuthorization Response
+            # -(17) After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
 
-            -(18) The Verifier creates an Access Token for the user so he can use it to access services in the DOME onboarding portal. The Access Token is generated in JWT format and signed by the RP component. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
+            verifier -> verifier: (18) Generate Access Token
+            # -(18) The Verifier creates an Access Token for the user so it can be used later for access services provided by the Relying Party (in the case of onboarding, those services would be the ones related to the onboarding process implemented by the Onboarding portal). The Access Token is generated in JWT format and signed by the VC Verifier. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
 
                 For our use case, the payload of the JWT access token looks like:
 
@@ -1004,7 +905,7 @@ localBiblio:
                         "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
                         "client_id": "did:elsi:VATFR-99999999",
                         "scope": "vp_token",
-                        "verifiableCredential": [the VC that was received inside the Verifiable Presentation]
+                        "verifiableCredential": ["the VC that was received inside the Verifiable Presentation"]
                     }
 
                 Where, according to [[RFC9068]]:
@@ -1022,12 +923,14 @@ localBiblio:
 
                     - `verifiableCredential` contains the Verifiable Credential that was received, specifically the value of the first element of the field `verifiableCredential` of the Verifiable Presentation.
 
-            -(19) The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
+            verifier -> mobile: (19) HTTP 200 with <access token>
+            # -(19) The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
 
-            -(20) The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
+            verifier -> portal --++: (20) Notify with\n<access token> and <state>
+            # -(20) The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
 
                 <ul>
-                    - The `state` nonce that was generated by the portal when it generated the QR code. The portal uses the `state` nonce to know what login session is notified.
+                    - The `state` nonce that was generated by the portal when it generated the QR code. The portal uses the `state` nonce to know what login session is being notified.
 
                     - The access token generated before.
 
@@ -1043,13 +946,237 @@ localBiblio:
 
                 The portal component replies immediately and continues processing.
 
-            -(21) The DOM portal refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent by the browser to the DOME portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
+            portal -> browser --: (21) Refresh screen\nwith services and include\n<access token>
+            # -(21) The portal of the Relying Party refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent back by the browser to the portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
             
+
+
+<section>Access control with the LEARCredential
+
+    <section>Overview
+
+        This section assumes that authentication has already been performed and that the Relying Party receives a request to a protected resource, with a proper access token inside the request. If the request does not come with an access token, the request is rejected immediately (or the user is redirected to the Authentication service of the Relying Party, depending on the use case).
+
+        The Access Control mechanism described here is the same independently of whether the request comes from a user or a machine, so the M2M use case is supported without any modification. In the following description we will use the term `user` interchangeably for both the user as a natural person or the user as a machine.
+
+        However, the assumption is that all machines have an identity (they are assigned an identifier), and that they are acting `on behalf of` a legally valid identity in the sense of eIDAS2. In other words, we require that the identities of users and machines can be cryptographically bound to the real-world identity of either a natural person or a legal person in a way that provides legal certainty to the Relying Party regarding the chain of responsibility.
+
+        If the user is a natural person using the portal of the Relying Party, the request to the protected resource will come from the browser that the user employs to navigate the portal, and the access token will be included automatically by the browser in every request that is sent ot the Relying Party, for example when the user clicks a button or fills a form.
+
+        If the user is a server or device, it is assumed that it has obtained an access token previously as the result of an authentication process described above. The server or device is responsible for including the access token in every request that is sent to the Relying Party to access a protected resource.
+
+        If the portal of the Relying Party is an onboarding process (eg., the portal of the DOME Onboarding service), the protected resource could be the onboarding service itself, or a service to upload additional information for a partially completed onboarding process.
+
+        If the portal is a Marketplace and the organisation using the portal wants to offer products in it, these services could be to register the organisation as a <i>Seller</i>, or to create a Product specification and offering.
+        
+        If the portal is the Marketplace and the organisation wants to contract products in it, these services could be to register the organisation as a <i>Customer</i>, or to launch a procurement order of a product.
+
+        The same mechanism can be used by any participant in the ecosystem, if they want to use an advanced IAM mechanism which is aligned with the EU strategy on digital identity based on Verifiable Credential and eIDAS2.
+
+        For the explanation we will use the following figure from [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve enforcement the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
+
+        <figure #authn-reference>
+            <img src="images/login_in_DOME/authn_architecture_authorization.drawio.png" alt="" />
+
+            <figcaption>Authentication reference architecture (NIST)
+
+
+    <section>Authorization process in detail
+
+        For our use case we convert the reference architecture into a sequence diagram.        
+
+
+        <x-diagram .d2>
+            shape: sequence_diagram
+
+            # Definition of the participants
+            user: John Doe {
+                icon: https://icons.terrastruct.com/essentials%2F365-user.svg
+            }
+            browser: Laptop {
+                icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
+            }
+            pep: PEP {
+                icon: https://icons.terrastruct.com/azure%2FIdentity%20Service%20Color%2FConditional%20Access.svg
+            }
+            pdp: PDP {
+                icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FLogic%20Apps%20Custom%20Connector.svg
+            }
+            prp: PRP {
+                icon: https://icons.terrastruct.com/aws%2FManagement%20&%20Governance%2FAmazon-CloudWatch_Rule_light-bg.svg
+            }
+            pip: PIP {
+                icon: https://icons.terrastruct.com/azure%2FGeneral%20Service%20Icons%2FInformation.svg
+            }
+            resource: Resource {
+                icon: https://icons.terrastruct.com/essentials%2F117-database.svg
+            }
+            # ==================================================
+
+            user -> browser.req: (1) Access protected resource
+
+            browser.req -> pep.1: (2) PEP intercepts the call
+
+            pep.1 -> pdp.1: (3) Request a decision
+
+            pdp.1 -> prp.req: (4) Query policies
+            prp.req -> pdp.2: (5) Reply with policies
+
+            pdp.2 -> pdp.2: (6) Initial evaluation of the policies
+
+            pdp.2 -> pip.req: (7) Query additional attributes
+            pip.req -> pdp.3: (8) Reply with attributes
+
+            pdp.3 -> pdp.3: (9) Final evaluation of the policies
+
+            pdp.3 -> pep.2: (10) Return decision
+
+            pep.2 -> resource.req: (11) Perform operation
+            resource.req -> pep.3: (12) Return result
+
+            pep.3 -> browser.resp: (13) Return result
+            browser.resp -> user: Display result
+
+
+        <x-diagram .plantuml>Starting the authentication phase
+            box "Company" #WhiteSmoke
+                actor "User" as user
+                participant "Laptop" as browser
+            end box
+            box "Relying Party" #WhiteSmoke
+                participant "PEP" as pep
+                participant "PDP" as pdp
+                participant "PRP" as prp
+                participant "PIP" as pip
+                participant "Resource" as resource
+            end box
+            # ==================================================
+
+            user -> browser ++: (1) Access protected resource
+            # -(1) The user interacts with the browser to access a protected resource. This step is needed only when the user is a natural person browsing the portal of the Relying Party. For other direct interactions, the flow starts in the next step.
+
+            browser -> pep --++: (2) PEP intercepts the call
+            # -(2) The PEP (Policy Enforcement Point) intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.
+
+            pep -> pdp --++: (3) Request a decision
+            # -(3) The PEP requests a decision from the PEP. The request from the PEP to the PDP consists of subject attributes (typically for the user who issued the request), resource attributes (the resource for which access is sought), action attributes (the operations to be performed on the resource), and environment attributes.
+
+            pdp.1 -> prp.req: (4) Query policies
+            prp.req -> pdp.2: (5) Reply with policies
+
+            pdp.2 -> pdp.2: (6) Initial evaluation of the policies
+
+            pdp.2 -> pip.req: (7) Query additional attributes
+            pip.req -> pdp.3: (8) Reply with attributes
+
+            pdp.3 -> pdp.3: (9) Final evaluation of the policies
+
+            pdp.3 -> pep.2: (10) Return decision
+
+            pep.2 -> resource.req: (11) Perform operation
+            resource.req -> pep.3: (12) Return result
+
+            pep.3 -> browser.resp: (13) Return result
+            browser.resp -> user: Display result
+
+        <ul>
+
+
+
+        Some of the above attributes are obtained by the PEP from the original request received from the browser. For example, the HTTP verb (GET, POST, PUT, PATCH, DELETE) and the URL and possibly the body of the request provide action attributes.
+
+        The access token generated during authentication provides some subject attributes (identification data and roles assigned by the issuer of the credential).
+
+        An example access token would be:
+
+        <x-code .json>
+            {
+                "token_type": "Bearer",
+                "expires_in": 3600,
+                "access_token": "ewogICJhbGciOiAiRVMyNTYiLAogICJraWQiOiAiV09IRnU0SFo1OVNNODUzQzdlTjBPdmxLR3JNZWVyRENwSE9VUm9UUXdIdyIsCiAgInR5cCI6ICJKV1QiCn0.ewogICJAY29udGV4dCI6IFsKICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIKICBdLAogICJ0eXBlIjogWwogICAgIlZlcmlmaWFibGVQcmVzZW50YXRpb24iCiAgXSwKICAidmVyaWZpYWJsZUNyZWRlbnRpYWwiOiBbCiAgICB7CiAgICAgICJ0eXBlcyI6IFsKICAgICAgICAiUGFja2V0RGVsaXZlcnlTZXJ2aWNlIiwKICAgICAgICAiVmVyaWZpYWJsZUNyZWRlbnRpYWwiCiAgICAgIF0sCiAgICAgICJAY29udGV4dCI6IFsKICAgICAgICAiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiLAogICAgICAgICJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L3N1aXRlcy9qd3MtMjAyMC92MSIKICAgICAgXSwKICAgICAgImNyZWRlbnRpYWxzU3ViamVjdCI6IHt9LAogICAgICAiYWRkaXRpb25hbFByb3AxIjoge30KICAgIH0KICBdLAogICJpZCI6ICJlYmM2ZjFjMiIsCiAgImhvbGRlciI6IHsKICAgICJpZCI6ICJkaWQ6a2V5Ono2TWtzOW05aWZMd3kzSldxSDRjNTdFYkJRVlMyU3BSQ2pmYTc5d0hiNXZXTTZ2aCIKICB9LAogICJwcm9vZiI6IHsKICAgICJ0eXBlIjogIkpzb25XZWJTaWduYXR1cmUyMDIwIiwKICAgICJjcmVhdG9yIjogImRpZDprZXk6ejZNa3M5bTlpZkx3eTNKV3FINGM1N0ViQlFWUzJTcFJDamZhNzl3SGI1dldNNnZoIiwKICAgICJjcmVhdGVkIjogIjIwMjMtMDEtMDZUMDc6NTE6MzZaIiwKICAgICJ2ZXJpZmljYXRpb25NZXRob2QiOiAiZGlkOmtleTp6Nk1rczltOWlmTHd5M0pXcUg0YzU3RWJCUVZTMlNwUkNqZmE3OXdIYjV2V002dmgjejZNa3M5bTlpZkx3eTNKV3FINGM1N0ViQlFWUzJTcFJDamZhNzl3SGI1dldNNnZoIiwKICAgICJqd3MiOiAiZXlKaU5qUWlPbVpoYkhObExDSmpjbWwwSWpwYkltSTJOQ0pkTENKaGJHY2lPaUpGWkVSVFFTSjkuLjZ4U3FvWmphME53akYwYWY5WmtucXgzQ2JoOUdFTnVuQmY5Qzh1TDJ1bEdmd3VzM1VGTV9abmhQald0SFBsLTcyRTlwM0JUNWYycHRab1lrdE1LcERBIgogIH0KfQ"
+            }
+
+        Decoding the `access_token` field we could see a Verifiable Presentation including the LEARCredential that the user presented when authenticating:
+
+        <x-code .json>
+            {
+                "@context": [
+                    "https://www.w3.org/2018/credentials/v1",
+                    "https://dome-marketplace.eu//2022/credentials/learcredential/v1"
+                ],
+                "id": "urn:did:elsi:25159389-8dd17b796ac0",
+                "type": ["VerifiableCredential", "LEARCredential"],
+                "issuer": {
+                    "id": "did:elsi:VATES-12345678"
+                },
+                "issuanceDate": "2022-03-22T14:00:00Z",
+                "validFrom": "2022-03-22T14:00:00Z",
+                "expirationDate": "2023-03-22T14:00:00Z",
+                "credentialSubject": {
+                    "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+                    "title": "Mr.",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "gender": "M",
+                    "postal_address": "",
+                    "email": "johndoe@goodair.com",
+                    "telephone": "",
+                    "fax": "",
+                    "mobile_phone": "+34787426623",
+                    "legalRepresentative": {
+                        "cn": "56565656V Jesus Ruiz",
+                        "serialNumber": "56565656V",
+                        "organizationIdentifier": "VATES-12345678",
+                        "o": "GoodAir",
+                        "c": "ES"
+                    },
+                    "rolesAndDuties": [
+                        {
+                            "type": "LEARCredential",
+                            "id": "https://dome-marketplace.eu//lear/v1/6484994n4r9e990494"
+                        }
+                    ]
+                }
+            }
+
+
+
+
+        Environmental attributes, which depend on the availability of system sensors that can detect and report values, are somewhat different from subject and resource attributes, which are administratively created. Environmental attributes are not properties of the subject or resources, but are measurable characteristics that pertain to the operational or situational context in which access requests occur. These environmental characteristics are subject and resource independent, and may include the current time, day of the week, or threat level.
+
+        The PDP computes decisions to permit or deny subject requests to perform actions on resources. In computing a decision, the PDP queries policies stored in a PRP.
+        
+        If the attributes of the request are not sufficient for rule and policy evaluation, the PDP may need to search the PIP for additional attributes. The PIP is shown as one logical store, but in fact may comprise multiple physical stores of different types. In our case, the logical PIP includes one or more Trusted Issuers Lists (to check if the issuer of the credential is included in them as a trusted issuer of that type of credential), and also the Authorization Registry (AR), which can check for finer granularity authorisation records which may be very dynamic in nature (e.g. if some resource usage by employees and machines owned by the issuer have exceeded some quota this month).
+
+        The actual Trusted Issuers Lists that the PDP needs to check is determined by the policy rules retrieved from the PRP. Those policy rules also determine the additional queries performed to the PIP data stores.
+            
+        The set of information and data stored in the PIP and PRP comprise the access control data and collectively define the current authorization state, which the PDP will use to compute its decision.
+
+        <ul>
+            -(4) Query policy rules applicable to this request.
+            -(5) Reply with policy rules
+
+            -(6) The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, including the set of Trusted Issuers Lists to query.
+
+            -(7) Query additional attributes
+            -(8) Reply with attributes
+
+            -(9) The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP and also the attributes received from the PIP, and computes a decision.
+
+            -(10) The PDP returns the decision to the PEP, which will enforce it.
+
+            -(11) If the decision from the PDP is Reject, the PEP returns an error to the browser in the laptop of the user. Otherwise, it forwards the original request to the Resource.
+
+            -(12) The resource executes the request and returns the result
+
+            -(13) The PEP returns the result to the laptop of the user.
+
+            -(14) The laptop displays the result to the user.
 
 
 <section .appendix #request_scope>Request Scope
 
-    According to section 5.3 of [[OpenID.VP]], wallets MAY support requesting presentation of credentials using OAuth 2.0 `scope` values. Such a scope value MUST be an alias for a well-defined presentation definition as it will be refered to in the `presentation_submission` response parameter.
+    According to section 5.3 of [[OpenID.VP]], wallets MAY support requesting presentation of credentials using OAuth 2.0 `scope` values. Such a scope value MUST be an alias for a well-defined presentation definition as it will be referred to in the `presentation_submission` response parameter.
 
     In this specification we define concrete scope values and the mapping between a certain scope value and the respective presentation definition, in particular the mapping between scope values and specific types of Verifiable Credentials used for access control in the use case described in this document. In a production implementation of a Data Space ecosystem, the Trust Framework has to define the mappings used in the ecosysyem and the mechanisms and governance model used to update those mappings.
 
@@ -1084,178 +1211,6 @@ localBiblio:
                 }
             ]
         }
-
-
-
-<section>Access control with the LEARCredential
-
-
-    Once the user has performed authentication and the portal displays the services that he has available, the user clicks on a specific service that he wants to access.
-    
-    If the Relying Party (the portal) is the DOME Onboarding service, this could be the onboarding service itself, or a service to upload additional information for a partially completed onboarding process.
-
-    If the RP is the Marketplace and the organisation wants to offer products in it, these services could be to register the organisation as a <i>Seller</i>, or to create a Product specification and offering.
-    
-    If the RP is the Marketplace and the organisation wants to contract products in it, these services could be to register the organisation as a <i>Customer</i>, or to launch a procurement order of a product.
-
-    The same mechanism can be used by any participant in the ecosystem, if they want to use an advanced IAM mechanism which is aligned with the EU strategy on digital identity based on Verifiable Credential and eIDAS2.
-
-    For the explanation we will use the following figure from [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve enforcement the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
-
-    <figure #authn-reference>
-        <img src="images/login_in_DOME/authn_reference.jpeg" alt="" />
-
-    <figcaption>Authentication reference architecture (NIST)
-
-    For our use case we convert the reference architecture into a sequence diagram.        
-
-    <x-diagram .d2>
-        shape: sequence_diagram
-
-        # Definition of the participants
-        user: John Doe {
-            icon: https://icons.terrastruct.com/essentials%2F365-user.svg
-        }
-        browser: Laptop {
-            icon: https://icons.terrastruct.com/tech%2Fbrowser-2.svg
-        }
-        pep: PEP {
-            icon: https://icons.terrastruct.com/azure%2FIdentity%20Service%20Color%2FConditional%20Access.svg
-        }
-        pdp: PDP {
-            icon: https://icons.terrastruct.com/azure%2FIntegration%20Service%20Color%2FLogic%20Apps%20Custom%20Connector.svg
-        }
-        prp: PRP {
-            icon: https://icons.terrastruct.com/aws%2FManagement%20&%20Governance%2FAmazon-CloudWatch_Rule_light-bg.svg
-        }
-        pip: PIP {
-            icon: https://icons.terrastruct.com/azure%2FGeneral%20Service%20Icons%2FInformation.svg
-        }
-        resource: Resource {
-            icon: https://icons.terrastruct.com/essentials%2F117-database.svg
-        }
-        # ==================================================
-
-        user -> browser.req: (1) Access protected resource
-
-        browser.req -> pep.1: (2) PEP intercepts the call
-
-        pep.1 -> pdp.1: (3) Request a decision
-
-        pdp.1 -> prp.req: (4) Query policies
-        prp.req -> pdp.2: (5) Reply with policies
-
-        pdp.2 -> pdp.2: (6) Initial evaluation of the policies
-
-        pdp.2 -> pip.req: (7) Query additional attributes
-        pip.req -> pdp.3: (8) Reply with attributes
-
-        pdp.3 -> pdp.3: (9) Final evaluation of the policies
-
-        pdp.3 -> pep.2: (10) Return decision
-
-        pep.2 -> resource.req: (11) Perform operation
-        resource.req -> pep.3: (12) Return result
-
-        pep.3 -> browser.resp: (13) Return result
-        browser.resp -> user: Display result
-    
-    <ul>
-        -(1) The user interacts with the browser to access a protected resource.
-
-        -(2) The PEP intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.
-
-        -(3) The PEP requests a decision from the PEP. The request from the PEP to the PDP consists of subject attributes (typically for the user who issued the request), resource attributes (the resource for which access is sought), action attributes (the operations to be performed on the resource), and environment attributes.
-
-    Some of the above attributes are obtained by the PEP from the original request received from the browser. For example, the HTTP verb (GET, POST, PUT, PATCH, DELETE) and the URL and possibly the body of the request provide action attributes.
-
-    The access token generated during authentication provides some subject attributes (identification data and roles assigned by the issuer of the credential).
-
-    An example access token would be:
-
-    <x-code .json>
-        {
-            "token_type": "Bearer",
-            "expires_in": 3600,
-            "access_token": "ewogICJhbGciOiAiRVMyNTYiLAogICJraWQiOiAiV09IRnU0SFo1OVNNODUzQzdlTjBPdmxLR3JNZWVyRENwSE9VUm9UUXdIdyIsCiAgInR5cCI6ICJKV1QiCn0.ewogICJAY29udGV4dCI6IFsKICAgICJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSIKICBdLAogICJ0eXBlIjogWwogICAgIlZlcmlmaWFibGVQcmVzZW50YXRpb24iCiAgXSwKICAidmVyaWZpYWJsZUNyZWRlbnRpYWwiOiBbCiAgICB7CiAgICAgICJ0eXBlcyI6IFsKICAgICAgICAiUGFja2V0RGVsaXZlcnlTZXJ2aWNlIiwKICAgICAgICAiVmVyaWZpYWJsZUNyZWRlbnRpYWwiCiAgICAgIF0sCiAgICAgICJAY29udGV4dCI6IFsKICAgICAgICAiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiLAogICAgICAgICJodHRwczovL3czaWQub3JnL3NlY3VyaXR5L3N1aXRlcy9qd3MtMjAyMC92MSIKICAgICAgXSwKICAgICAgImNyZWRlbnRpYWxzU3ViamVjdCI6IHt9LAogICAgICAiYWRkaXRpb25hbFByb3AxIjoge30KICAgIH0KICBdLAogICJpZCI6ICJlYmM2ZjFjMiIsCiAgImhvbGRlciI6IHsKICAgICJpZCI6ICJkaWQ6a2V5Ono2TWtzOW05aWZMd3kzSldxSDRjNTdFYkJRVlMyU3BSQ2pmYTc5d0hiNXZXTTZ2aCIKICB9LAogICJwcm9vZiI6IHsKICAgICJ0eXBlIjogIkpzb25XZWJTaWduYXR1cmUyMDIwIiwKICAgICJjcmVhdG9yIjogImRpZDprZXk6ejZNa3M5bTlpZkx3eTNKV3FINGM1N0ViQlFWUzJTcFJDamZhNzl3SGI1dldNNnZoIiwKICAgICJjcmVhdGVkIjogIjIwMjMtMDEtMDZUMDc6NTE6MzZaIiwKICAgICJ2ZXJpZmljYXRpb25NZXRob2QiOiAiZGlkOmtleTp6Nk1rczltOWlmTHd5M0pXcUg0YzU3RWJCUVZTMlNwUkNqZmE3OXdIYjV2V002dmgjejZNa3M5bTlpZkx3eTNKV3FINGM1N0ViQlFWUzJTcFJDamZhNzl3SGI1dldNNnZoIiwKICAgICJqd3MiOiAiZXlKaU5qUWlPbVpoYkhObExDSmpjbWwwSWpwYkltSTJOQ0pkTENKaGJHY2lPaUpGWkVSVFFTSjkuLjZ4U3FvWmphME53akYwYWY5WmtucXgzQ2JoOUdFTnVuQmY5Qzh1TDJ1bEdmd3VzM1VGTV9abmhQald0SFBsLTcyRTlwM0JUNWYycHRab1lrdE1LcERBIgogIH0KfQ"
-        }
-
-    Decoding the `access_token` field we could see a Verifiable Presentation including the LEARCredential that the user presented when authenticating:
-
-    <x-code .json>
-        {
-            "@context": [
-                "https://www.w3.org/2018/credentials/v1",
-                "https://dome-marketplace.eu//2022/credentials/learcredential/v1"
-            ],
-            "id": "urn:did:elsi:25159389-8dd17b796ac0",
-            "type": ["VerifiableCredential", "LEARCredential"],
-            "issuer": {
-                "id": "did:elsi:VATES-12345678"
-            },
-            "issuanceDate": "2022-03-22T14:00:00Z",
-            "validFrom": "2022-03-22T14:00:00Z",
-            "expirationDate": "2023-03-22T14:00:00Z",
-            "credentialSubject": {
-                "id": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-                "title": "Mr.",
-                "first_name": "John",
-                "last_name": "Doe",
-                "gender": "M",
-                "postal_address": "",
-                "email": "johndoe@goodair.com",
-                "telephone": "",
-                "fax": "",
-                "mobile_phone": "+34787426623",
-                "legalRepresentative": {
-                    "cn": "56565656V Jesus Ruiz",
-                    "serialNumber": "56565656V",
-                    "organizationIdentifier": "VATES-12345678",
-                    "o": "GoodAir",
-                    "c": "ES"
-                },
-                "rolesAndDuties": [
-                    {
-                        "type": "LEARCredential",
-                        "id": "https://dome-marketplace.eu//lear/v1/6484994n4r9e990494"
-                    }
-                ]
-            }
-        }
-
-
-
-
-    Environmental attributes, which depend on the availability of system sensors that can detect and report values, are somewhat different from subject and resource attributes, which are administratively created. Environmental attributes are not properties of the subject or resources, but are measurable characteristics that pertain to the operational or situational context in which access requests occur. These environmental characteristics are subject and resource independent, and may include the current time, day of the week, or threat level.
-
-    The PDP computes decisions to permit or deny subject requests to perform actions on resources. In computing a decision, the PDP queries policies stored in a PRP.
-    
-    If the attributes of the request are not sufficient for rule and policy evaluation, the PDP may need to search the PIP for additional attributes. The PIP is shown as one logical store, but in fact may comprise multiple physical stores of different types. In our case, the logical PIP includes one or more Trusted Issuers Lists (to check if the issuer of the credential is included in them as a trusted issuer of that type of credential), and also the Authorization Registry (AR), which can check for finer granularity authorisation records which may be very dynamic in nature (e.g. if some resource usage by employees and machines owned by the issuer have exceeded some quota this month).
-
-    The actual Trusted Issuers Lists that the PDP needs to check is determined by the policy rules retrieved from the PRP. Those policy rules also determine the additional queries performed to the PIP data stores.
-        
-    The set of information and data stored in the PIP and PRP comprise the access control data and collectively define the current authorization state, which the PDP will use to compute its decision.
-
-    <ul>
-        -(4) Query policy rules applicable to this request.
-        -(5) Reply with policy rules
-
-        -(6) The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, including the set of Trusted Issuers Lists to query.
-
-        -(7) Query additional attributes
-        -(8) Reply with attributes
-
-        -(9) The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP and also the attributes received from the PIP, and computes a decision.
-
-        -(10) The PDP returns the decision to the PEP, which will enforce it.
-
-        -(11) If the decision from the PDP is Reject, the PEP returns an error to the browser in the laptop of the user. Otherwise, it forwards the original request to the Resource.
-
-        -(12) The resource executes the request and returns the result
-
-        -(13) The PEP returns the result to the laptop of the user.
-
-        -(14) The laptop displays the result to the user.
 
 
 
