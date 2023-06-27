@@ -120,13 +120,15 @@ localBiblio:
 
     Once an organisation has onboarded an ecosystem like a Data Space, some of its employees have to be appointed to enable them to perform a concrete set of activities in the ecosystem. These activities are performed in the web portals of different organisations which are already participants in the ecosystem, like the onboarding service, the marketplace portals and also in the web portals of other participants.
 
-    This document describes how:
+    This document describes:
     
     <ul>
-        - An organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer
-        - Other organisations can accept those Verifiable Credentials to perform authentication and access control.
+        - How an organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
+        - How other organisations can accept those Verifiable Credentials to perform authentication and access control, leveraging the eIDAS legal framework to obtain the same levels of legal certainty and non-repudiation as when using other traditional forms of documentation.
         
-    We assume that all organisations have onboarded in the ecosystem using the mechanisms described in [[[DID-ELSI]]] and [[[DID-ONBOARDING]]].
+    The mechanisms described here can also be used when the users involved are not strictly employees, but it also works for contractors. It also can be used for customers of the organisation, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
+
+    For clarity of the exposition, we focus in this document on the employee use case, and later we generalise to other types of end-users, including machines and devices acting on behalf of an organisation.
 
 
 <section id="conformance">
@@ -135,13 +137,11 @@ localBiblio:
 
     Once an organisation has onboarded an ecosystem like a Data Space, some of its employees have to be appointed to enable them to perform a concrete set of activities in the ecosystem. These activities are performed in the web portals of different organisations which are already participants in the ecosystem, like the onboarding service, the marketplace portals and also in the web portals of other participants.
 
-    This document describes how:
+    This document describes:
     
     <ul>
-        - An organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer
-        - Other organisations can accept those Verifiable Credentials to perform authentication and access control.
-        
-    We assume that all organisations have onboarded in the ecosystem using the mechanisms described in [[[DID-ELSI]]] and [[[DID-ONBOARDING]]].
+        - How an organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
+        - How other organisations can accept those Verifiable Credentials to perform authentication and access control, leveraging the eIDAS legal framework to obtain the same levels of legal certainty and non-repudiation as when using other traditional forms of documentation.
     
     The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
 
