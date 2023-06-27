@@ -124,12 +124,8 @@ localBiblio:
     
     <ul>
         - How an organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
+
         - How other organisations can accept those Verifiable Credentials to perform authentication and access control, leveraging the eIDAS legal framework to obtain the same levels of legal certainty and non-repudiation as when using other traditional forms of documentation.
-        
-    The mechanisms described here can also be used when the users involved are not strictly employees, but it also works for contractors. It also can be used for customers of the organisation, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
-
-    For clarity of the exposition, we focus in this document on the employee use case, and later we generalise to other types of end-users, including machines and devices acting on behalf of an organisation.
-
 
 <section id="conformance">
 
@@ -141,270 +137,226 @@ localBiblio:
     
     <ul>
         - How an organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
+
         - How other organisations can accept those Verifiable Credentials to perform authentication and access control, leveraging the eIDAS legal framework to obtain the same levels of legal certainty and non-repudiation as when using other traditional forms of documentation.
-    
-    The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
-
-    To achieve a high level of legal certainty under eIDAS, the LEARCredential is:
-    
-    <ul>
-        - signed or sealed with an eIDAS certificate which is either:
-
-            <ul>
-                - a <b>certificate for electronic seals</b> issued to a legal person by a Qualified Trust Service Provider, or
-                - a <b>certificate for electronic signatures</b>, issued to a <b>legal representative of the legal person</b> by a Qualified Trust Service Provider.
-        - signed using the <b>JSON Advanced Electronic Signature</b> format described in [[[ETSI-JADES]]]
-
-    The LEARCredential includes claims identifying the employee and a description of the concrete powers that have been delegated by the legal representative of the organisation.
-
-    By signing/sealing the credential with an eIDAS certificate, the legal representative attests that the powers described in the credential have been delegated to the employee (maybe under some conditions, also described in the credential).
-
-    In this way, the LEARCredential has the same legal status as any other document in other formats (e.g., PDF) signed in an eIDAS-compliant way, but with all the advantages provided by the Verifiable Credential format.
-
-    In addition, the LEARCredential includes cryptographic material that allows the appointed employee to <b>use the credential as an online authentication mechanism</b> in a portal, by proving that the holder of the credential is the same person identified in the credential.
-
-    Any Verifier that trusts the eIDAS Trust Framework will be able to verify that:
-
-    <ul>
-        - <b>The person presenting the LEARCredential is the same as the one identified in the credential</b>
-        - <b>A legal representative of the organisation has attested that the person has the powers described in the credential</b>
-
-    This enables the person presenting the LEARCredential to start the process and to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the process requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X). 
-
-    Both types of eIDAS certificates mentioned above are an electronic attestation <b>that links electronic seal/signature validation data to a legal person and confirms the name of that person</b>. This way, the certificate, usually linked to the sealed/signed document, can be used to verify the identity of the creator of the seal/signature and whether the document has been sealed/signed using the corresponding private key.
-
-    Before issuing a certificate like the above, the Qualified Trust Service Provider (QTSP) performs validations against `Authentic Sources` to authenticate the identity of the organisation:
-
-    <ul>
-        - The data concerning the business name or corporate name of the organisation.
-        - The data relating to the constitution and legal status of the subscriber.
-        - The data concerning the extent and validity of the powers of representation of the applicant.
-        - The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
-
-    The person controlling the above certificates will appoint a legal entity representative (LEAR) by generating and signing a Verifiable Credential which:
-
-    <ul>
-        - Includes identification data of an employee of the organisation
-        - Includes claims stating the delegation of specific powers to perform a set of specific processes on behalf of the organisation
-        - Includes a public key where the corresponding private key is controlled by the employee, enabling him to prove that he is the holder of the credential when it is being used in an authentication process like the ones used as examples in this document.
-
-    The LEARCredential uses the `did:elsi` method for the identifiers of legal persons involved in the process, to facilitate the DID resolution and linkage with the eIDAS certificates. The `did:elsi` method is specified in [[[DID-ELSI]]].    
-    
-    The high-level view of the process is described in the following diagram, when a COO (Chief Operating Officer) appoints an employee to perform some processes:
-
-
-    <x-diagram .plantuml>High level view of issuance of LEARCredential
-        box "Company" #WhiteSmoke
-            actor "Employee of company" as employee
-            participant "COO of company" as COO
-        end box
-        control "Trust Service Provider" as TSP
-        database "Authentic Sources" as registry
-
-        COO -> TSP ++: Request a\ncertificate for signatures
-
-        TSP <-> registry: Verify trusted data
         
-        TSP -> COO --: Provide certificate for signature
+    The mechanisms described here can also be used when the users involved are not strictly employees, but it also works for contractors. It also can be used for customers of the organisation, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
 
-        COO -> employee: Issue LEARCredential
+    For clarity of the exposition, we focus in this document on the employee use case, and later we generalise to other types of end-users, including machines and devices acting on behalf of an organisation.
 
-<section>Participants
+    At a high level, we want to enable the use of Verifiable Credentials so that when an entity (a legal person or a natural person acting on behalf of a legal person) wants to perform an action on a protected resource managed by a Relying Party, we use Verifiable Credentials to perform authentication of the entity and then access control based on the content of the Verifiable Credential(s) presented by that entity, and possibly additional authorisation information that the Relying Party considers relevant for controlling access to the protected resource (for example, the contractual status of the resource, time of the day or other context information).
 
-    Here we introduce the actors of the reference use case we are going to use. The main actors are marked in yellow in the following diagram.
-    
-    RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
+    <section>Authentication requires a VerifiableID
 
-    RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
+        Not all types of Verifiable Credentials can be used as a mechanism for online authentication, because the Relying Party (the entity receiving the Verifiable Credential in an authentication process) needs to bind the identity of the user sending the credential to the claims attested about the subject inside the credential.
 
-    The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
+        For the purpose of this discussion we use a diagram derived from the taxonomy <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
 
-    <x-diagram .d2>
-        classes: {
-            participant: {
-                style: {
-                    fill: "aqua"
-                }
-            }
-            multiple: {
-                style: {
-                    multiple: true
-                }
-            }
-        }
-
-        eIDAS: eIDAS Trust Framework {
-            icon: /images/eu_trust_mark.jpg
-        }
-        eIDAS.style.fill: transparent
-
-        DE_TL: Germany Trusted List
-
-        RealTruth: RealTruth TSP {
-
-            Seal: Certificate\nfor seal
-            Seal.shape: oval
-
-            Sign: Certificate\nfor signature
-            Sign.shape: oval
-
-        }
-        RealTruth.class: participant
-
-        OtherG: Other TSPs {
-            S3.shape: circle
-            S3: Cert\nfor Sign
-            S4.shape: circle
-            S4: Cert\nfor Seal
-        }
-        OtherG.class: multiple
-
-        DE_TL -> RealTruth
-        DE_TL -> OtherG
-
-        Other_Countries: Other Trusted Lists
-        Other_Countries.style.fill: transparent
-        Other_Countries.class: multiple
-
-        TSP1 {
-            S1.shape: circle
-            S1: Cert\nfor Sign
-            S2.shape: circle
-            S2: Cert\nfor Seal
-        }
-
-        TSPn {
-            S3.shape: circle
-            S3: Cert\nfor Sign
-            S4.shape: circle
-            S4: Cert\nfor Seal
-        }
-
-        GoodAir {
-            COO
-            Employee
-        }
-        GoodAir.class: participant
-
-        eIDAS -> DE_TL
-        eIDAS -> Other_Countries
+        <x-diagram .ditaa>A credential as a VerifiableID
+                               +-----------------+
+                               |                 |
+                               |  W3C Verifiable |
+                               |    Credential   |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                               +--------+--------+
+                               |                 |
+                               |   Verifiable    |
+                               |  Attestation    |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                                        +-------------------\
+                                        |                   |
+                                 +------+-------+    +------+--------+
+                                 |              |    |    Other      |
+                                 |  Verifiable  |    |   Verifiable  |
+                                 |     ID       |    |  Attestations |
+                                 |c5DF          |    |               |
+                                 +--------------+    +---------------+
 
 
-        RealTruth.Seal -> GoodAir: Issue Cert for Seals {
-            style: {
-                font-size: 30
-            }
-        }
-        RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures {
-            style: {
-                font-size: 30            }
-        }
+        For example, in the case of a Diploma as a Verifiable Credential (a Verifiable Diploma), the credential is a Verifiable Attestation which indicates that the subject has certain skills or has achieved certain learning outcomes through formal or non-formal learning context. However, as in the case with normal Diplomas in paper of PDF format, this credential can be presented by anyone that holds the credential. In other words, the credential binds the identity of the subject with the claims inside the credential, but does not bind the identity of the holder of the credential with the identity of the subject of the credential, which requires a special mechanism in the issuance process.
 
-        Other_Countries -> TSP1
-        Other_Countries -> TSPn
+        Most Verifiable Credentials will be issued as Verifiable Attestations, acting as efficient machine-processable and verifiable equivalent to their analog counterparts. Their purpose is to attest some attributes about the subject of the credential and not act as a mechanism for online authentication.
 
-        GoodAir.COO -> GoodAir.Employee: LEARCredential {
-            style: {
-                font-size: 30
-            }
-        }
+        Instead, <b>a `VerifiableID` is a special form of a Verifiable Credential that a natural or legal person can use in an electronic identification process as evidence of whom he/she/it is</b> (comparable with a passport, physical IDcard, driving licence, social security card, member-card…).
 
-    <section #participant>GoodAir: the company that wants to perform the process
+        VerifiableIDs can be of different types and be issued by different entities with different levels of assurance (in eIDAS terminology). They are issued with the purpose of serving as authentication mechanisms in online processes. In the near future, VerifiableIDs of the highest level of assurance (LoA High) will be issued to citizens and businesses by their governments under eIDAS2.
 
-        The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
+        We describe in this document a way to issue VerifiableID credentials and how a Relying Party can perform authentication by accepting that credential.
 
-        The company is registered in the tax agency and business registry of Spain with VAT number <b>VATES-12345678</b>.
 
-    <section>COO (Chief Operating Officer) of GoodAir
+    <section>Access Control requires a Verifiable Authorisation
 
-        The GoodAir company is small and the only person that can sign contracts on behalf of the company is the COO (Chief Operating Officer). The COO is a legal representative of the company and she is registered as so in the business registry of Spain.
+        In general, in an authentication and access control process, the entity willing to perform an action on a protected resource has to present (in a Verifiable Presentation) a VerifiableID and possibly one or more additional Verifiable Attestations.
+        
+        The credential should include identifying the employee (or any other subject) and a formal description of the concrete powers that have been delegated by the legal representative of the organisation.
 
-        The COO has a certificate for electronic signatures issued by one of the TSPs in Spain enabling the COO to perform electronic qualified signatures as legal representative of GoodAir, instead of doing them manually.
+        <x-diagram .ditaa>A credential as a Verifiable Authorisation
+                               +-----------------+
+                               |                 |
+                               |  W3C Verifiable |
+                               |    Credential   |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                               +--------+--------+
+                               |                 |
+                               |   Verifiable    |
+                               |  Attestation    |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                   /--------------------+-------------------\
+                   |                    |                   |
+            +------+--------+    +------+-------+    +------+--------+
+            |               |    |              |    |    Other      |
+            |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
+            | Authorisation |    |     ID       |    |  Attestations |
+            |c5DF           |    |              |    |               |
+            +---------------+    +--------------+    +---------------+
 
-        The X.509 certificate of the COO has the following contents in the `Subject` field (the example below is derived from a real certificate but with the identifiers modified to be an example):
 
-        <x-code .ini>
-            cn = 56565656V Jesus Ruiz
-            serialNumber = 56565656V
-            givenName = Jesus
-            sn = Ruiz
-            2.5.4.97 = VATES-12345678
-            o = GoodAir
-            c = ES
-            2.5.4.13 = Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021
 
-        The above set of fields bind the legal identity of the COO with the identity of the business:
+    <section>LEARCredential is both a VerifiableID and Verifiable Authorisation
+
+        In many use cases, it is possible to simplify the authentication and access control by combining in a single credential both a VerifiableID (authentication) and a Verifiable Authorisation (for access control).
+
+        The resulting credential is called LEARCredential and it is very useful when the holder/subject wants to use decentralised IAM mechanisms implemented by Relying Parties which are federated in a decentralised way using a common Trust Anchor Framework.
+
+        The concept of LEARCredential is described in the following diagram:
+
+        <x-diagram .ditaa>The LEARCredential is both a Verifiable Authorisation and a VerifiableID
+                               +-----------------+
+                               |                 |
+                               |  W3C Verifiable |
+                               |    Credential   |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                               +--------+--------+
+                               |                 |
+                               |   Verifiable    |
+                               |  Attestation    |
+                               |                 |
+                               +-----------------+
+                                        ^
+                                        |
+                                     extends
+                                        |
+                   /--------------------+-------------------\
+                   |                    |                   |
+            +------+--------+    +------+-------+    +------+--------+
+            |               |    |              |    |    Other      |
+            |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
+            | Authorisation |    |     ID       |    |  Attestations |
+            |c5DF           |    |c5DF          |    |               |
+            +---------------+    +--------------+    +---------------+
+                    ^                    ^
+                    |       extends      |
+                    \---------+----------/
+                              |
+                     +--------+---------+
+                     |                  |
+                     |                  |
+                     |  LEARCredential  |
+                     |                  |
+                     |cGRE              |
+                     +------------------+
+
+        The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
+
+        To achieve a high level of legal certainty under eIDAS, the LEARCredential is:
+        
+        <ul>
+            - signed or sealed with an eIDAS certificate which is either:
+
+                <ul>
+                    - a <b>certificate for electronic seals</b> issued to a legal person by a Qualified Trust Service Provider, or
+                    - a <b>certificate for electronic signatures</b>, issued to a <b>legal representative of the legal person</b> by a Qualified Trust Service Provider.
+            - signed using the <b>JSON Advanced Electronic Signature</b> format described in [[[ETSI-JADES]]]
+
+        The LEARCredential includes claims identifying the employee and a description of the concrete powers that have been delegated by the legal representative of the organisation.
+
+        By signing/sealing the credential with an eIDAS certificate, the legal representative attests that the powers described in the credential have been delegated to the employee (maybe under some conditions, also described in the credential).
+
+        In this way, the LEARCredential has the same legal status as any other document in other formats (e.g., PDF) signed in an eIDAS-compliant way, but with all the advantages provided by the Verifiable Credential format.
+
+        In addition, the LEARCredential includes cryptographic material that allows the appointed employee to <b>use the credential as an online authentication mechanism</b> in a portal, by proving that the holder of the credential is the same person identified in the credential.
+
+        Any Verifier that trusts the eIDAS Trust Framework will be able to verify that:
 
         <ul>
-            - `serialNumber` is the unique number recognized by the Spanish Government for spanish citizens (called NIF).
-            - `2.5.4.97` is the <a href="https://oidref.com/2.5.4.97">official OID for `organizationIdentifier`</a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.
+            - <b>The person presenting the LEARCredential is the same as the one identified in the credential</b>
+            - <b>A legal representative of the organisation has attested that the person has the powers described in the credential</b>
 
-        Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
+        This enables the person presenting the LEARCredential to start the process and to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the process requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X). 
 
-    <section>RealTruth: a Trust Service Provider
+        Both types of eIDAS certificates mentioned above are an electronic attestation <b>that links electronic seal/signature validation data to a legal person and confirms the name of that person</b>. This way, the certificate, usually linked to the sealed/signed document, can be used to verify the identity of the creator of the seal/signature and whether the document has been sealed/signed using the corresponding private key.
 
-        RealTruth is an EU TSP, which appears in the TL (Trusted List) maintained by the <a href="https://tl.bundesnetzagentur.de/TL-DE.XML">German Government</a>.
+        Before issuing a certificate like the above, the Qualified Trust Service Provider (QTSP) performs validations against `Authentic Sources` to authenticate the identity of the organisation:
+
+        <ul>
+            - The data concerning the business name or corporate name of the organisation.
+            - The data relating to the constitution and legal status of the subscriber.
+            - The data concerning the extent and validity of the powers of representation of the applicant.
+            - The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
+
+        The person controlling the above certificates will appoint a legal entity representative (LEAR) by generating and signing a Verifiable Credential which:
+
+        <ul>
+            - Includes identification data of an employee of the organisation
+            - Includes claims stating the delegation of specific powers to perform a set of specific processes on behalf of the organisation
+            - Includes a public key where the corresponding private key is controlled by the employee, enabling him to prove that he is the holder of the credential when it is being used in an authentication process like the ones used as examples in this document.
+
+        The LEARCredential uses the `did:elsi` method for the identifiers of legal persons involved in the process, to facilitate the DID resolution and linkage with the eIDAS certificates. The `did:elsi` method is specified in [[[DID-ELSI]]].    
         
-        RealTruth is a TSP based in Germany but operates in most of the countries of the EU and so being able to provide Trust Services across many countries, including Spain.
+        The high-level view of the process is described in the following diagram, when a COO (Chief Operating Officer) appoints an employee to perform some processes:
 
-        As all TSPs in the TLs of the Member States, its entry in the TL includes one or more "Services" entries which describe the Trust Services provided by the TSP.
 
-        A TSP can have one Service issuing certificates for signatures, another service issuing certificates for seals, another service for timestamping, etc.
+        <x-diagram .plantuml>High level view of issuance of LEARCredential
+            box "Company" #WhiteSmoke
+                actor "Employee of company" as employee
+                participant "COO of company" as COO
+            end box
+            control "Trust Service Provider" as TSP
+            database "Authentic Sources" as registry
 
-        The regulator approves or suspends each service from a TSP individually, and the services are the root anchor for a given trust environment.
+            COO -> TSP ++: Request a\ncertificate for signatures
 
-        In our case, the entry for RealTruth in the TL includes a `\<TSPService\>` entry, and inside it the `\<ServiceDigitalIdentity\>` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
-
-        <x-code .INI>
-            2.5.4.97 = VATDE-170173453
-            CN = DRV QC 11 MA CA 2017ca
-            OU = QC 11 Mitarbeiter CA
-            O = Deutsche Rentenversicherung Westfalen
-            C = DE
-
-        Which in the `organizationIdentifier` field (OID 2.5.4.97) specifies the unique organisation identifier assigned by the German regulatory authority to the TSP: VATDE-170173453.
-
-        RealTruth provides `Legal Person Representative Certificates` which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
-
-        The certification policies of RealTruth includes the following sentences:
-
-        <blockquote>
-            The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
-
-            <ul>
-                - The data concerning the business name or corporate name of the organisation.
-                - The data relating to the constitution and legal status of the subscriber.
-                - <b>The data concerning the extent and validity of the powers of representation of the applicant.</b>
-                - The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
-
-        The TSP (RealTruth in this case) performs the verifications against `Authentic Sources`.
-
-        <blockquote>
-            Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
+            TSP <-> registry: Verify trusted data
             
-            The Authentic Sources in scope of Annex VI of the [eIDAS2] legislative proposal are sources for attributes on address, age, gender, civil status, family composition, nationality, education and training qualifications titles and licences, professional qualifications titles and licences, public permits and licences, financial and company data.
-            
-            Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
-            
-            Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
+            TSP -> COO --: Provide certificate for signature
 
-        In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
+            COO -> employee: Issue LEARCredential
 
-    <section>John Doe: an administrative employee of GoodAir
 
-        This is an employee of the central administration department of GoodAir, who is going to be formally nominated to manage a specific set of processes on behalf of GoodAir in the Data Space. In particular, this employee is going to be nominated as a LEAR (Legal Entity Appointed Representative).
+    <section>The LEARCredential for some identification processes
+        But <b>any entity can issue VerifiableIDs</b>, though the acceptance by Relying Parties can not be ensured because it is the Relying Party the only one deciding if it trusts on the issuer and its process for generating the VerifiableID.
+        
+        DOME will make use of the future eIDAS2 VerifiableIDs when they are available and when they make sense in the context of DOME. But DOME defines some specific types of VerifiableIDs that are derived from eIDAS certificates for signatures/seals using the regulated standards for signatures, achieving a level of assurance that provides an acceptable level of legal certainty and reduced risk of repudiation.
+        
+        An example is the LEARCredential described in a section above, which has the same level of legal certainty as any document signed with the same certificates (like a contract or an invoice).
 
-        As its name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decision. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating to him the capabilities to perform some processes in the DOME portal and some other tasks in other organisations. That means that John Doe will not be empowered to perform cation snot explicitly specified in the credential.
+        Similarly, a Product provider (like GoodAir) who decides to use the DOME Trust and IAM framework or a compatible one for managing access to associated services by customers of their products will typically define specific types of VerifiableIDs if the standard ones in DOME or the existing and widely accepted ones are not suitable for the provider. In general, if a provider can use an existing and already used VerifiableID then it will facilitate potential customers access to its product because issuers of the VerifiableID do not have to modify or adapt their existing issuing processes.
 
-        To perform the nomination, the COO of GoodAir (a legal representative of GoodAir) will issue a special credential to John Doe and will sign the credential with his certificate for signatures as legal representative of GoodAir. The details are described later in this document.
-
-    <section>DOME: an instance of a Data Space for Smart Cities
-
-        DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
-
-        The DOME Data Space has an portal service that allows external entities to perform some processes in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
-
-        In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
 
 
 <section>The LEARCredential
@@ -1246,7 +1198,206 @@ localBiblio:
             pep -> user --++: **(12)** Return result
 
 
-<section .appendix #request_scope>Request Scope
+<section .appendix #participants>Participants
+
+    Here we introduce the actors of the reference use case we are going to use. The main actors are marked in yellow in the following diagram.
+    
+    RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
+
+    RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
+
+    The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
+
+    <x-diagram .d2>
+        classes: {
+            participant: {
+                style: {
+                    fill: "aqua"
+                }
+            }
+            multiple: {
+                style: {
+                    multiple: true
+                }
+            }
+        }
+
+        eIDAS: eIDAS Trust Framework {
+            icon: /images/eu_trust_mark.jpg
+        }
+        eIDAS.style.fill: transparent
+
+        DE_TL: Germany Trusted List
+
+        RealTruth: RealTruth TSP {
+
+            Seal: Certificate\nfor seal
+            Seal.shape: oval
+
+            Sign: Certificate\nfor signature
+            Sign.shape: oval
+
+        }
+        RealTruth.class: participant
+
+        OtherG: Other TSPs {
+            S3.shape: circle
+            S3: Cert\nfor Sign
+            S4.shape: circle
+            S4: Cert\nfor Seal
+        }
+        OtherG.class: multiple
+
+        DE_TL -> RealTruth
+        DE_TL -> OtherG
+
+        Other_Countries: Other Trusted Lists
+        Other_Countries.style.fill: transparent
+        Other_Countries.class: multiple
+
+        TSP1 {
+            S1.shape: circle
+            S1: Cert\nfor Sign
+            S2.shape: circle
+            S2: Cert\nfor Seal
+        }
+
+        TSPn {
+            S3.shape: circle
+            S3: Cert\nfor Sign
+            S4.shape: circle
+            S4: Cert\nfor Seal
+        }
+
+        GoodAir {
+            COO
+            Employee
+        }
+        GoodAir.class: participant
+
+        eIDAS -> DE_TL
+        eIDAS -> Other_Countries
+
+
+        RealTruth.Seal -> GoodAir: Issue Cert for Seals {
+            style: {
+                font-size: 30
+            }
+        }
+        RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures {
+            style: {
+                font-size: 30            }
+        }
+
+        Other_Countries -> TSP1
+        Other_Countries -> TSPn
+
+        GoodAir.COO -> GoodAir.Employee: LEARCredential {
+            style: {
+                font-size: 30
+            }
+        }
+
+    <section #participant>GoodAir: the company that wants to perform the process
+
+        The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
+
+        The company is registered in the tax agency and business registry of Spain with VAT number <b>VATES-12345678</b>.
+
+    <section>COO (Chief Operating Officer) of GoodAir
+
+        The GoodAir company is small and the only person that can sign contracts on behalf of the company is the COO (Chief Operating Officer). The COO is a legal representative of the company and she is registered as so in the business registry of Spain.
+
+        The COO has a certificate for electronic signatures issued by one of the TSPs in Spain enabling the COO to perform electronic qualified signatures as legal representative of GoodAir, instead of doing them manually.
+
+        The X.509 certificate of the COO has the following contents in the `Subject` field (the example below is derived from a real certificate but with the identifiers modified to be an example):
+
+        <x-code .ini>
+            cn = 56565656V Jesus Ruiz
+            serialNumber = 56565656V
+            givenName = Jesus
+            sn = Ruiz
+            2.5.4.97 = VATES-12345678
+            o = GoodAir
+            c = ES
+            2.5.4.13 = Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021
+
+        The above set of fields bind the legal identity of the COO with the identity of the business:
+
+        <ul>
+            - `serialNumber` is the unique number recognized by the Spanish Government for spanish citizens (called NIF).
+            - `2.5.4.97` is the <a href="https://oidref.com/2.5.4.97">official OID for `organizationIdentifier`</a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.
+
+        Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
+
+    <section>RealTruth: a Trust Service Provider
+
+        RealTruth is an EU TSP, which appears in the TL (Trusted List) maintained by the <a href="https://tl.bundesnetzagentur.de/TL-DE.XML">German Government</a>.
+        
+        RealTruth is a TSP based in Germany but operates in most of the countries of the EU and so being able to provide Trust Services across many countries, including Spain.
+
+        As all TSPs in the TLs of the Member States, its entry in the TL includes one or more "Services" entries which describe the Trust Services provided by the TSP.
+
+        A TSP can have one Service issuing certificates for signatures, another service issuing certificates for seals, another service for timestamping, etc.
+
+        The regulator approves or suspends each service from a TSP individually, and the services are the root anchor for a given trust environment.
+
+        In our case, the entry for RealTruth in the TL includes a `\<TSPService\>` entry, and inside it the `\<ServiceDigitalIdentity\>` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
+
+        <x-code .INI>
+            2.5.4.97 = VATDE-170173453
+            CN = DRV QC 11 MA CA 2017ca
+            OU = QC 11 Mitarbeiter CA
+            O = Deutsche Rentenversicherung Westfalen
+            C = DE
+
+        Which in the `organizationIdentifier` field (OID 2.5.4.97) specifies the unique organisation identifier assigned by the German regulatory authority to the TSP: VATDE-170173453.
+
+        RealTruth provides `Legal Person Representative Certificates` which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
+
+        The certification policies of RealTruth includes the following sentences:
+
+        <blockquote>
+            The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
+
+            <ul>
+                - The data concerning the business name or corporate name of the organisation.
+                - The data relating to the constitution and legal status of the subscriber.
+                - <b>The data concerning the extent and validity of the powers of representation of the applicant.</b>
+                - The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
+
+        The TSP (RealTruth in this case) performs the verifications against `Authentic Sources`.
+
+        <blockquote>
+            Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
+            
+            The Authentic Sources in scope of Annex VI of the [eIDAS2] legislative proposal are sources for attributes on address, age, gender, civil status, family composition, nationality, education and training qualifications titles and licences, professional qualifications titles and licences, public permits and licences, financial and company data.
+            
+            Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
+            
+            Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
+
+        In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
+
+    <section>John Doe: an administrative employee of GoodAir
+
+        This is an employee of the central administration department of GoodAir, who is going to be formally nominated to manage a specific set of processes on behalf of GoodAir in the Data Space. In particular, this employee is going to be nominated as a LEAR (Legal Entity Appointed Representative).
+
+        As its name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decision. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating to him the capabilities to perform some processes in the DOME portal and some other tasks in other organisations. That means that John Doe will not be empowered to perform cation snot explicitly specified in the credential.
+
+        To perform the nomination, the COO of GoodAir (a legal representative of GoodAir) will issue a special credential to John Doe and will sign the credential with his certificate for signatures as legal representative of GoodAir. The details are described later in this document.
+
+    <section>DOME: an instance of a Data Space for Smart Cities
+
+        DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
+
+        The DOME Data Space has an portal service that allows external entities to perform some processes in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
+
+        In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
+
+
+
+<section #request_scope>Request Scope
 
     According to section 5.3 of [[OpenID.VP]], wallets MAY support requesting presentation of credentials using OAuth 2.0 `scope` values. Such a scope value MUST be an alias for a well-defined presentation definition as it will be referred to in the `presentation_submission` response parameter.
 
