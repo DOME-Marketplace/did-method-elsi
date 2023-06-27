@@ -453,7 +453,7 @@ localBiblio:
             [
                 {
                     "id": "https://dome-marketplace.eu//lear/v1/6484994n4r9e990494",
-                    "target:"https://bae.dome-marketplace.eu/"
+                    "target":"https://bae.dome-marketplace.eu/"
                     "roleNames": ["seller", "customer"]
                 }
             ]
