@@ -198,9 +198,20 @@ localBiblio:
 
         <section>Access Control requires a Verifiable Authorisation
 
-            In general, in an authentication and access control process, the entity willing to perform an action on a protected resource has to present (in a Verifiable Presentation) a VerifiableID and possibly one or more additional Verifiable Attestations.
-            
-            The credential should include identifying the employee (or any other subject) and a formal description of the concrete powers that have been delegated by the legal representative of the organisation.
+            Once the user is authenticated, the system should make a decision to grant or reject an access request to a protected resource from an already authenticated subject, based on what the subject is authorised to access.
+
+            Let’s take the example of when a Service Provider signs an agreement with a Service Consumer organisation (a legal person), and the Service Provider wants to allow access to some services to employees of the Consumer organisation under the conditions of the agreement.
+
+            In most cases, granting access is not an all-or-nothing decision. In general, the agreement between the Service Provider and Service Consumer specifies that only a subset of the employees of the Consumer organisation can access the services, and even in that subset not all employees have the same powers when accessing the services. For example, some employees have access to the administration of the service, some can perform some create/update/delete operations in a subset of the services, and some employees can only have read access to a subset of the services.
+
+            To allow for this granularity in an authentication and access control process, in general the entity willing to perform an action on a protected resource has to present (in a Verifiable Presentation) a VerifiableID and possibly one or more additional Verifiable Attestations.
+
+            At least one of the credentials should include claims identifying the employee (or any other subject) and a formal description of the concrete powers that have been delegated by the legal representative of the organisation, enabling the determination by the Service Provider whether the user is entitled to access a service and the operations that the user can perform on that service.
+
+            We define later a standard mechanism and format for a Verifiable Credential that enables this functionality in a simple, secure and with high degree of legal certainty compatible with eIDAS.
+
+            Such a credential is called a Verifiable Authorization:
+
 
             <x-diagram .ditaa>A credential as a Verifiable Authorisation
                                    +-----------------+
@@ -435,9 +446,9 @@ localBiblio:
 
             This private key controlled by the employee can be used to sign challenges from Relying Parties that receive the credential to prove that the person sending the credential is the same person that is identified in the `credentialSubject` object of the LEARCredential.
 
-            It is this property the one that makes this credential a VerifiableID that can be used for online authentication.
+            It is this property that makes this credential a VerifiableID that can be used for online authentication.
 
-            An example DID for th employee could be:
+            An example DID for the employee could be:
 
             <x-code .json>
                 {
@@ -773,7 +784,7 @@ localBiblio:
                 <ul>
                     - `pre-authorized_code`: REQUIRED. The code representing the authorization to obtain Credentials of a certain type.
 
-                    - `user_pin`: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of maximum 8 numeric characters (the numbers 0 - 9).
+                    - `user_pin`: OPTIONAL. String value containing a user PIN. This value MUST be present if user_pin_required was set to true in the Credential Offer. The string value MUST consist of a maximum of 8 numeric characters (the numbers 0 - 9).
 
                 In this profile the Wallet does not have to authenticate when using the Token Endpoint, because we are using the Pre-Authorized Code Grant Type, given the level of trust between the Issuer and the End User and that authentication was already performed at the beginning of the flow.
 
@@ -817,7 +828,7 @@ localBiblio:
 
             <section>Token Error Response
 
-                If the Token Request is invalid or unauthorized, the Authorization Server constructs the error response as defined in section 6.3 of [[OpenID.VCI]].
+                If the Token Request is invalid or unauthorised, the Authorization Server constructs the error response as defined in section 6.3 of [[OpenID.VCI]].
 
 
         <section>Request and receive Credential
@@ -830,9 +841,9 @@ localBiblio:
 
             The Wallet backend invokes the Credential Endpoint, which issues a Credential as approved by the End-User upon presentation of a valid Access Token representing this approval.
 
-            Communication with the Credential Endpoint MUST utilize TLS.
+            Communication with the Credential Endpoint MUST utilise TLS.
 
-            The client can request issuance of a Credential of a certain type multiple times, e.g., to associate the Credential with different public keys/Decentralized Identifiers (DIDs) or to refresh a certain Credential.
+            The client can request issuance of a Credential of a certain type multiple times, e.g., to associate the Credential with different public keys/Decentralised Identifiers (DIDs) or to refresh a certain Credential.
 
             If the Access Token is valid for requesting issuance of multiple Credentials, it is at the client's discretion to decide the order in which to request issuance of multiple Credentials requested in the Authorization Request.
 
@@ -940,7 +951,7 @@ localBiblio:
 
             <section>Credential Error Response
 
-                When the Credential Request is invalid or unauthorized, the Credential Issuer constructs the error response as defined in section 7.3.1 of OIDCVCI.
+                When the Credential Request is invalid or unauthorised, the Credential Issuer constructs the error response as defined in section 7.3.1 of OIDCVCI.
 
             <section>Credential Issuer Provided Nonce
 
@@ -997,7 +1008,7 @@ localBiblio:
 
                 -(4) The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
 
-                    If the user accessed directly the Login page, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
+                    If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
 
                 -(5) The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
 
@@ -1356,11 +1367,11 @@ localBiblio:
 
             This section assumes that authentication has already been performed and that the Relying Party receives a request to a protected resource, with a proper access token inside the request. If the request does not come with an access token, the request is rejected immediately (or the user is redirected to the Authentication service of the Relying Party, depending on the use case).
 
-            The Access Control mechanism described here is the same independently of whether the request comes from a user or a machine, so the M2M use case is supported without any modification. In the following description we will use the term `user` interchangeably for both the user as a natural person or the user as a machine.
+            The Access Control mechanism described here is the same independently of whether the request comes from a user or a machine, so the M2M use case is supported without any modification. In the following description we will use the term <b>user</b> interchangeably for both the user as a natural person or the user as a machine.
 
             However, the assumption is that all machines have an identity (they are assigned an identifier), and that they are acting `on behalf of` a legally valid identity in the sense of eIDAS2. In other words, we require that the identities of users and machines can be cryptographically bound to the real-world identity of either a natural person or a legal person in a way that provides legal certainty to the Relying Party regarding the chain of responsibility.
 
-            If the user is a natural person using the portal of the Relying Party, the request to the protected resource will come from the browser that the user employs to navigate the portal, and the access token will be included automatically by the browser in every request that is sent ot the Relying Party, for example when the user clicks a button or fills a form.
+            If the user is a natural person using the portal of the Relying Party, the request to the protected resource will come from the browser that the user employs to navigate the portal, and the access token will be included automatically by the browser in every request that is sent to the Relying Party, for example when the user clicks a button or fills a form.
 
             If the user is a server or device, it is assumed that it has obtained an access token previously as the result of an authentication process described above. The server or device is responsible for including the access token in every request that is sent to the Relying Party to access a protected resource.
 
