@@ -155,34 +155,34 @@ localBiblio:
             For the purpose of this discussion we use a diagram derived from the taxonomy <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
 
             <x-diagram .ditaa>A credential as a VerifiableID
-                                +-----------------+
-                                |                 |
-                                |  W3C Verifiable |
-                                |    Credential   |
-                                |                 |
-                                +-----------------+
+                                   +-----------------+
+                                   |                 |
+                                   |  W3C Verifiable |
+                                   |    Credential   |
+                                   |                 |
+                                   +-----------------+
                                             ^
                                             |
-                                        extends
+                                         extends
                                             |
-                                +--------+--------+
-                                |                 |
-                                |   Verifiable    |
-                                |  Attestation    |
-                                |                 |
-                                +-----------------+
+                                   +--------+--------+
+                                   |                 |
+                                   |   Verifiable    |
+                                   |  Attestation    |
+                                   |                 |
+                                   +-----------------+
                                             ^
                                             |
-                                        extends
+                                         extends
                                             |
                                             +-------------------\
                                             |                   |
-                                    +------+-------+    +------+--------+
-                                    |              |    |    Other      |
-                                    |  Verifiable  |    |   Verifiable  |
-                                    |     ID       |    |  Attestations |
-                                    |c5DF          |    |               |
-                                    +--------------+    +---------------+
+                                     +------+-------+    +------+--------+
+                                     |              |    |    Other      |
+                                     |  Verifiable  |    |   Verifiable  |
+                                     |     ID       |    |  Attestations |
+                                     |c5DF          |    |               |
+                                     +--------------+    +---------------+
 
 
             For example, in the case of a Diploma as a Verifiable Credential (a Verifiable Diploma), the credential is a Verifiable Attestation which indicates that the subject has certain skills or has achieved certain learning outcomes through formal or non-formal learning context. However, as in the case with normal Diplomas in paper of PDF format, this credential can be presented by anyone that holds the credential. In other words, the credential binds the identity of the subject with the claims inside the credential, but does not bind the identity of the holder of the credential with the identity of the subject of the credential, which requires a special mechanism in the issuance process.
@@ -203,28 +203,28 @@ localBiblio:
             The credential should include identifying the employee (or any other subject) and a formal description of the concrete powers that have been delegated by the legal representative of the organisation.
 
             <x-diagram .ditaa>A credential as a Verifiable Authorisation
-                                +-----------------+
-                                |                 |
-                                |  W3C Verifiable |
-                                |    Credential   |
-                                |                 |
-                                +-----------------+
+                                   +-----------------+
+                                   |                 |
+                                   |  W3C Verifiable |
+                                   |    Credential   |
+                                   |                 |
+                                   +-----------------+
                                             ^
                                             |
-                                        extends
+                                         extends
                                             |
-                                +--------+--------+
-                                |                 |
-                                |   Verifiable    |
-                                |  Attestation    |
-                                |                 |
-                                +-----------------+
+                                   +--------+--------+
+                                   |                 |
+                                   |   Verifiable    |
+                                   |  Attestation    |
+                                   |                 |
+                                   +-----------------+
                                             ^
                                             |
-                                        extends
+                                         extends
                                             |
-                    /--------------------+-------------------\
-                    |                    |                   |
+                       /--------------------+-------------------\
+                       |                    |                   |
                 +------+--------+    +------+-------+    +------+--------+
                 |               |    |              |    |    Other      |
                 |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
@@ -243,28 +243,28 @@ localBiblio:
             The concept of LEARCredential is described in the following diagram:
 
             <x-diagram .ditaa>The LEARCredential is both a Verifiable Authorisation and a VerifiableID
-                                +-----------------+
-                                |                 |
-                                |  W3C Verifiable |
-                                |    Credential   |
-                                |                 |
-                                +-----------------+
+                                   +-----------------+
+                                   |                 |
+                                   |  W3C Verifiable |
+                                   |    Credential   |
+                                   |                 |
+                                   +-----------------+
                                             ^
                                             |
-                                        extends
+                                         extends
                                             |
-                                +--------+--------+
-                                |                 |
-                                |   Verifiable    |
-                                |  Attestation    |
-                                |                 |
-                                +-----------------+
+                                   +--------+--------+
+                                   |                 |
+                                   |   Verifiable    |
+                                   |  Attestation    |
+                                   |                 |
+                                   +-----------------+
                                             ^
                                             |
-                                        extends
+                                         extends
                                             |
-                    /--------------------+-------------------\
-                    |                    |                   |
+                       /--------------------+-------------------\
+                       |                    |                   |
                 +------+--------+    +------+-------+    +------+--------+
                 |               |    |              |    |    Other      |
                 |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
@@ -274,14 +274,14 @@ localBiblio:
                         ^                    ^
                         |       extends      |
                         \---------+----------/
-                                |
-                        +--------+---------+
-                        |                  |
-                        |                  |
-                        |  LEARCredential  |
-                        |                  |
-                        |cGRE              |
-                        +------------------+
+                                  |
+                         +--------+---------+
+                         |                  |
+                         |                  |
+                         |  LEARCredential  |
+                         |                  |
+                         |cGRE              |
+                         +------------------+
 
             The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
 
