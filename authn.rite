@@ -1,5 +1,5 @@
 ---
-title: Authentication and Authorization with Verifiable Credentials using did:elsi
+title: Authentication and Authorization with Verifiable Credentials
 
 editors:
    - name: "Jesus Ruiz"
@@ -26,7 +26,7 @@ latestVersion: "https://alastria.github.io/did-method-elsi/authzn.html"
 edDraftURI: "https://alastria.github.io/did-method-elsi/authzn.html"
 github: "https://github.com/alastria/did-method-elsi/blob/main/authzn.html"
 og_description: >
-    Authentication and Authorization with Verifiable Credentials using using did:elsi
+    Authentication and Authorization with Verifiable Credentials
 og_site_name: Authn with Verifiable Credentials
 rite:
     codeStyle: github
@@ -114,11 +114,19 @@ localBiblio:
         title: "NIST Special Publication 800-178: A Comparison of Attribute Based Access Control (ABAC) Standards for Data Service Applications"
         href: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-178.pdf"
         date: "October 2016"
+    "ENISA-QES":
+        title: "Security guidelines on the appropriate use of qualified electronic signatures"
+        href: "https://www.enisa.europa.eu/publications/security-guidelines-on-the-appropriate-use-of-qualified-electronic-signatures"
+        date: "December 2016"
+    "ENISA-QSEAL":
+        title: "Security guidelines on the appropriate use of qualified electronic seals"
+        href: "https://www.enisa.europa.eu/publications/security-guidelines-on-the-appropriate-use-of-qualified-electronic-seals"
+        date: "June 2017"
 ---
 
 <section #abstract>
 
-    Once an organisation has onboarded an ecosystem like a Data Space, some of its employees have to be appointed to enable them to perform a concrete set of activities in the ecosystem. These activities are performed in the web portals of different organisations which are already participants in the ecosystem, like the onboarding service, the marketplace portals and also in the web portals of other participants.
+    We describe here a mechanism to use Verifiable Credentials to perform Authentication and Access Control leveraging the eIDAS trust framework and using advanced or qualified signatures and seals to provide a high level of legal certainty and specially enjoying the presumption of npn-repudiation provided by those eIDAS signatures.
 
     This document describes:
     
@@ -133,63 +141,114 @@ localBiblio:
 
     <section>Introduction
 
-        Once an organisation has onboarded an ecosystem like a Data Space, some of its employees have to be appointed to enable them to perform a concrete set of activities in the ecosystem. These activities are performed in the web portals of different organisations which are already participants in the ecosystem, like the onboarding service, the marketplace portals and also in the web portals of other participants.
+        We describe here a mechanism to use Verifiable Credentials to perform Authentication and Access Control leveraging the eIDAS trust framework and using advanced or qualified signatures and seals to provide a high level of legal certainty and specially enjoying the presumption of non-repudiation provided by those eIDAS signatures.
+
+        <x-warning>
+            We focus here on `legal persons`. It is out of scope the identification and authentication of `natural persons` (except when acting as representatives of the legal person, see below). Whenever eIDAS2 and the EUDIW (European Digital Identity Wallet) are ready, we will support that mechanism for identification and access control.
+
+        We support identification and access control of `legal persons` when they want to access products and services provided by other `legal entities`.
+
+        To do so, we define specific types of Verifiable Credentials with a format and a mechanism which specify: a way to sign the credentials; a way to bind the identity of the holder of a credential to the identity of the subject inside the credential; and a way to embed authorisation information in the credential with the powers that the legal entity has delegated to the subject inside the credential.
 
         This document describes:
         
         <ul>
-            - How an organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
+            - How an organisation can issue Verifiable Credentials to other entities enabling them to perform some specific processes in other organisations "on-behalf-of" the issuer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
 
             - How other organisations can accept those Verifiable Credentials to perform authentication and access control, leveraging the eIDAS legal framework to obtain the same levels of legal certainty and non-repudiation as when using other traditional forms of documentation.
             
-        The mechanisms described here can also be used when the users involved are not strictly employees, but it also works for contractors. It also can be used for customers of the organisation, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
+        The mechanisms described here can be used to generate credentials to employees, contractors, customers and even to machines and devices acting on behalf of an organisation. The schema is identical, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
 
-        For clarity of the exposition, we focus in this document on the employee use case, and later we generalise to other types of end-users, including machines and devices acting on behalf of an organisation.
+        <section>Signature of the Verifiable Credentials
 
-        At a high level, we want to enable the use of Verifiable Credentials so that when an entity (a legal person or a natural person acting on behalf of a legal person) wants to perform an action on a protected resource managed by a Relying Party, we use Verifiable Credentials to perform authentication of the entity and then access control based on the content of the Verifiable Credential(s) presented by that entity, and possibly additional authorisation information that the Relying Party considers relevant for controlling access to the protected resource (for example, the contractual status of the resource, time of the day or other context information).
+            The mechanism for signing the Verifiable Credentials:
+            
+            **Provides high assurance of the identity of the creator of the credential.**
+
+                We use **qualified certificates for electronic seals** provided by **eIDAS Qualified Trust Services Providers** (QTSPs) to seal credentials with **advanced electronic seals** (AdESeal) or **qualified electronic seals** (QESeal) with the **JSON Advanced Electronic Signature** format (JAdES).
+                
+                They provide **high assurance of the identity of the creator of the seal**. For example, it will be difficult for a malicious user to get a qualified seal certificate in the name of a company, because the QTSP will be responsible to check that such seal is issued to the persons representing the company and not to unauthorised persons.
+
+            **Enables authorised representative of the legal person to act on behalf of the legal person.**
+
+                We also can use **qualified certificates for electronic signatures** issued to **authorised representatives of the legal person** by a QTSP, to sign credentials with **advanced electronic signatures** (AdES) or **qualified electronic signatures** (QES) with the **JSON Advanced Electronic Signature** format (JAdES).
+                
+                This provides high legal predictability, including for the qualified electronic signature the benefits from the **legal equivalence to handwritten signatures**.
+
+                As stated by the eIDAS Regulation, when a transaction requires a qualified electronic seal from a legal person, a qualified electronic signature from the authorised representative of the legal person should be equally acceptable.
+
+                It is possible to certify elements that are bound to the signatory such as a title (e.g. Director), a link with its employer, etc. Because the QTSP is trusted for verifying the information it certifies, the Relying Party can get a high level of confidence in such information conveyed with the signature through the signatory's certificate.
+
+                This provides high legal predictability, including for the qualified electronic signature the benefits from the **legal equivalence to handwritten signatures**.
+
+                In this way, the Relying Party receiving Verifiable Credentials can have the same legal certainty than with any other document in other formats (e.g. PDF) signed with AdES or QES signatures or with handwritten signatures (in the case of QES).
+
+            **Provides high level of legal certainty and interoperability.**
+
+                Any basic signature benefits from the non-discrimination rule, which means that a Court in an EU Member State cannot reject it automatically as being invalid simply because they are in electronic form.
+                
+                However, their dependability is lower than that of an AdES or QES because the signatory may be required to prove the security of the technology being used if the validity of the signature is disputed before a court. This requires significant costs and efforts that could be avoided with relative ease by opting for the more established and standardised advanced and qualified signature solutions. It may also be the case that the relying parties have no applications or tools to validate such signature, when not based on standards; in such a scenario, the signature may be legally valid and technologically robust, but of limited use ([[ENISA-QES]] and [[ENISA-QSEAL]]).
+                
+                For these interoperability reasons, QES that are based on recognised EU standards are preferable unless the parties operate purely in a local context where the acceptance and usability of the chosen signature solution is sufficiently certain.
+                
+                Beyond the technical interoperability, the eIDAS Regulation also ensures the international recognition of electronic signatures.
+
+
+
+
+
 
         <section>Authentication requires a VerifiableID
+
 
             Not all types of Verifiable Credentials can be used as a mechanism for online authentication, because the Relying Party (the entity receiving the Verifiable Credential in an authentication process) needs to bind the identity of the user sending the credential to the claims attested about the subject inside the credential.
 
             For the purpose of this discussion we use a diagram derived from the taxonomy <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
 
-            <x-diagram .ditaa>A credential as a VerifiableID
-                                   +-----------------+
-                                   |                 |
-                                   |  W3C Verifiable |
-                                   |    Credential   |
-                                   |                 |
-                                   +-----------------+
-                                            ^
-                                            |
-                                         extends
-                                            |
-                                   +--------+--------+
-                                   |                 |
-                                   |   Verifiable    |
-                                   |  Attestation    |
-                                   |                 |
-                                   +-----------------+
-                                            ^
-                                            |
-                                         extends
-                                            |
-                                            +-------------------\
-                                            |                   |
-                                     +------+-------+    +------+--------+
-                                     |              |    |    Other      |
-                                     |  Verifiable  |    |   Verifiable  |
-                                     |     ID       |    |  Attestations |
-                                     |c5DF          |    |               |
-                                     +--------------+    +---------------+
+
+            <x-diagram .plantuml>Types of credentials
+                hide circle
+                hide empty members
+
+                class "<b>W3C Verifiable</b>\n<b>Credential</b>" as vc 
+                class "<b>Verifiable</b>\n<b>Attestation</b>" as va
+                vc <|-- va: extends
+
+                package "Authn & Authz" <<Rectangle>> {
+                    class "<b>VerifiableID</b>" as vid #Application {
+                        For authentication
+                    }
+                    class "<b>Verifiable Authorisation</b>" as vau #Application {
+                        For authorisation
+                    }
+                    class "<b>LEARCredential</b>" as lear #PaleGreen {
+                        For authentication &
+                        authorisation
+                    }
+                    va <|-- vid
+                    va <|-- vau: extends
+
+                    vau <|-- lear: extends
+                    vid <|-- lear: extends
+                }
+
+                package "Other uses" <<Rectangle>> {
+                    va <|-- "Other\nVerifiable Attestations"
+                }
+
+                class "<b>Employee</b>\n<b>credential</b>" as employee #Khaki
+                class "<b>Customer</b>\n<b>credential</b>" as customer #Khaki
+                class "<b>Machine</b>\n<b>credential</b>" as machine #Khaki
+                lear <... employee
+                lear <... customer
+                lear <... machine
 
 
             For example, in the case of a Diploma as a Verifiable Credential (a Verifiable Diploma), the credential is a Verifiable Attestation which indicates that the subject has certain skills or has achieved certain learning outcomes through formal or non-formal learning context. However, as in the case with normal Diplomas in paper of PDF format, this credential can be presented by anyone that holds the credential. In other words, the credential binds the identity of the subject with the claims inside the credential, but does not bind the identity of the holder of the credential with the identity of the subject of the credential, which requires a special mechanism in the issuance process.
 
             Most Verifiable Credentials will be issued as Verifiable Attestations, acting as efficient machine-processable and verifiable equivalent to their analog counterparts. Their purpose is to attest some attributes about the subject of the credential and not act as a mechanism for online authentication.
 
-            Instead, <b>a `VerifiableID` is a special form of a Verifiable Credential that a natural or legal person can use in an electronic identification process as evidence of whom he/she/it is</b> (comparable with a passport, physical IDcard, driving licence, social security card, member-card…).
+            Instead, **a `VerifiableID` is a special form of a Verifiable Credential that a natural or legal person can use in an electronic identification process as evidence of whom he/she/it is** (comparable with a passport, physical IDcard, driving licence, social security card, member-card…).
 
             VerifiableIDs can be of different types and be issued by different entities with different levels of assurance (in eIDAS terminology). They are issued with the purpose of serving as authentication mechanisms in online processes. In the near future, VerifiableIDs of the highest level of assurance (LoA High) will be issued to citizens and businesses by their governments under eIDAS2.
 
@@ -210,40 +269,7 @@ localBiblio:
 
             We define later a standard mechanism and format for a Verifiable Credential that enables this functionality in a simple, secure and with high degree of legal certainty compatible with eIDAS.
 
-            Such a credential is called a Verifiable Authorization:
-
-
-            <x-diagram .ditaa>A credential as a Verifiable Authorisation
-                                   +-----------------+
-                                   |                 |
-                                   |  W3C Verifiable |
-                                   |    Credential   |
-                                   |                 |
-                                   +-----------------+
-                                            ^
-                                            |
-                                         extends
-                                            |
-                                   +--------+--------+
-                                   |                 |
-                                   |   Verifiable    |
-                                   |  Attestation    |
-                                   |                 |
-                                   +-----------------+
-                                            ^
-                                            |
-                                         extends
-                                            |
-                       /--------------------+-------------------\
-                       |                    |                   |
-                +------+--------+    +------+-------+    +------+--------+
-                |               |    |              |    |    Other      |
-                |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
-                | Authorisation |    |     ID       |    |  Attestations |
-                |c5DF           |    |              |    |               |
-                +---------------+    +--------------+    +---------------+
-
-
+            Such a credential is called a Verifiable Authorization, represented in the figure above.
 
         <section>Combining VerifiableID and Verifiable Authorisation in the LEARCredential
 
@@ -251,48 +277,7 @@ localBiblio:
 
             The resulting credential is called LEARCredential and it is very useful when the holder/subject wants to use decentralised IAM mechanisms implemented by Relying Parties which are federated in a decentralised way using a common Trust Anchor Framework.
 
-            The concept of LEARCredential is described in the following diagram:
-
-            <x-diagram .ditaa>The LEARCredential is both a Verifiable Authorisation and a VerifiableID
-                                   +-----------------+
-                                   |                 |
-                                   |  W3C Verifiable |
-                                   |    Credential   |
-                                   |                 |
-                                   +-----------------+
-                                            ^
-                                            |
-                                         extends
-                                            |
-                                   +--------+--------+
-                                   |                 |
-                                   |   Verifiable    |
-                                   |  Attestation    |
-                                   |                 |
-                                   +-----------------+
-                                            ^
-                                            |
-                                         extends
-                                            |
-                       /--------------------+-------------------\
-                       |                    |                   |
-                +------+--------+    +------+-------+    +------+--------+
-                |               |    |              |    |    Other      |
-                |  Verifiable   |    |  Verifiable  |    |   Verifiable  |
-                | Authorisation |    |     ID       |    |  Attestations |
-                |c5DF           |    |c5DF          |    |               |
-                +---------------+    +--------------+    +---------------+
-                        ^                    ^
-                        |       extends      |
-                        \---------+----------/
-                                  |
-                         +--------+---------+
-                         |                  |
-                         |                  |
-                         |  LEARCredential  |
-                         |                  |
-                         |cGRE              |
-                         +------------------+
+            The concept of LEARCredential is described in the diagram above.
 
             The appointed employee will perform the process by using a special type of Verifiable Credential called `LEARCredential` (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
 

@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Authentication and Authorization with Verifiable Credentials using did:elsi</title>
+    <title>Authentication and Authorization with Verifiable Credentials</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Opengraph Facebook Meta Tags -->
-    <meta property="og:title" content="Authentication and Authorization with Verifiable Credentials using did:elsi">
+    <meta property="og:title" content="Authentication and Authorization with Verifiable Credentials">
     <meta property="og:type" content="website">
-    <meta property="og:description" content="Authentication and Authorization with Verifiable Credentials using using did:elsi">
+    <meta property="og:description" content="Authentication and Authorization with Verifiable Credentials">
     <meta property="og:site_name" content="Authn with Verifiable Credentials">
     <meta property="og:url" content="https://alastria.github.io/did-method-elsi/authzn.html">
 
@@ -71,6 +71,16 @@
                 "DIF.PresentationExchange": {
                         href: "https://identity.foundation/presentation-exchange/spec/v2.0.0/",
                         title: "Presentation Exchange 2.0.0",
+                },
+                "ENISA-QES": {
+                        date: "December 2016",
+                        href: "https://www.enisa.europa.eu/publications/security-guidelines-on-the-appropriate-use-of-qualified-electronic-signatures",
+                        title: "Security guidelines on the appropriate use of qualified electronic signatures",
+                },
+                "ENISA-QSEAL": {
+                        date: "June 2017",
+                        href: "https://www.enisa.europa.eu/publications/security-guidelines-on-the-appropriate-use-of-qualified-electronic-seals",
+                        title: "Security guidelines on the appropriate use of qualified electronic seals",
                 },
                 "ETSI-CERTOVERVIEW": {
                         date: "2020-07",
@@ -142,73 +152,7 @@
             },
         };
     </script>
-    <style>
-        .xnotet {
-            width:100%;
-            display: inline-block;
-            margin: 0;
-            border-left: 0.5em solid #52e052;
-            border-right: 6px solid #e9fbe9;
-            border-top: 6px solid #e9fbe9;
-            border-bottom: 6px solid #e9fbe9;
-        
-            overflow: auto;
-            page-break-inside: avoid;
-        }
-        .xnotea {
-            padding-left: 0.5em;
-            padding-right: 0.5em;
-        }
-        .xwarnt {
-            width:100%;
-            display: inline-block;
-            margin: 0;
-            border-left: 0.5em solid #f11;
-            border-right: 6px solid #fbe9e9;
-            border-top: 6px solid #fbe9e9;
-            border-bottom: 6px solid #fbe9e9;
-        
-            overflow: auto;
-            page-break-inside: avoid;
-        }
-        .xwarna {
-            padding-left: 0.5em;
-            padding-right: 0.5em;
-        }
-        .xnotep {
-            font-weight: bold;
-        }
-        code {
-            color: red;
-        }
-        pre.nohighlight {
-            padding: 0.5em;
-            margin: 0;
-        }
-        .codecolor {
-            width:100%;
-            display: inline-block;
-            margin: 0;
-            box-shadow: 5px 5px 5px rgba(68, 68, 68, 0.6);
-            border-radius: 7px;
-            border: 1px solid black;
-        }
-        div.nohighlight {
-            padding: 0.5em
-        }
-        ul.plain {
-            list-style: none;
-        }
-        ul.plain>li {
-            text-indent: -1em;
-        }
-        ul.plain>li>div {
-            text-indent:0;
-        }
-        ul.plain>li>p {
-            text-indent:0;
-        }
-    </style>
+    <link rel="stylesheet" href="./assets/templates/respec/additional.css">
 </head>
 
 <body>
@@ -218,7 +162,7 @@
 
 
 <section id='abstract'>
-    <p>Once an organisation has onboarded an ecosystem like a Data Space, some of its employees have to be appointed to enable them to perform a concrete set of activities in the ecosystem. These activities are performed in the web portals of different organisations which are already participants in the ecosystem, like the onboarding service, the marketplace portals and also in the web portals of other participants.
+    <p>We describe here a mechanism to use Verifiable Credentials to perform Authentication and Access Control leveraging the eIDAS trust framework and using advanced or qualified signatures and seals to provide a high level of legal certainty and specially enjoying the presumption of npn-repudiation provided by those eIDAS signatures.
     </p>
     <p>This document describes:
     </p>
@@ -235,30 +179,70 @@
 
     <section><h2>Introduction</h2>
 
-        <p>Once an organisation has onboarded an ecosystem like a Data Space, some of its employees have to be appointed to enable them to perform a concrete set of activities in the ecosystem. These activities are performed in the web portals of different organisations which are already participants in the ecosystem, like the onboarding service, the marketplace portals and also in the web portals of other participants.
+        <p>We describe here a mechanism to use Verifiable Credentials to perform Authentication and Access Control leveraging the eIDAS trust framework and using advanced or qualified signatures and seals to provide a high level of legal certainty and specially enjoying the presumption of non-repudiation provided by those eIDAS signatures.
+        </p>
+        <table style='width:100%;'><tr><td class='xwarnt'><aside class='xwarna'>
+
+            <p>We focus here on <code>legal persons</code>. It is out of scope the identification and authentication of <code>natural persons</code> (except when acting as representatives of the legal person, see below). Whenever eIDAS2 and the EUDIW (European Digital Identity Wallet) are ready, we will support that mechanism for identification and access control.
+            </p>
+        </aside></td></tr></table>
+        <p>We support identification and access control of <code>legal persons</code> when they want to access products and services provided by other <code>legal entities</code>.
+        </p>
+        <p>To do so, we define specific types of Verifiable Credentials with a format and a mechanism which specify: a way to sign the credentials; a way to bind the identity of the holder of a credential to the identity of the subject inside the credential; and a way to embed authorisation information in the credential with the powers that the legal entity has delegated to the subject inside the credential.
         </p>
         <p>This document describes:
         </p>
         <ul>
-            <li>How an organisation can issue Verifiable Credentials to its employees enabling them to perform some specific processes in other organisations "on-behalf-of" the employer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
+            <li>How an organisation can issue Verifiable Credentials to other entities enabling them to perform some specific processes in other organisations "on-behalf-of" the issuer, in a way which is compatible with eIDAS and so it provides a legal certainty and non-repudiation levels equivalent to signed documents typically used for those tasks.
             </li>
             <li>How other organisations can accept those Verifiable Credentials to perform authentication and access control, leveraging the eIDAS legal framework to obtain the same levels of legal certainty and non-repudiation as when using other traditional forms of documentation.
             </li>
         </ul>
-        <p>The mechanisms described here can also be used when the users involved are not strictly employees, but it also works for contractors. It also can be used for customers of the organisation, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
+        <p>The mechanisms described here can be used to generate credentials to employees, contractors, customers and even to machines and devices acting on behalf of an organisation. The schema is identical, except the issuance process is probably a little bit different and the roles and duties embedded in the credentials have different legal implications (but always in line with the legal framework, for example with the Consumer Protection Directive).
         </p>
-        <p>For clarity of the exposition, we focus in this document on the employee use case, and later we generalise to other types of end-users, including machines and devices acting on behalf of an organisation.
-        </p>
-        <p>At a high level, we want to enable the use of Verifiable Credentials so that when an entity (a legal person or a natural person acting on behalf of a legal person) wants to perform an action on a protected resource managed by a Relying Party, we use Verifiable Credentials to perform authentication of the entity and then access control based on the content of the Verifiable Credential(s) presented by that entity, and possibly additional authorisation information that the Relying Party considers relevant for controlling access to the protected resource (for example, the contractual status of the resource, time of the day or other context information).
-        </p>
+        <section><h2>Signature of the Verifiable Credentials</h2>
+
+            <p>The mechanism for signing the Verifiable Credentials:
+            </p>
+            <p><b>Provides high assurance of the identity of the creator of the credential.</b>
+                <p>We use <b>qualified certificates for electronic seals</b> provided by <b>eIDAS Qualified Trust Services Providers</b> (QTSPs) to seal credentials with <b>advanced electronic seals</b> (AdESeal) or <b>qualified electronic seals</b> (QESeal) with the <b>JSON Advanced Electronic Signature</b> format (JAdES).
+                </p>
+                <p>They provide <b>high assurance of the identity of the creator of the seal</b>. For example, it will be difficult for a malicious user to get a qualified seal certificate in the name of a company, because the QTSP will be responsible to check that such seal is issued to the persons representing the company and not to unauthorised persons.
+                </p>
+            </p>
+            <p><b>Enables authorised representative of the legal person to act on behalf of the legal person.</b>
+                <p>We also can use <b>qualified certificates for electronic signatures</b> issued to <b>authorised representatives of the legal person</b> by a QTSP, to sign credentials with <b>advanced electronic signatures</b> (AdES) or <b>qualified electronic signatures</b> (QES) with the <b>JSON Advanced Electronic Signature</b> format (JAdES).
+                </p>
+                <p>This provides high legal predictability, including for the qualified electronic signature the benefits from the <b>legal equivalence to handwritten signatures</b>.
+                </p>
+                <p>As stated by the eIDAS Regulation, when a transaction requires a qualified electronic seal from a legal person, a qualified electronic signature from the authorised representative of the legal person should be equally acceptable.
+                </p>
+                <p>It is possible to certify elements that are bound to the signatory such as a title (e.g. Director), a link with its employer, etc. Because the QTSP is trusted for verifying the information it certifies, the Relying Party can get a high level of confidence in such information conveyed with the signature through the signatory's certificate.
+                </p>
+                <p>This provides high legal predictability, including for the qualified electronic signature the benefits from the <b>legal equivalence to handwritten signatures</b>.
+                </p>
+                <p>In this way, the Relying Party receiving Verifiable Credentials can have the same legal certainty than with any other document in other formats (e.g. PDF) signed with AdES or QES signatures or with handwritten signatures (in the case of QES).
+                </p>
+            </p>
+            <p><b>Provides high level of legal certainty and interoperability.</b>
+                <p>Any basic signature benefits from the non-discrimination rule, which means that a Court in an EU Member State cannot reject it automatically as being invalid simply because they are in electronic form.
+                </p>
+                <p>However, their dependability is lower than that of an AdES or QES because the signatory may be required to prove the security of the technology being used if the validity of the signature is disputed before a court. This requires significant costs and efforts that could be avoided with relative ease by opting for the more established and standardised advanced and qualified signature solutions. It may also be the case that the relying parties have no applications or tools to validate such signature, when not based on standards; in such a scenario, the signature may be legally valid and technologically robust, but of limited use ([[ENISA-QES]] and [[ENISA-QSEAL]]).
+                </p>
+                <p>For these interoperability reasons, QES that are based on recognised EU standards are preferable unless the parties operate purely in a local context where the acceptance and usability of the chosen signature solution is sufficiently certain.
+                </p>
+                <p>Beyond the technical interoperability, the eIDAS Regulation also ensures the international recognition of electronic signatures.
+                </p>
+            </p>
+        </section>
         <section><h2>Authentication requires a VerifiableID</h2>
 
             <p>Not all types of Verifiable Credentials can be used as a mechanism for online authentication, because the Relying Party (the entity receiving the Verifiable Credential in an authentication process) needs to bind the identity of the user sending the credential to the claims attested about the subject inside the credential.
             </p>
             <p>For the purpose of this discussion we use a diagram derived from the taxonomy <a href="https://ec.europa.eu/digital-building-blocks/wikis/display/EBSIDOC/Data+Models+and+Schemas">defined in EBSI</a>:
             </p>
-            <figure><img src='builtassets/diagram_305c81c1bd87a8e5efb039f7ee33ee41.png' alt=''>
-            <figcaption>A credential as a VerifiableID</figcaption></figure>
+            <figure><img src='builtassets/plantuml_78bc41a433a2657fc60dd292cca51c5d.png' alt=''>
+            <figcaption>Types of credentials</figcaption></figure>
 
             <p>For example, in the case of a Diploma as a Verifiable Credential (a Verifiable Diploma), the credential is a Verifiable Attestation which indicates that the subject has certain skills or has achieved certain learning outcomes through formal or non-formal learning context. However, as in the case with normal Diplomas in paper of PDF format, this credential can be presented by anyone that holds the credential. In other words, the credential binds the identity of the subject with the claims inside the credential, but does not bind the identity of the holder of the credential with the identity of the subject of the credential, which requires a special mechanism in the issuance process.
             </p>
@@ -285,11 +269,8 @@
             </p>
             <p>We define later a standard mechanism and format for a Verifiable Credential that enables this functionality in a simple, secure and with high degree of legal certainty compatible with eIDAS.
             </p>
-            <p>Such a credential is called a Verifiable Authorization:
+            <p>Such a credential is called a Verifiable Authorization, represented in the figure above.
             </p>
-            <figure><img src='builtassets/diagram_b55036304d683abd69b58f039171edaa.png' alt=''>
-            <figcaption>A credential as a Verifiable Authorisation</figcaption></figure>
-
         </section>
         <section><h2>Combining VerifiableID and Verifiable Authorisation in the LEARCredential</h2>
 
@@ -297,11 +278,8 @@
             </p>
             <p>The resulting credential is called LEARCredential and it is very useful when the holder/subject wants to use decentralised IAM mechanisms implemented by Relying Parties which are federated in a decentralised way using a common Trust Anchor Framework.
             </p>
-            <p>The concept of LEARCredential is described in the following diagram:
+            <p>The concept of LEARCredential is described in the diagram above.
             </p>
-            <figure><img src='builtassets/diagram_fbbeb7b4ff0898bcce0f78ae0e543ce5.png' alt=''>
-            <figcaption>The LEARCredential is both a Verifiable Authorisation and a VerifiableID</figcaption></figure>
-
             <p>The appointed employee will perform the process by using a special type of Verifiable Credential called <code>LEARCredential</code> (from <b>L</b>egal <b>E</b>ntity <b>A</b>ppointed <b>R</b>epresentative).
             </p>
             <p>To achieve a high level of legal certainty under eIDAS, the LEARCredential is:
@@ -340,7 +318,7 @@
             </p>
             <p>Both types of eIDAS certificates mentioned above are an electronic attestation <b>that links electronic seal/signature validation data to a legal person and confirms the name of that person</b>. This way, the certificate, usually linked to the sealed/signed document, can be used to verify the identity of the creator of the seal/signature and whether the document has been sealed/signed using the corresponding private key.
             </p>
-            <p>Before issuing a certificate like the above, the Qualified Trust Service Provider (QTSP) performs validations against `Authentic Sources` to authenticate the identity of the organisation:
+            <p>Before issuing a certificate like the above, the Qualified Trust Service Provider (QTSP) performs validations against <code>Authentic Sources</code> to authenticate the identity of the organisation:
             </p>
             <ul>
                 <li>The data concerning the business name or corporate name of the organisation.
@@ -362,7 +340,7 @@
                 <li>Includes a public key where the corresponding private key is controlled by the employee, enabling him to prove that he is the holder of the credential when it is being used in an authentication process like the ones used as examples in this document.
                 </li>
             </ul>
-            <p>The LEARCredential uses the `did:elsi` method for the identifiers of legal persons involved in the process, to facilitate the DID resolution and linkage with the eIDAS certificates. The `did:elsi` method is specified in [[[DID-ELSI]]].
+            <p>The LEARCredential uses the <code>did:elsi</code> method for the identifiers of legal persons involved in the process, to facilitate the DID resolution and linkage with the eIDAS certificates. The <code>did:elsi</code> method is specified in [[[DID-ELSI]]].
             </p>
             <p>The high-level view of the process is described in the following diagram, when a COO (Chief Operating Officer) appoints an employee to perform some processes:
             </p>
@@ -445,15 +423,15 @@
         </section>
         <section><h2>DID of the employee</h2>
 
-            <p>In this example we use the `did:key` method for the DID of the employee, which provides a very high level of privacy and given the way the LEARCredential is generated it supports the verification of the chain of responsibility with a proper level of guarantee.
+            <p>In this example we use the <code>did:key</code> method for the DID of the employee, which provides a very high level of privacy and given the way the LEARCredential is generated it supports the verification of the chain of responsibility with a proper level of guarantee.
             </p>
-            <p>If the highest levels of assurance and legal compliance is desired and the employee has an eIDAS certificate for signatures (in this case a personal one, not one like the COO), we could use the `elsi:did` method for identification of the employee. However, the organisation (GoodAir in our example) should make sure that the employee is aware of and agree to the possible privacy implications of doing so, given the personal details leaked from the eIDAS certificate.
+            <p>If the highest levels of assurance and legal compliance is desired and the employee has an eIDAS certificate for signatures (in this case a personal one, not one like the COO), we could use the <code>elsi:did</code> method for identification of the employee. However, the organisation (GoodAir in our example) should make sure that the employee is aware of and agree to the possible privacy implications of doing so, given the personal details leaked from the eIDAS certificate.
             </p>
             <p>Those personal details are exactly the same as if the employee signs any document with a digital certificate, but care should be taken by the organisation because in this case the signature would be done "on behalf of" his employer and not as an individual personal action.
             </p>
-            <p>Even though this is not unique to the `did:elsi` method, this also implies that the onboarding service has to handle those personal details in the same way as if it would be accepting any other document signed with a certificate for signatures, and ensure compliance with GDPR. This is "business as usual" when using digital signatures, but we want to make sure that this is taken care of when implementing the authentication and access control mechanisms described here.
+            <p>Even though this is not unique to the <code>did:elsi</code> method, this also implies that the onboarding service has to handle those personal details in the same way as if it would be accepting any other document signed with a certificate for signatures, and ensure compliance with GDPR. This is "business as usual" when using digital signatures, but we want to make sure that this is taken care of when implementing the authentication and access control mechanisms described here.
             </p>
-            <p>In this example we assume the usage of the `did:key` method for the employee to protect his privacy as much as possible.
+            <p>In this example we assume the usage of the <code>did:key</code> method for the employee to protect his privacy as much as possible.
             </p>
             <p>This DID for the employee is an additional claim to the ones presented above, using the <code>id</code> field in the <code>credentialSubject</code> object.
             </p>
@@ -564,7 +542,7 @@
 ]
 </pre></td></tr></table>
 
-            <p>In the above example, we have specified that the roles object referenced in the credential with `id: https://dome-marketplace.eu//lear/v1/6484994n4r9e990494` is granting the employee of GoodAir (in our example) to access services in the DOME marketplace (specified with the field <code>target</code>) with the roles <code>seller</code> and <code>customer</code> (which are the roles of the <a href="https://business-api-ecosystem.readthedocs.io/en/latest/index.html">FIWARE BAE component</a>).
+            <p>In the above example, we have specified that the roles object referenced in the credential with <code>id: https://dome-marketplace.eu//lear/v1/6484994n4r9e990494</code> is granting the employee of GoodAir (in our example) to access services in the DOME marketplace (specified with the field <code>target</code>) with the roles <code>seller</code> and <code>customer</code> (which are the roles of the <a href="https://business-api-ecosystem.readthedocs.io/en/latest/index.html">FIWARE BAE component</a>).
             </p>
             <p>If <code>target</code> is omitted, the roles would apply to any target organisation. If we need to specify more than one target organisation, the array should include as many objects as required.
             </p>
@@ -643,7 +621,7 @@
             </p>
             <p>The wallet is assumed to be a Web application with a wallet backend, maybe implemented as a PWA so it has some offline capabilities and can be installed in the device, providing a user experience similar to a native application. Private key management and most sensitive operations are performed in a backend server, operated by an entity trusted by the end user. Other profiles can support native and completely offline PWA mobile applications, for end users.
             </p>
-            <p>This type of wallet supports natural persons, juridical persons and natural persons who are legal entity representatives of juridical persons. For juridical persons the wallet is usually called an `enterprise wallet` but we will use here just the term <code>wallet</code> unless the distinction is required.
+            <p>This type of wallet supports natural persons, juridical persons and natural persons who are legal entity representatives of juridical persons. For juridical persons the wallet is usually called an <code>enterprise wallet</code> but we will use here just the term <code>wallet</code> unless the distinction is required.
             </p>
             <p>In this profile we assume that the wallet is not previously registered with the Issuer and that the wallet does not expose public endpoints that are called by the Issuer, even if the wallet has a backend server that could implement those endpoints. That makes the wallet implementations in this profile to be very similar in interactions to a full mobile implementation, making migration to a full mobile implementation easier.
             </p>
@@ -718,7 +696,7 @@
                         </aside></td></tr></table>
                         </div>
                     </li>
-                    <li><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is `urn:ietf:params:oauth:grant-type:pre-authorized_code`. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.
+                    <li><code>grants</code>: REQUIRED. A JSON object indicating to the Wallet the Grant Type <code>pre-authorized_code</code>. This grant is represented by a key and an object, where the key is <code>urn:ietf:params:oauth:grant-type:pre-authorized_code</code>. In this profile the credential issuance flow requires initial authentication of the End User by the Credential Issuer, so the Pre-Authorized Code Flow achieves a good level of security and we do not need the more general Authorization Code Flow.
                         <div>
                         <p>In other scenarios like when the wallet is a native mobile application and the user interacts with the Issuer exclusively with the mobile (without the laptop), then the Authorization Code Flow has to be used. This can be described in detail in a different profile.
                         </p>
@@ -783,9 +761,9 @@
             </p>
             <p>A Credential Issuer is identified in this context by a case sensitive URL using the https scheme that contains scheme, host and, optionally, port number and path components, but no query or fragment components. No DID is used in this context.
             </p>
-            <p>Credential Issuers MUST make a JSON document available at the path formed by concatenating the string `/.well-known/openid-credential-issuer` to the Credential Issuer Identifier. If the Credential Issuer value contains a path component, any terminating / MUST be removed before appending `/.well-known/openid-credential-issuer`.
+            <p>Credential Issuers MUST make a JSON document available at the path formed by concatenating the string <code>/.well-known/openid-credential-issuer</code> to the Credential Issuer Identifier. If the Credential Issuer value contains a path component, any terminating / MUST be removed before appending <code>/.well-known/openid-credential-issuer</code>.
             </p>
-            <p><code>openid-credential-issuer</code> MUST point to a JSON document compliant with this specification and MUST be returned using the `application/json` content type.
+            <p><code>openid-credential-issuer</code> MUST point to a JSON document compliant with this specification and MUST be returned using the <code>application/json</code> content type.
             </p>
             <p>The retrieval of the Credential Issuer configuration is illustrated below.
             </p>
@@ -931,7 +909,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
             </section>
             <section><h2>Credential Request</h2>
 
-                <p>The Wallet backend makes a Credential Request to the Credential Endpoint by sending the following parameters in the entity-body of an HTTP POST request using the `application/json` media type.
+                <p>The Wallet backend makes a Credential Request to the Credential Endpoint by sending the following parameters in the entity-body of an HTTP POST request using the <code>application/json</code> media type.
                 </p>
                 <ul>
                     <li><code>format</code>: REQUIRED. This profile uses the Credential format identifier <code>jwt_vc_json</code>.
@@ -950,7 +928,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
                             <li>in the JOSE Header,
                                 <div>
                                 <ul>
-                                    <li><code>typ</code>: REQUIRED. MUST be `openid4vci-proof+jwt`, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].
+                                    <li><code>typ</code>: REQUIRED. MUST be <code>openid4vci-proof+jwt</code>, which explicitly types the proof JWT as recommended in Section 3.11 of [[RFC8725]].
                                     </li>
                                     <li><code>alg</code>: REQUIRED. A digital signature algorithm identifier such as per IANA "JSON Web Signature and Encryption Algorithms" registry. MUST NOT be none or an identifier for a symmetric algorithm (MAC).
                                     </li>
@@ -1005,9 +983,9 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
 }
 </pre></td></tr></table>
 
-                    <p>In the example of a LEARCredential, the wallet generates a pair of public/private keys and a `did:key` identifier which is univocally related to the public key. This is the reason why the <code>kid</code> field above is exactly the DID identifier under this DID method. The `did:key` method is very simple and achieves a very high degree of privacy, allowing the creation of many different identifiers which can be one-use only if so desired.
+                    <p>In the example of a LEARCredential, the wallet generates a pair of public/private keys and a <code>did:key</code> identifier which is univocally related to the public key. This is the reason why the <code>kid</code> field above is exactly the DID identifier under this DID method. The <code>did:key</code> method is very simple and achieves a very high degree of privacy, allowing the creation of many different identifiers which can be one-use only if so desired.
                     </p>
-                    <p>The `did:key` method is perfect for the requirements of our usage of the LEARCredential. Any other suitable DID method can be used if it is required, but this is out of scope for this profile.
+                    <p>The <code>did:key</code> method is perfect for the requirements of our usage of the LEARCredential. Any other suitable DID method can be used if it is required, but this is out of scope for this profile.
                     </p>
                 </section>
             </section>
@@ -1092,10 +1070,10 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
             <p>The high level flow is the following:
             </p>
             <ul class='plain'>
-                <li id='994.1'><a href='#994.1' class='selfref'><b>1</b></a> The user sends a request to access a protected resource managed by the Relying Party.
+                <li id='979.1'><a href='#979.1' class='selfref'><b>1</b></a> The user sends a request to access a protected resource managed by the Relying Party.
 
                 </li>
-                <li id='996.2'><a href='#996.2' class='selfref'><b>2</b></a> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+                <li id='981.2'><a href='#981.2' class='selfref'><b>2</b></a> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
 
                     <div>
                     <ul>
@@ -1110,24 +1088,24 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
                     </p>
                     </div>
                 </li>
-                <li id='1005.3'><a href='#1005.3' class='selfref'><b>3</b></a> The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
+                <li id='990.3'><a href='#990.3' class='selfref'><b>3</b></a> The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
 
                     <div>
                     <p>An example flow with a natural person would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
                     </p>
                     </div>
                 </li>
-                <li id='1009.4'><a href='#1009.4' class='selfref'><b>4</b></a> The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
+                <li id='994.4'><a href='#994.4' class='selfref'><b>4</b></a> The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
 
                     <div>
                     <p>If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
                     </p>
                     </div>
                 </li>
-                <li id='1013.5'><a href='#1013.5' class='selfref'><b>5</b></a> The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
+                <li id='998.5'><a href='#998.5' class='selfref'><b>5</b></a> The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
 
                 </li>
-                <li id='1015.6'><a href='#1015.6' class='selfref'><b>6</b></a> The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
+                <li id='1000.6'><a href='#1000.6' class='selfref'><b>6</b></a> The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
 
                     <div>
                     <p>The Trust Framework is composed of one or more Trusted Lists where each list is specialised in some specific domain of trust.
@@ -1186,24 +1164,24 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1060.1'><a href='#1060.1' class='selfref'><b>1</b></a> The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
+                <li id='1045.1'><a href='#1045.1' class='selfref'><b>1</b></a> The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
 
 <div>
                     <p>We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
                     </p>
 </div>
                 </li>
-                <li id='1065.2'><a href='#1065.2' class='selfref'><b>2</b></a> The browser sends a request to the Packet Delivery portal server.
+                <li id='1050.2'><a href='#1050.2' class='selfref'><b>2</b></a> The browser sends a request to the Packet Delivery portal server.
 
 <div>
 </div>
                 </li>
-                <li id='1069.3'><a href='#1069.3' class='selfref'><b>3</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+                <li id='1054.3'><a href='#1054.3' class='selfref'><b>3</b></a> The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
 
 <div>
 </div>
                 </li>
-                <li id='1072.4'><a href='#1072.4' class='selfref'><b>4</b></a> The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
+                <li id='1057.4'><a href='#1057.4' class='selfref'><b>4</b></a> The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
 
 <div>
                     <p>A QR code is used because a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
@@ -1216,7 +1194,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
 
 </div>
                 </li>
-                <li id='1079.5'><a href='#1079.5' class='selfref'><b>5</b></a> The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
+                <li id='1064.5'><a href='#1064.5' class='selfref'><b>5</b></a> The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
 
 <div>
                     <figure id='qr_code_authreq'>
@@ -1227,22 +1205,22 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
                     </figure>
 </div>
                 </li>
-                <li id='1088.6'><a href='#1088.6' class='selfref'><b>6</b></a> The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
+                <li id='1073.6'><a href='#1073.6' class='selfref'><b>6</b></a> The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
 
 <div>
 </div>
                 </li>
-                <li id='1093.7'><a href='#1093.7' class='selfref'><b>7</b></a> After confirmation by the user, the wallet performs a `GET /authentication-requests` to the endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
+                <li id='1078.7'><a href='#1078.7' class='selfref'><b>7</b></a> After confirmation by the user, the wallet performs a `GET /authentication-requests` to the endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
 
 <div>
 </div>
                 </li>
-                <li id='1097.8'><a href='#1097.8' class='selfref'><b>8</b></a> The VC Verifier creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are described in detail in the next section
+                <li id='1082.8'><a href='#1082.8' class='selfref'><b>8</b></a> The VC Verifier creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are described in detail in the next section
 
 <div>
 </div>
                 </li>
-                <li id='1100.9'><a href='#1100.9' class='selfref'><b>9</b></a> The Verifier replies to the wallet with the Authorization Request
+                <li id='1085.9'><a href='#1085.9' class='selfref'><b>9</b></a> The Verifier replies to the wallet with the Authorization Request
 
 <div>
 </div>
@@ -1256,38 +1234,38 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
             <p>The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular taking into account that this is a cross-device interaction:
             </p>
             <ul>
-                <li id='1111.response_type'><a href='#1111.response_type' class='selfref'><b>response_type</b></a> (REQUIRED). Must be <code>vp_token</code>. This parameter is defined in [[RFC6749]]. The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type <code>vp_token</code>. This response type asks the Wallet to return only a VP Token in the Authorization Response, which is what we want in our case.
+                <li id='1096.response_type'><a href='#1096.response_type' class='selfref'><b>response_type</b></a> (REQUIRED). Must be <code>vp_token</code>. This parameter is defined in [[RFC6749]]. The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type <code>vp_token</code>. This response type asks the Wallet to return only a VP Token in the Authorization Response, which is what we want in our case.
 
                 </li>
-                <li id='1113.scope'><a href='#1113.scope' class='selfref'><b>scope</b></a> (REQUIRED). This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <a href="#request_scope" class="xref">Request Scope</a> for more details. We use in this instance the value <code>dome.credentials.presentation.LEARCredential</code> which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type <code>LEARCredential</code>.
+                <li id='1098.scope'><a href='#1098.scope' class='selfref'><b>scope</b></a> (REQUIRED). This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <a href="#request_scope" class="xref">Request Scope</a> for more details. We use in this instance the value <code>dome.credentials.presentation.LEARCredential</code> which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type <code>LEARCredential</code>.
 
                 </li>
-                <li id='1115.response_mode'><a href='#1115.response_mode' class='selfref'><b>response_mode</b></a> REQUIRED. MUST be <code>direct_post</code>. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter <code>redirect_uri</code> described below.
+                <li id='1100.response_mode'><a href='#1100.response_mode' class='selfref'><b>response_mode</b></a> REQUIRED. MUST be <code>direct_post</code>. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter <code>redirect_uri</code> described below.
 
                 </li>
-                <li id='1117.redirect_uri'><a href='#1117.redirect_uri' class='selfref'><b>redirect_uri</b></a> (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using <code>POST</code> and encoding `application/json`).
+                <li id='1102.redirect_uri'><a href='#1102.redirect_uri' class='selfref'><b>redirect_uri</b></a> (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using <code>POST</code> and encoding <code>application/json</code>).
 
                 </li>
-                <li id='1119.client_id'><a href='#1119.client_id' class='selfref'><b>client_id</b></a> REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
+                <li id='1104.client_id'><a href='#1104.client_id' class='selfref'><b>client_id</b></a> REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
 
                 </li>
-                <li id='1121.client_id_scheme'><a href='#1121.client_id_scheme' class='selfref'><b>client_id_scheme</b></a> REQUIRED. MUST have the value <code>did</code>. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[ETSI-JADES]] format, which defines the mechanism to identify the public key.
+                <li id='1106.client_id_scheme'><a href='#1106.client_id_scheme' class='selfref'><b>client_id_scheme</b></a> REQUIRED. MUST have the value <code>did</code>. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses <code>did:elsi</code> and so the request MUST be signed with the eIDAS certificate according to the [[ETSI-JADES]] format, which defines the mechanism to identify the public key.
 
                     <div>
-                    <p>All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
+                    <p>All Verifier metadata other than the public key MUST be obtained from the client_metadata or the <code>client_metadata_uri parameter</code> as defined in Section 5 of [[OpenID.VP]].
                     </p>
                     </div>
                 </li>
-                <li id='1125.nonce'><a href='#1125.nonce' class='selfref'><b>nonce</b></a> REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
+                <li id='1110.nonce'><a href='#1110.nonce' class='selfref'><b>nonce</b></a> REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
 
                 </li>
-                <li id='1127.state'><a href='#1127.state' class='selfref'><b>state</b></a> REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
+                <li id='1112.state'><a href='#1112.state' class='selfref'><b>state</b></a> REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
 
                 </li>
-                <li id='1129.presentation_definition'><a href='#1129.presentation_definition' class='selfref'><b>presentation_definition</b></a> CONDITIONAL. A string containing a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because <code>scope</code> already specifies the credential type.
+                <li id='1114.presentation_definition'><a href='#1114.presentation_definition' class='selfref'><b>presentation_definition</b></a> CONDITIONAL. A string containing a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because <code>scope</code> already specifies the credential type.
 
                 </li>
-                <li id='1131.presentation_definition_uri'><a href='#1131.presentation_definition_uri' class='selfref'><b>presentation_definition_uri</b></a> CONDITIONAL. A string containing a URL pointing to a resource where a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because <code>scope</code> already specifies the credential type.
+                <li id='1116.presentation_definition_uri'><a href='#1116.presentation_definition_uri' class='selfref'><b>presentation_definition_uri</b></a> CONDITIONAL. A string containing a URL pointing to a resource where a <code>presentation_definition</code> JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because <code>scope</code> already specifies the credential type.
 
                 </li>
             </ul>
@@ -1340,17 +1318,17 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1187.10'><a href='#1187.10' class='selfref'><b>10</b></a> Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
+                <li id='1172.10'><a href='#1172.10' class='selfref'><b>10</b></a> Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
 
 <div>
 </div>
                 </li>
-                <li id='1190.11'><a href='#1190.11' class='selfref'><b>11</b></a> Verification that the DID in the `client_id` field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.
+                <li id='1175.11'><a href='#1175.11' class='selfref'><b>11</b></a> Verification that the DID in the `client_id` field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.
 
 <div>
 </div>
                 </li>
-                <li id='1193.12'><a href='#1193.12' class='selfref'><b>12</b></a> Verification that the entity identified in the `client_id` field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID in the `client_id` field.
+                <li id='1178.12'><a href='#1178.12' class='selfref'><b>12</b></a> Verification that the entity identified in the `client_id` field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID in the `client_id` field.
 
 <div>
                     <p>The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard.
@@ -1359,7 +1337,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
                     </p>
                     <p>In most other cases, for example when the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the onboarding service (meaning that the Wallet user trusts on the onboarding service, in the same way as all other participants).
                     </p>
-                    <p>In this case, to check if the DID is a participant on the ecosystem, the wallet sends a `GET /api/did/v1/identifiers/{did-to-verify}` request to the endpoint of one of several trusted servers implementing the functionality to query the Trusted Participant Registry, where `{did-to-verify}` is the actual DID the Wallet wants to check (in our example it would be `did:elsi:VATFR-99999999`, corresponding to the RP) . The API returns a JSON document as a DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the Wallet user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the Wallet of the user, to facilitate the use of the wallet.
+                    <p>In this case, to check if the DID is a participant on the ecosystem, the wallet sends a <code>GET /api/did/v1/identifiers/{did-to-verify}</code> request to the endpoint of one of several trusted servers implementing the functionality to query the Trusted Participant Registry, where <code>{did-to-verify}</code> is the actual DID the Wallet wants to check (in our example it would be <code>did:elsi:VATFR-99999999</code>, corresponding to the RP) . The API returns a JSON document as a DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the Wallet user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the Wallet of the user, to facilitate the use of the wallet.
                     </p>
 </div>
                 </li>
@@ -1375,7 +1353,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1227.13'><a href='#1227.13' class='selfref'><b>13</b></a> The wallet creates an Authorization Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authorization Response are described below.
+                <li id='1212.13'><a href='#1212.13' class='selfref'><b>13</b></a> The wallet creates an Authorization Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authorization Response are described below.
 
 <div>
                     <p>The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only <code>vp_token</code> as the <code>response_type</code>, the VP Token is provided directly in the Authorization Response and a separate <code>id_token</code> is not needed.
@@ -1415,7 +1393,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
                     </p>
 </div>
                 </li>
-                <li id='1259.14'><a href='#1259.14' class='selfref'><b>14</b></a> The wallet sends the Authorization Response to the endpoint received in the `redirect_uri` parameter of the Authorization Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
+                <li id='1244.14'><a href='#1244.14' class='selfref'><b>14</b></a> The wallet sends the Authorization Response to the endpoint received in the `redirect_uri` parameter of the Authorization Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
 
 <div>
 
@@ -1435,7 +1413,7 @@ presentation_submission=[see definition below]
         </section>
         <section><h2>Authenticating the user with the LEARCredential</h2>
 
-            <p>We should remember that inside the LEARCredential the <code>credentialSubject</code> object has an <code>id</code> field with value `did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK` which is the DID of the user. It was generated during the creation of the LEARCredential, and the Relying Party should trust that the credential was generated in the proper way binding cryptographically the DID with the LEARCredential, as described in a previous section. It is the same trust that should be put in the generation of any other signed document, like a contract or invoice.
+            <p>We should remember that inside the LEARCredential the <code>credentialSubject</code> object has an <code>id</code> field with value <code>did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK</code> which is the DID of the user. It was generated during the creation of the LEARCredential, and the Relying Party should trust that the credential was generated in the proper way binding cryptographically the DID with the LEARCredential, as described in a previous section. It is the same trust that should be put in the generation of any other signed document, like a contract or invoice.
             </p>
             <p>The process of verifying the Authorization Response and authenticating the user with the LEARCredential is the following:
             </p>
@@ -1445,7 +1423,7 @@ presentation_submission=[see definition below]
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1290.15_and_16'><a href='#1290.15_and_16' class='selfref'><b>15 and 16</b></a> The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
+                <li id='1275.15_and_16'><a href='#1275.15_and_16' class='selfref'><b>15 and 16</b></a> The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
 
 <div>
                     <ol>
@@ -1456,16 +1434,16 @@ presentation_submission=[see definition below]
                     </ol>
                     <p>Both verifications can be done by performing DID resolution, checking that the resulting DID Document contains the public key corresponding to the one specified in the Verifiable Credential, and by verifying the digital signature of the credential against that public key.
                     </p>
-                    <p>In our case the LEARCredential was issued using the `did:elsi` method, so resolution is very simple and is specified in [[DID-ELSI]].
+                    <p>In our case the LEARCredential was issued using the <code>did:elsi</code> method, so resolution is very simple and is specified in [[DID-ELSI]].
                     </p>
 </div>
                 </li>
-                <li id='1301.17'><a href='#1301.17' class='selfref'><b>17</b></a> After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
+                <li id='1286.17'><a href='#1286.17' class='selfref'><b>17</b></a> After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
 
 <div>
 </div>
                 </li>
-                <li id='1304.18'><a href='#1304.18' class='selfref'><b>18</b></a> The Verifier creates an Access Token for the user so it can be used later for access services provided by the Relying Party (in the case of onboarding, those services would be the ones related to the onboarding process implemented by the Onboarding portal). The Access Token is generated in JWT format and signed by the VC Verifier. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
+                <li id='1289.18'><a href='#1289.18' class='selfref'><b>18</b></a> The Verifier creates an Access Token for the user so it can be used later for access services provided by the Relying Party (in the case of onboarding, those services would be the ones related to the onboarding process implemented by the Onboarding portal). The Access Token is generated in JWT format and signed by the VC Verifier. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
 
 <div>
                     <p>For our use case, the payload of the JWT access token looks like:
@@ -1504,12 +1482,12 @@ presentation_submission=[see definition below]
                     </ul>
 </div>
                 </li>
-                <li id='1337.19'><a href='#1337.19' class='selfref'><b>19</b></a> The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
+                <li id='1322.19'><a href='#1322.19' class='selfref'><b>19</b></a> The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
 
 <div>
 </div>
                 </li>
-                <li id='1340.20'><a href='#1340.20' class='selfref'><b>20</b></a> The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
+                <li id='1325.20'><a href='#1325.20' class='selfref'><b>20</b></a> The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
 
 <div>
                     <ul>
@@ -1535,7 +1513,7 @@ access_token=[the access token]
                     </p>
 </div>
                 </li>
-                <li id='1360.21'><a href='#1360.21' class='selfref'><b>21</b></a> The portal of the Relying Party refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent back by the browser to the portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
+                <li id='1345.21'><a href='#1345.21' class='selfref'><b>21</b></a> The portal of the Relying Party refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent back by the browser to the portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
 
 <div>
 </div>
@@ -1551,7 +1529,7 @@ access_token=[the access token]
             </p>
             <p>The Access Control mechanism described here is the same independently of whether the request comes from a user or a machine, so the M2M use case is supported without any modification. In the following description we will use the term <b>user</b> interchangeably for both the user as a natural person or the user as a machine.
             </p>
-            <p>However, the assumption is that all machines have an identity (they are assigned an identifier), and that they are acting `on behalf of` a legally valid identity in the sense of eIDAS2. In other words, we require that the identities of users and machines can be cryptographically bound to the real-world identity of either a natural person or a legal person in a way that provides legal certainty to the Relying Party regarding the chain of responsibility.
+            <p>However, the assumption is that all machines have an identity (they are assigned an identifier), and that they are acting <code>on behalf of</code> a legally valid identity in the sense of eIDAS2. In other words, we require that the identities of users and machines can be cryptographically bound to the real-world identity of either a natural person or a legal person in a way that provides legal certainty to the Relying Party regarding the chain of responsibility.
             </p>
             <p>If the user is a natural person using the portal of the Relying Party, the request to the protected resource will come from the browser that the user employs to navigate the portal, and the access token will be included automatically by the browser in every request that is sent to the Relying Party, for example when the user clicks a button or fills a form.
             </p>
@@ -1584,12 +1562,12 @@ access_token=[the access token]
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1412.1'><a href='#1412.1' class='selfref'><b>1</b></a> The user (natural person or machine) sends a request to access a protected resource, and the PEP (Policy Enforcement Point) component intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.
+                <li id='1397.1'><a href='#1397.1' class='selfref'><b>1</b></a> The user (natural person or machine) sends a request to access a protected resource, and the PEP (Policy Enforcement Point) component intercepts the call. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded if they are accepted.
 
 <div>
 </div>
                 </li>
-                <li id='1415.2'><a href='#1415.2' class='selfref'><b>2</b></a> If the request is not authenticated it is rejected with an error. Depending on the use case, the error returned can contain additional information that enables the user agent to be redirected to perform authentication.
+                <li id='1400.2'><a href='#1400.2' class='selfref'><b>2</b></a> If the request is not authenticated it is rejected with an error. Depending on the use case, the error returned can contain additional information that enables the user agent to be redirected to perform authentication.
 
 <div>
                     <p>After inspecting the request, the PEP requests a decision from the PDP passing a series of attributes. In general, the request from the PEP to the PDP consists of <b>subject</b> attributes (typically for the user who issued the request), <b>resource</b> attributes (the resource for which access is sought), <b>action</b> attributes (the operations to be performed on the resource), and <b>environment</b> attributes.
@@ -1670,12 +1648,12 @@ access_token=[the access token]
                     </p>
 </div>
                 </li>
-                <li id='1490.3'><a href='#1490.3' class='selfref'><b>3</b></a> The PDP asks the PRP for the policy rules applicable to this request. The policy rules may be specified using different policy languages, like ODRL, XACML or Rego. It is very difficult to make the interface between the PDP and the PRP completely transparent and independent from the concrete policy language used in an implementation. However, The PDP can be modularised in order to minimise the dependency and reduce the cost of migration to other policy language in the future.
+                <li id='1475.3'><a href='#1475.3' class='selfref'><b>3</b></a> The PDP asks the PRP for the policy rules applicable to this request. The policy rules may be specified using different policy languages, like ODRL, XACML or Rego. It is very difficult to make the interface between the PDP and the PRP completely transparent and independent from the concrete policy language used in an implementation. However, The PDP can be modularised in order to minimise the dependency and reduce the cost of migration to other policy language in the future.
 
 <div>
 </div>
                 </li>
-                <li id='1493.4'><a href='#1493.4' class='selfref'><b>4</b></a> The PDP receives the policy rules to apply for the current request.
+                <li id='1478.4'><a href='#1478.4' class='selfref'><b>4</b></a> The PDP receives the policy rules to apply for the current request.
 
 <div>
 </div>
@@ -1700,17 +1678,17 @@ access_token=[the access token]
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1522.4'><a href='#1522.4' class='selfref'><b>4</b></a> The PDP receives the policy rules to apply for the current request.
+                <li id='1507.4'><a href='#1507.4' class='selfref'><b>4</b></a> The PDP receives the policy rules to apply for the current request.
 
 <div>
 </div>
                 </li>
-                <li id='1525.5'><a href='#1525.5' class='selfref'><b>5</b></a> The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, and also the set of Trusted Issuers Lists to query. The concrete Trusted Lists to query are dynamic and depend on the specific policies associated to the request.
+                <li id='1510.5'><a href='#1510.5' class='selfref'><b>5</b></a> The PDP performs an initial evaluation of the policy rules and if the attributes of the request are not sufficient for rule and policy evaluation, it determines the PIP stores to query, and also the set of Trusted Issuers Lists to query. The concrete Trusted Lists to query are dynamic and depend on the specific policies associated to the request.
 
 <div>
 </div>
                 </li>
-                <li id='1529.6'><a href='#1529.6' class='selfref'><b>6</b></a> Based on the policies and the attributes of the request, the PDP queries the PIP for additional attributes needed for the policy evaluation.
+                <li id='1514.6'><a href='#1514.6' class='selfref'><b>6</b></a> Based on the policies and the attributes of the request, the PDP queries the PIP for additional attributes needed for the policy evaluation.
 
 <div>
                     <p>Now that the PDP has the policy rules to apply and the attributes from the request and the ones retrieved from the PIP, the PDP can determine the actual Trusted Lists that have to be queried in order to be able to evaluate the policies.
@@ -1747,12 +1725,12 @@ access_token=[the access token]
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1573.6'><a href='#1573.6' class='selfref'><b>6</b></a> Based on the policies and the attributes of the request, the PDP queries the PIP for additional attributes needed for the policy evaluation.
+                <li id='1558.6'><a href='#1558.6' class='selfref'><b>6</b></a> Based on the policies and the attributes of the request, the PDP queries the PIP for additional attributes needed for the policy evaluation.
 
 <div>
 </div>
                 </li>
-                <li id='1577.7'><a href='#1577.7' class='selfref'><b>7</b></a> Based on the policies and the attributes of the request, the PDP queries one or more Trusted Issuer Lists to check that the credentials received comply with the requirements specified in the policies.
+                <li id='1562.7'><a href='#1562.7' class='selfref'><b>7</b></a> Based on the policies and the attributes of the request, the PDP queries one or more Trusted Issuer Lists to check that the credentials received comply with the requirements specified in the policies.
 
 <div>
 </div>
@@ -1769,27 +1747,27 @@ access_token=[the access token]
 <!-- ****** EXPLANATIONS **** -->
 
             <ul class='plain'>
-                <li id='1600.8'><a href='#1600.8' class='selfref'><b>8</b></a> The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP, the attributes received from the PIP, and the Trusted Issuers Lists queried. After the evaluation the PDP computes a decision, either to accept or to reject the request.
+                <li id='1585.8'><a href='#1585.8' class='selfref'><b>8</b></a> The PDP performs a final evaluation of the policy rules, taking into consideration the attributes received from the PEP, the attributes received from the PIP, and the Trusted Issuers Lists queried. After the evaluation the PDP computes a decision, either to accept or to reject the request.
 
 <div>
 </div>
                 </li>
-                <li id='1603.9'><a href='#1603.9' class='selfref'><b>9</b></a> The PDP returns the decision to the PEP, which will enforce it.
+                <li id='1588.9'><a href='#1588.9' class='selfref'><b>9</b></a> The PDP returns the decision to the PEP, which will enforce it.
 
 <div>
 </div>
                 </li>
-                <li id='1606.10'><a href='#1606.10' class='selfref'><b>10</b></a> If the decision from the PDP is to reject the request, the PEP returns an error to the user. Otherwise, it forwards the original request to the Resource for execution.
+                <li id='1591.10'><a href='#1591.10' class='selfref'><b>10</b></a> If the decision from the PDP is to reject the request, the PEP returns an error to the user. Otherwise, it forwards the original request to the Resource for execution.
 
 <div>
 </div>
                 </li>
-                <li id='1609.11'><a href='#1609.11' class='selfref'><b>11</b></a> The resource executes the request and returns the result.
+                <li id='1594.11'><a href='#1594.11' class='selfref'><b>11</b></a> The resource executes the request and returns the result.
 
 <div>
 </div>
                 </li>
-                <li id='1612.12'><a href='#1612.12' class='selfref'><b>12</b></a> The PEP returns the result to the user.
+                <li id='1597.12'><a href='#1597.12' class='selfref'><b>12</b></a> The PEP returns the result to the user.
 
 <div>
 </div>
@@ -1816,7 +1794,7 @@ access_token=[the access token]
     </p>
     <p>The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
     </p>
-    <figure><img src='builtassets/diagram_36c71184cf20e51b32d23a987b6a6750.svg' alt=''>
+    <figure><img src='builtassets/d2_36c71184cf20e51b32d23a987b6a6750.svg' alt=''>
     <figcaption></figcaption></figure>
 
     <section id='participant'><h2>GoodAir: the company that wants to perform the process</h2>
@@ -1870,7 +1848,7 @@ access_token=[the access token]
         </p>
         <p>The regulator approves or suspends each service from a TSP individually, and the services are the root anchor for a given trust environment.
         </p>
-        <p>In our case, the entry for RealTruth in the TL includes a `&ltTSPService&gt` entry, and inside it the `&ltServiceDigitalIdentity&gt` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
+        <p>In our case, the entry for RealTruth in the TL includes a <code>&ltTSPService&gt</code> entry, and inside it the <code>&ltServiceDigitalIdentity&gt</code> entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
         </p>
 
 <table style="width:100%;"><tr><td class="codecolor">
@@ -1884,7 +1862,7 @@ access_token=[the access token]
 
         <p>Which in the <code>organizationIdentifier</code> field (OID 2.5.4.97) specifies the unique organisation identifier assigned by the German regulatory authority to the TSP: VATDE-170173453.
         </p>
-        <p>RealTruth provides `Legal Person Representative Certificates` which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
+        <p>RealTruth provides <code>Legal Person Representative Certificates</code> which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
         </p>
         <p>The certification policies of RealTruth includes the following sentences:
         </p>
@@ -1902,7 +1880,7 @@ access_token=[the access token]
                 </li>
             </ul>
         </blockquote>
-        <p>The TSP (RealTruth in this case) performs the verifications against `Authentic Sources`.
+        <p>The TSP (RealTruth in this case) performs the verifications against <code>Authentic Sources</code>.
         </p>
         <blockquote>
             <p>Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
