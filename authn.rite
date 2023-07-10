@@ -12,9 +12,9 @@ copyright: >
    <a rel="license" href="https://creativecommons.org/licenses/by/4.0/legalcode">
    Creative Commons Attribution 4.0 International Public License</a>
 
-latestVersion: "https://alastria.github.io/did-method-elsi/authzn.html"
-edDraftURI: "https://alastria.github.io/did-method-elsi/authzn.html"
-github: "https://github.com/alastria/did-method-elsi/blob/main/authzn.html"
+latestVersion: "https://alastria.github.io/did-method-elsi/authn.html"
+edDraftURI: "https://alastria.github.io/did-method-elsi/authn.html"
+github: "https://github.com/alastria/did-method-elsi/blob/main/authn.html"
 og_description: >
     Authentication and Authorization of Legal Persons with Verifiable Credentials
 og_site_name: Authn with Verifiable Credentials
