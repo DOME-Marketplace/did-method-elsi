@@ -1,5 +1,5 @@
 ---
-title: Authentication and Authorization of Legal Persons with Verifiable Credentials
+title: Authentication and authorization of entities acting on behalf of legal persons with Verifiable Credentials under eIDAS framework
 
 editors:
     - name: "Jesus Ruiz"
@@ -16,7 +16,7 @@ latestVersion: "https://alastria.github.io/did-method-elsi/authn.html"
 edDraftURI: "https://alastria.github.io/did-method-elsi/authn.html"
 github: "https://github.com/alastria/did-method-elsi/blob/main/authn.html"
 og_description: >
-    Authentication and Authorization of Legal Persons with Verifiable Credentials
+    Authentication and authorization of entities acting on behalf of legal persons with Verifiable Credentials under eIDAS framework
 og_site_name: Authn with Verifiable Credentials
 rite:
     codeStyle: github
@@ -138,7 +138,7 @@ localBiblio:
 
 <section #abstract>
 
-        We describe here a mechanism to perform authentication and access control of legal persons using Verifiable Credentials by:
+        We describe here a mechanism to perform authentication and access control of legal persons or entities acting on behalf of a legal person using Verifiable Credentials by:
         
         <ul>
             - making the credential a `legally binding document` under the [[eIDAS]] framework, by signing the credential with an advanced or qualified seal/signature;
@@ -155,8 +155,8 @@ localBiblio:
 
     <section>Introduction
 
-        We describe here a mechanism to perform authentication and access control of legal persons using Verifiable Credentials by:
-        
+        We describe here a mechanism to perform authentication and access control of legal persons or entities acting on behalf of a legal person using Verifiable Credentials by:
+
         <ul>
             - making the credential a `legally binding document` under the [[eIDAS]] framework, by signing the credential with an advanced or qualified seal/signature;
             - making the credential a `VerifiableID`, by binding the identities of the subject and holder of the credential so it can be used for authentication;
