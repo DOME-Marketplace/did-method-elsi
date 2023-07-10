@@ -134,6 +134,10 @@ localBiblio:
     "EU_Trusted_Lists":
         title: "EU Trusted Lists"
         href: "https://digital-strategy.ec.europa.eu/en/policies/eu-trusted-lists"
+    "Actor-DataSpaces":
+        title: "Extending Actor Models in Data Spaces"
+        href: "https://dl.acm.org/doi/pdf/10.1145/3543873.3587645"
+        date: "April 2023"
 ---
 
 <section #abstract>
@@ -180,6 +184,8 @@ localBiblio:
         In the context of authentication and access management, the legal entity acting as consumer organisation will be named `Participant`. The digital representation of a natural person, acting on behalf of a Participant, is referred to as a `Principal`. However, when the context is clear and we need to refer to eIDAS legal terms, we will use the term `user` (defined in the Glossary) to denote a natural or legal person, or a natural person representing a legal person using a wallet to authenticate.
 
         The legal entity acting as service provider and performing authentication and access management will be called `Relying Party`.
+
+        The approach is similar to the on-behalf-of actor model described in [[Actor-DataSpaces]] but our focus is on the compliance with the eIDAS legal framework to enable not only Data Spaces but any type of ecosystem to leverage the eIDAS trust framework and achieve a high level of legal certainty with the presumption of non-repudiation in the courts.
 
         The mechanism described here allows a Relying Party receiving a Verifiable Credential from a principal engaging in an authentication process to perform the following verifications:
 
