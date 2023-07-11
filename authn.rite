@@ -152,9 +152,11 @@ localBiblio:
 
 <section #abstract>
 
-        We describe a mechanism which combines eIDAS X.509 certificates issued by QTSPs, advanced or qualified signatures and seals, and Verifiable Credentials to enable Decentralised Identity and Access Management (DIAM) in B2B ecosystems that require a high level of legal certainty, reduced manual processes and reduced dependency in third parties for the operation of the ecosystem:
+        We describe a mechanism which combines eIDAS X.509 certificates issued by QTSPs, advanced or qualified signatures and seals, and Verifiable Credentials to enable Decentralised Identity and Access Management (DIAM) in B2B ecosystems where it is required a high level of legal certainty, reduced manual processes and reduced dependency in third parties for the operation of the ecosystem.
 
         The mechanism enables authentication and access control of **entities acting on behalf of a legal person** with much more descriptive power and flexibility than trying to use just X.509 certificates, and in a more efficient and automated way than using just signed PDFs.
+
+        The mechanism is aligned with the upcoming EDIW (European Digital Identity Wallet) and its supporting eIDAS2 regulation, but it advances the state of the art by focusing entirely on legal persons. The mechanism can **not** be used for natural persons, but for legal persons there is no need to wait for future regulation and it can be implemented today.
         
         The mechanism leverages Verifiable Credentials and the existing eIDAS framework by:
         
@@ -227,22 +229,6 @@ localBiblio:
         This mechanism leverages the eIDAS trust framework using advanced or qualified signatures and seals to provide a **high level of legal certainty and enjoying the presumption of non-repudiation in the courts**, something that does not happen when using other types of basic signatures.
 
     <section>Introduction
-
-        We describe here a mechanism to perform authentication and access control of legal persons or entities acting on behalf of a legal person using Verifiable Credentials by:
-
-        <ul>
-            - making the credential a `legally binding document` under the [[eIDAS]] framework, by signing the credential with an advanced or qualified seal/signature;
-            - making the credential a `VerifiableID`, by binding the identities of the subject and holder of the credential so it can be used for authentication;
-            - making the credential a `Verifiable Authorisation`, by embedding authorisation information in the credential and binding it to the identities of the issuer and subject.
-        
-        The credential is a **legally binding machine-readable document where the issuer attests that it delegates the set of powers specified in the credential to the user identified as the subject of the credential**. The subject can then **use the credential to authenticate to a Relying Party** because the identities of holder and subject are bound.
-
-        This mechanism leverages the eIDAS trust framework using advanced or qualified signatures and seals to provide a **high level of legal certainty and enjoying the presumption of non-repudiation in the courts**, something that does not happen when using other types of basic signatures.
-
-        <x-warning>
-            We focus here on `legal persons` and not on `natural persons` (except when acting as representatives of the legal person, see below).            
-            
-            Whenever the EDIW (European Digital Identity Wallet) and its supporting eIDAS2 regulation are ready, we will support that mechanism for identification and access control of natural persons, as a natural extension to the mechanism described here.
 
         In a typical B2B ecosystem, the agreements between a product/service provider and the consumer are formalised among legal persons (also known in this document as 'organisations').
 
