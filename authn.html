@@ -196,28 +196,28 @@
 
 
 <section id='abstract'>
-        <p>We describe a mechanism which combines eIDAS X.509 certificates issued by QTSPs, advanced or qualified signatures and seals, and Verifiable Credentials to enable Decentralised Identity and Access Management (DIAM) in B2B ecosystems where it is required a high level of legal certainty, reduced manual processes and reduced dependency in third parties for the operation of the ecosystem.
-        </p>
-        <p>The mechanism enables authentication and access control of <b>entities acting on behalf of a legal person</b> with much more descriptive power and flexibility than trying to use just X.509 certificates of representation, and in a more efficient and automated way than using just signed PDFs.
-        </p>
-        <p>The mechanism is aligned with the upcoming EDIW (European Digital Identity Wallet) and its supporting eIDAS2 regulation, but it advances the state of the art by focusing entirely on legal persons. The mechanism can <b>not</b> be used for natural persons, but for legal persons there is no need to wait for future regulation and it can be implemented today.
-        </p>
-        <p>The mechanism leverages Verifiable Credentials and the existing eIDAS framework by:
-        </p>
-        <ul>
-            <li>making the credential a <b>machine-readable e-mandate</b> by embedding authorisation information in the credential using a formal language and binding it to the identities of the issuer and subject.
-            </li>
-            <li>making the credential a <b>legally binding document</b> under the [[eIDAS]] framework, by signing the credential with an advanced or qualified seal/signature.
-            </li>
-            <li>making the credential an <b>authentication mechanism</b>, by binding the identities of the subject and holder of the credential so it can be used for authentication.
-            </li>
-        </ul>
-        <p>In this way, the credential is a <b>legally binding machine-readable document where the issuer attests that it delegates the set of powers specified in the credential to the user identified as the subject of the credential</b>.
-        </p>
-        <p>The subject can then <b>use the credential to authenticate to a Relying Party</b> because the identities of holder and subject are bound.
-        </p>
-        <p>This mechanism leverages the eIDAS trust framework using advanced or qualified signatures and seals to provide a <b>high level of legal certainty and enjoying the presumption of non-repudiation in the courts</b>, something that does not happen when using other types of basic signatures.
-        </p>
+    <p>We describe a mechanism which combines eIDAS X.509 certificates issued by QTSPs, advanced or qualified signatures and seals, and Verifiable Credentials to enable Decentralised Identity and Access Management (DIAM) in B2B ecosystems where it is required a high level of legal certainty, reduced manual processes and reduced dependency in third parties for the operation of the ecosystem.
+    </p>
+    <p>The mechanism enables authentication and access control of <b>entities acting on behalf of a legal person</b> with much more descriptive power and flexibility than trying to use just X.509 certificates of representation, and in a more efficient and automated way than using just signed PDFs.
+    </p>
+    <p>The mechanism is aligned with the upcoming EDIW (European Digital Identity Wallet) and its supporting eIDAS2 regulation, but it advances the state of the art by focusing entirely on legal persons. The mechanism can <b>not</b> be used for natural persons, but for legal persons there is no need to wait for future regulation and it can be implemented today.
+    </p>
+    <p>The mechanism leverages Verifiable Credentials and the existing eIDAS framework by:
+    </p>
+    <ul>
+        <li>making the credential a <b>machine-readable e-mandate</b> by embedding authorisation information in the credential using a formal language and binding it to the identities of the issuer and subject.
+        </li>
+        <li>making the credential a <b>legally binding document</b> under the [[eIDAS]] framework, by signing the credential with an advanced or qualified seal/signature.
+        </li>
+        <li>making the credential an <b>authentication mechanism</b>, by binding the identities of the subject and holder of the credential so it can be used for authentication.
+        </li>
+    </ul>
+    <p>In this way, the credential is a <b>legally binding machine-readable document where the issuer attests that it delegates the set of powers specified in the credential to the user identified as the subject of the credential</b>.
+    </p>
+    <p>The subject can then <b>use the credential to authenticate to a Relying Party</b> because the identities of holder and subject are bound.
+    </p>
+    <p>This mechanism leverages the eIDAS trust framework using advanced or qualified signatures and seals to provide a <b>high level of legal certainty and enjoying the presumption of non-repudiation in the courts</b>, something that does not happen when using other types of basic signatures.
+    </p>
 </section>
 <section id='conformance'>
 </section>
@@ -225,29 +225,33 @@
 
     <section id='Problem Statement'><h2>Problem Statement</h2>
 
-        <p>Representation powers and mandates are an essential element for businesses establishing relationships with other businesses, governments and customers, because in many cases natural persons act on behalf of legal persons and depending on the sensitivity of the involved data/processes the Relying Party wants to enforce a high level of compliance and reduce associated legal risks.
-        </p>
-        <p>The "traditional" way to solve this is by using manual processes and paper/PDF documents associated to onboarding and Know-Your-Customer (KYC) processes, that the Relying Party verifies until it is satisfied with the level of legal risk assumed when allowing a Principal to access some services on behalf of the Participant. Those setup processes are normally cumbersome, slow and people-intensive, creating a lot of friction in the initial stages of using a service, especially when strong identification is required by the nature of the service.
-        </p>
-        <p>Verifiable Credentials can become a good instrument to migrate those paper/PDF documents to a machine-readable and legally-binding format and streamline and automate most of the tasks in this area, making the whole process more efficient while maintaining the same level of compliance and legal risk than with traditional processes.
+        <p>Representation powers and mandates are an essential element for businesses establishing relationships with other businesses, governments and customers, because in many cases <b>natural persons act on behalf of legal persons</b> and depending on the sensitivity of the involved data/processes the Relying Party may want to enforce a high level of legal compliance and reduce associated legal risks.
         </p>
         <p>Electronic powers of representation and mandates are an <b>explicit objective of the European Digital Identity Wallet</b> (EDIW) and the proposed amendment to eIDAS to support it:
         </p>
         <blockquote>
-            <p>To achieve simplification and cost reduction benefits to persons and businesses across the Union, including by enabling <b>powers of representation and e-mandates</b>, Member States should issue EDIWs relying on common standards and technical specifications to ensure seamless interoperability and to adequately increase the IT security, strengthen robustness against cyber-attacks and thus significantly reduce the potential risks of ongoing digitalisation for citizens and businesses.
+            <p>To achieve <b>simplification and cost reduction benefits to persons and businesses across the Union, including by enabling powers of representation and e-mandates</b>, Member States should issue EDIWs relying on common standards and technical specifications to ensure seamless interoperability and to adequately increase the IT security, strengthen robustness against cyber-attacks and thus significantly reduce the potential risks of ongoing digitalisation for citizens and businesses.
             </p>
             <figcaption>—[[[eIDAS2.Regulation]]]
             </figcaption>
         </blockquote>
+        <p>The traditional way to solve this is by using cumbersome processes associated to onboarding and Know-Your-Customer (KYC) procedures, in many cases manual processes and paper/PDF documents that the Relying Party verifies until it is satisfied with the level of legal risk assumed when allowing a Principal to access some services on behalf of the Participant. Those setup processes are normally cumbersome, slow and people-intensive, creating a lot of friction in the initial stages of using a service, especially when strong identification is required by the nature of the service.
+        </p>
+        <p>Standard eIDAS certificates of representation can help (see an example QTSP <a href="https://eadtrust.eu/en/electronic-certificates/legal-entity-representative/">Certificate of Legal Entity Representative</a>), but they tend to be for natural persons with full powers or for very standard use cases.
+        </p>
+        <p>For a more granular specification of the powers of a natural person when acting on behalf of a legal person, other solutions have been implemented in different Member States, but typically centralised, non-interoperable among them and limited to the services provided by the Public Administration. In the private sector there is not any standardised solution and basically every company does it their own way.
+        </p>
+        <p><b>Verifiable Credentials</b> can become a good instrument to implement a machine-readable and legally-binding e-mandate with much more descriptive power and flexibility than trying to use just certificates of representation, while maintaining the same level of compliance and legal risk than with traditional processes, and this is the reason why it is included in the objectives of the upcoming eIDAS2 regulation.
+        </p>
         <p>However, currently there are important barriers that hinder the adoption of an EU wide solution for cross-border transfer of representation information, being one of the most relevant the <b>lack of a common semantic framework</b>.
         </p>
-        <p>Representation is complex, and electronic mandates schemes and policies are basically national and usually do not contemplate the possibility to use those mandates in cross-border scenarios. The problem of mandates when accessing services from a Public Administration is extremely complex, so we will focus here on the private sector: when both the Relying Party and the Participant are legal persons from the private sector.
+        <p>Representation is complex, and electronic mandates schemes and policies are basically national and usually do not contemplate the possibility to use those mandates in cross-border scenarios. The problem of mandates when accessing services from a Public Administration is extremely complex, so <b>we will focus here on the private sector</b>: when both the Relying Party and the Participant are legal persons from the private sector.
         </p>
-        <p>In order to have a usable mechanism using Verifiable Credentials, the main requirements are the following:
+        <p>In order to have a simple, flexible and powerful mechanism using Verifiable Credentials, the main requirements are the following:
         </p>
         <ul>
-            <li id='REQ-01'><b>REQ-01</b>: <b>The credential is an e-mandate</b>, by embedding authorisation information in the credential and binding it to the identities of the issuer and subject. We call such a credential a <code>Verifiable Authorisation</code>.
-                <p>We need to define a controlled vocabulary that can be used to express in a formal language (e.g. ODRL) the semantics of the powers delegated to a Principal by the Participant.
+            <li id='REQ-01'><b>REQ-01</b>: <b>The credential is an e-mandate</b>, by embedding authorisation information in the credential and binding it to the identities of the issuer and subject. We call such a credential a "Verifiable Authorisation".
+                <p>We need to define a <b>controlled vocabulary</b> that can be used to express in a formal language (e.g. ODRL) the semantics of the powers delegated to a Principal by the Participant.
                 </p>
             </li>
             <li id='REQ-02'><b>REQ-02</b>: <b>The Relying Party does not have to know in advance the Principal</b> accessing its services on behalf of a Participant.
@@ -269,7 +273,7 @@
                 </p>
             </li>
             <li id='REQ-05'><b>REQ-05</b>: The Relying Party can verify that the issuer of the credential corresponds to a <b>real-world identity which is fully accountable</b> for the contents of the credential, without needing any additional third-party, trust framework or participant list associated to a given Data Space or Federation.
-                <p>Because we use an eIDAS signature/seal for the credential, the current EU legal and trust framework in place since 2016 is enough for the Relying Party to verify that the Participant has issued a legally-binding mandate to the Principal.
+                <p>Using an eIDAS signature/seal for the credential, the current EU legal and trust framework in place since 2016 is enough for the Relying Party to verify that the Participant has issued a legally-binding mandate to the Principal.
                 </p>
             </li>
         </ul>
@@ -1261,7 +1265,7 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
     </section>
     <section id='Authenticating with Verifiable Credentials'><h2>Authenticating with Verifiable Credentials</h2>
 
-        <section id='Overview1036'><h2>Overview</h2>
+        <section id='Overview1040'><h2>Overview</h2>
 
             <p>Authentication requires a special type of Verifiable Credential called a VerifiableID. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a VerifiableId and a Verifiable Authorization.
             </p>
@@ -1665,7 +1669,7 @@ access_token=[the access token]
     </section>
     <section id='accesscontrol'><h2>Access control with Verifiable Credentials</h2>
 
-        <section id='Overview1424'><h2>Overview</h2>
+        <section id='Overview1428'><h2>Overview</h2>
 
             <p>This section assumes that authentication has already been performed and that the Relying Party receives a request to a protected resource, with a proper access token inside the request. If the request does not come with an access token, the request is rejected immediately (or the user is redirected to the Authentication service of the Relying Party, depending on the use case).
             </p>
