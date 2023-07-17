@@ -270,20 +270,24 @@ localBiblioFile: "localbiblio.yaml"
 
             <x-diagram .plantuml>Chain of trust
                 @startuml
+                left to right direction
 
-                package "eIDAS" {
-                    database "Source of Trust"
-                    component "Qualified Trust Service Provider"
-                    "Source of Trust" --> "Qualified Trust Service Provider" : Verified by QTSP
+                package "eIDAS Trust Framework" {
+                    database "Source of Trust" as st
+                    component "Qualified\nTrust Service\nProvider" as qtsp
+                    st --> qtsp : Read by\nQTSP
 
                 }
 
                 package "Legal entity" {
-                    actor "Representative of legal entity"
-                    "Qualified Trust Service Provider" --> "Representative of legal entity" : Issues certificate of representation
+                    actor "Representative of\nlegal entity" as lr
+                    qtsp --> lr : Issues\ncertificate\nof representation
 
-                    actor "Employee with limited powers"
-                    "Representative of legal entity" --> "Employee with limited powers" : Issues LEARCredential\nwith limited powers
+                    actor "Authorisation\nManager" as autm
+                    actor "Employee with\nlimited powers" as emp
+
+                    lr --> autm : Issues\ncredential with\nlimited powers
+                    autm --> emp : Issues\ncredential with\nlimited powers\nto access\nspecific services
 
                 }
 
