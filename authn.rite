@@ -268,7 +268,7 @@ localBiblioFile: "localbiblio.yaml"
             And this is the chain of trust from the "Authentic sources" to the credential that the employee (for example) holds.
 
 
-            <x-diagram .plantuml>Chain of trust
+            <x-diagram .plantuml_server>Chain of trust
                 @startuml
                 left to right direction
 
