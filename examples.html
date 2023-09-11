@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Examples for Authentication and authorization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Opengraph Facebook Meta Tags -->
+    <meta property="og:title" content="Examples for Authentication and authorization">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Examples for Authentication and authorization">
+    <meta property="og:site_name" content="Authn with Verifiable Credentials">
+    <meta property="og:url" content="https://alastria.github.io/did-method-elsi/examples.html">
+
+    <script src="https://www.w3.org/Tools/respec/respec-w3c" async="" class="remove"></script>
+    <script class="remove">
+        var respecConfig = {
+            latestVersion: "https://alastria.github.io/did-method-elsi/examples.html",
+            edDraftURI: "https://alastria.github.io/did-method-elsi/examples.html",
+            github: "https://github.com/alastria/did-method-elsi/blob/main/examples.html",
+            editors: [
+                {
+                    company: "JesusRuiz",
+                    companyURL: "https://hesusruiz.github.io/",
+                    email: "hesusruiz@gmail.com",
+                    name: "Jesus Ruiz",
+                },
+            ],
+            authors: [
+                {
+                    name: "The DOME project participants",
+                },
+            ],
+            localBiblio: {
+                "Actor-DataSpaces": {
+                        date: "April 2023",
+                        href: "https://dl.acm.org/doi/pdf/10.1145/3543873.3587645",
+                        title: "Extending Actor Models in Data Spaces",
+                },
+                "Cryptographic Hyperlinks": {
+                        date: "May 2021",
+                        href: "https://w3c-ccg.github.io/hashlink/",
+                        title: "Cryptographic Hyperlinks",
+                },
+                "DEP-DSS": {
+                        date: "2019-10",
+                        href: "https://ec.europa.eu/digital-building-blocks/wikis/display/DIGITAL/Qualified+electronic+signature+-+QES+validation+algorithm",
+                        publisher: "European Commission",
+                        title: "Algorithm for Validation of qualified and advanced signatures and seals",
+                },
+                "DID-DNS": {
+                        href: "https://tools.ietf.org/html/draft-mayrhofer-did-dns-01",
+                        publisher: "IETF",
+                        status: "Internet Draft",
+                        title: "The Decentralized Identifier (DID) in the DNS",
+                },
+                "DID-ELSI": {
+                        date: "04 June 2023",
+                        href: "https://alastria.github.io/did-method-elsi/",
+                        title: "DID ETSI Legal person Semantic Identifier Method Specification (did:elsi)",
+                },
+                "DID-ONBOARDING": {
+                        date: "04 June 2023",
+                        href: "https://alastria.github.io/did-method-elsi/onboarding.html",
+                        title: "Onboarding example with LEARCredential using did:elsi",
+                },
+                "DID-PRIMER": {
+                        href: "https://github.com/WebOfTrustInfo/rebooting-the-web-of-trust-fall2017/blob/master/topics-and-advance-readings/did-primer.md",
+                        publisher: "Rebooting the Web of Trust 2017",
+                        title: "DID Primer",
+                },
+                "DIF.PresentationExchange": {
+                        href: "https://identity.foundation/presentation-exchange/spec/v2.0.0/",
+                        title: "Presentation Exchange 2.0.0",
+                },
+                "ENISA-Qualified Electronic Seals": {
+                        date: "June 2017",
+                        href: "https://www.enisa.europa.eu/publications/security-guidelines-on-the-appropriate-use-of-qualified-electronic-seals",
+                        title: "Security guidelines on the appropriate use of qualified electronic seals",
+                },
+                "ENISA-Qualified Electronic Signatures": {
+                        date: "December 2016",
+                        href: "https://www.enisa.europa.eu/publications/security-guidelines-on-the-appropriate-use-of-qualified-electronic-signatures",
+                        title: "Security guidelines on the appropriate use of qualified electronic signatures",
+                },
+                "ETSI-CERTOVERVIEW": {
+                        date: "2020-07",
+                        href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941201/01.04.02_20/en_31941201v010402a.pdf",
+                        publisher: "ETSI",
+                        title: "ETSI EN 319 412-1 V1.4.2 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 1: Overview and common data structures",
+                },
+                "ETSI-LEGALPERSON": {
+                        date: "2020-07",
+                        href: "https://www.etsi.org/deliver/etsi_en/319400_319499/31941203/01.02.01_60/en_31941203v010201p.pdf",
+                        publisher: "ETSI",
+                        title: "ETSI EN 319 412-3 V1.2.1 (2020-07) - Electronic Signatures and Infrastructures (ESI); Certificate Profiles; Part 3: Certificate profile for certificates issued to legal persons",
+                },
+                "EU_Trusted_Lists": {
+                        href: "https://digital-strategy.ec.europa.eu/en/policies/eu-trusted-lists",
+                        title: "EU Trusted Lists",
+                },
+                "JAdES": {
+                        date: "2021-03",
+                        href: "https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf",
+                        publisher: "ETSI",
+                        title: "ETSI TS 119 182-1 V1.1.1 (2021-03) - Electronic Signatures and Infrastructures (ESI); JAdES digital signatures; Part 1: Building blocks and JAdES baseline signatures",
+                },
+                "NIST-AUTH": {
+                        date: "October 2016",
+                        href: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-178.pdf",
+                        title: "NIST Special Publication 800-178: A Comparison of Attribute Based Access Control (ABAC) Standards for Data Service Applications",
+                },
+                "ODRL": {
+                        date: "February 2018",
+                        href: "https://www.w3.org/TR/odrl-model/",
+                        title: "ODRL Information Model 2.2",
+                },
+                "OWASP-TRANSPORT": {
+                        href: "https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet",
+                        title: "Transport Layer Protection Cheatsheet",
+                },
+                "OpenID.Core": {
+                        date: "8 November 2014",
+                        href: "http://openid.net/specs/openid-connect-core-1_0.html",
+                        title: "OpenID Connect Core 1.0 incorporating errata set 1",
+                },
+                "OpenID.SIOP2": {
+                        date: "28 January 2022",
+                        href: "https://openid.bitbucket.io/connect/openid-connect-self-issued-v2-1_0.html",
+                        title: "Self-Issued OpenID Provider v2",
+                },
+                "OpenID.VCI": {
+                        date: "3 February 2023",
+                        href: "https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html",
+                        title: "OpenID for Verifiable Credential Issuance",
+                },
+                "OpenID.VP": {
+                        date: "21 April 2023",
+                        href: "https://openid.net/specs/openid-4-verifiable-presentations-1_0.html",
+                        title: "OpenID for Verifiable Presentations",
+                },
+                "RFC6749": {
+                        href: "https://www.rfc-editor.org/rfc/rfc6749.html",
+                        title: "The OAuth 2.0 Authorization Framework",
+                },
+                "RFC7515": {
+                        href: "https://www.rfc-editor.org/rfc/rfc7515",
+                        title: "JSON Web Signature (JWS)",
+                },
+                "RFC7519": {
+                        href: "https://www.rfc-editor.org/rfc/rfc7519",
+                        title: "JSON Web Token (JWT)",
+                },
+                "RFC8414": {
+                        href: "https://www.rfc-editor.org/rfc/rfc8414",
+                        title: "OAuth 2.0 Authorization Server Metadata",
+                },
+                "RFC8725": {
+                        href: "https://www.rfc-editor.org/rfc/rfc8725",
+                        title: "JSON Web Token Best Current Practices",
+                },
+                "STORK2.MandateReport": {
+                        date: "2012",
+                        href: "https://ec.europa.eu/digital-building-blocks/wikis/display/EIDCOMMUNITY/STORK+2.0+WP3+-+Legal+and+Trust+Analysis?preview=/84415420/84415378/STORK_2_0_D3_3_MandateAttribute_Management_Report_v_1_0.pdf",
+                        title: "STORK 2.0: D.3.3 – Mandate/Attribute Management Report",
+                },
+                "eIDAS": {
+                        href: "https://digital-strategy.ec.europa.eu/en/policies/discover-eidas",
+                        title: "Discover eIDAS",
+                },
+                "eIDAS-SAML_V1.2": {
+                        date: "August 2019",
+                        href: "https://ec.europa.eu/digital-building-blocks/wikis/download/attachments/467109280/eIDAS%20SAML%20Attribute%20Profile%20v1.2%20Final.pdf",
+                        title: "eIDAS SAML Attribute Profile. Version 1.2",
+                },
+                "eIDAS.Regulation": {
+                        date: "23 July 2014",
+                        href: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG",
+                        title: "Regulation (EU) No 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC",
+                },
+                "eIDAS2.Regulation": {
+                        date: "March 2023",
+                        href: "https://www.europarl.europa.eu/doceo/document/A-9-2023-0038_EN.html",
+                        title: "REPORT on the proposal for a regulation of the European Parliament and of the Council amending Regulation (EU) No 910/2014 as regards establishing a framework for a European Digital Identity",
+                },
+            },
+        };
+    </script>
+    <link rel="stylesheet" href="./assets/templates/respec/additional.css">
+</head>
+
+<body>
+    <p class="copyright">
+        Copyright © 2023 the document editors/authors. Text is available under the <a rel="license" href="https://creativecommons.org/licenses/by/4.0/legalcode"> Creative Commons Attribution 4.0 International Public License</a>
+    </p>
+
+
+<section id='abstract'>
+    <p>Detailed examples of several authentication scenarios
+    </p>
+</section>
+<section id='conformance'>
+</section>
+<section id='List of examples'><h2>List of examples</h2>
+
+    <section id='Access to DOME functions by DOME users'><h2>Access to DOME functions by DOME users</h2>
+
+        <section id='Onboarding of organisations in DOME'><h2>Onboarding of organisations in DOME</h2>
+
+        </section>
+        <section id='Assignment of relevant credentials to employee with App provider organisation'><h2>Assignment of relevant credentials to employee with App provider organisation</h2>
+
+        </section>
+        <section id='Employee of App provider login in DOME'><h2>Employee of App provider login in DOME</h2>
+
+        </section>
+        <section id='Employee of App provider creating product specification and offering'><h2>Employee of App provider creating product specification and offering</h2>
+
+        </section>
+        <section id='Assignment of relevant credentials to employee of Customer organization'><h2>Assignment of relevant credentials to employee of Customer organization</h2>
+
+        </section>
+        <section id='Employee of Customer organization logins in DOME'><h2>Employee of Customer organization logins in DOME</h2>
+
+        </section>
+        <section id='Employee of Customer launching procurement order of a product'><h2>Employee of Customer launching procurement order of a product</h2>
+
+        </section>
+    </section>
+    <section id='Use of the DOME Trust and IAM framework by data/app service providers (Use case: Air Quality)'><h2>Use of the DOME Trust and IAM framework by data/app service providers (Use case: Air Quality)</h2>
+
+        <section id='Acquisition of rights to use Air Quality Monitoring app by customer means that customer becomes Trusted issuer of that app specific VCs'><h2>Acquisition of rights to use Air Quality Monitoring app by customer means that customer becomes Trusted issuer of that app specific VCs</h2>
+
+        </section>
+        <section id='Operations by Admin as well as End users and implication in access'><h2>Operations by Admin as well as End users and implication in access</h2>
+
+        </section>
+    </section>
+</section>
+<section id='Example scenario: Participants in the ecosystem'><h2>Example scenario: Participants in the ecosystem</h2>
+
+    <p>Here we introduce the actors of the reference use case we are going to use. The main actors are marked in yellow in the following diagram.
+    </p>
+    <p>RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
+    </p>
+    <p>RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
+    </p>
+    <p>The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
+    </p>
+    <figure><img src='builtassets/d2_36c71184cf20e51b32d23a987b6a6750.svg' alt=''>
+    <figcaption></figcaption></figure>
+
+    <section id='participant'><h2>GoodAir: the company that wants to perform the process</h2>
+
+        <p>The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
+        </p>
+        <p>The company is registered in the tax agency and business registry of Spain with VAT number <b>VATES-12345678</b>.
+        </p>
+    </section>
+    <section id='COO (Chief Operating Officer) of GoodAir'><h2>COO (Chief Operating Officer) of GoodAir</h2>
+
+        <p>The GoodAir company is small and the only person that can sign contracts on behalf of the company is the COO (Chief Operating Officer). The COO is a legal representative of the company and she is registered as so in the business registry of Spain.
+        </p>
+        <p>The COO has a certificate for electronic signatures issued by one of the TSPs in Spain enabling the COO to perform electronic qualified signatures as legal representative of GoodAir, instead of doing them manually.
+        </p>
+        <p>The X.509 certificate of the COO has the following contents in the <code>Subject</code> field (the example below is derived from a real certificate but with the identifiers modified to be an example):
+        </p>
+
+<table style="width:100%;"><tr><td class="codecolor">
+<pre class='nohighlight precolor'>
+<span style="color:#008080">cn</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">56565656V Jesus Ruiz</span>
+<span style="color:#008080">serialNumber</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">56565656V</span>
+<span style="color:#008080">givenName</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">Jesus</span>
+<span style="color:#008080">sn</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">Ruiz</span>
+<span style="color:#008080">2.5.4.97</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">VATES-12345678</span>
+<span style="color:#008080">o</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">GoodAir</span>
+<span style="color:#008080">c</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">ES</span>
+<span style="color:#008080">2.5.4.13</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021</span>
+</pre></td></tr></table>
+
+        <p>The above set of fields bind the legal identity of the COO with the identity of the business:
+        </p>
+        <ul>
+            <li><code>serialNumber</code> is the unique number recognized by the Spanish Government for spanish citizens (called NIF).
+            </li>
+            <li><code>2.5.4.97</code> is the <a href="https://oidref.com/2.5.4.97">official OID for <code>organizationIdentifier</code></a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.
+            </li>
+        </ul>
+        <p>Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
+        </p>
+    </section>
+    <section id='RealTruth: a Trust Service Provider'><h2>RealTruth: a Trust Service Provider</h2>
+
+        <p>RealTruth is an EU TSP, which appears in the TL (Trusted List) maintained by the <a href="https://tl.bundesnetzagentur.de/TL-DE.XML">German Government</a>.
+        </p>
+        <p>RealTruth is a TSP based in Germany but operates in most of the countries of the EU and so being able to provide Trust Services across many countries, including Spain.
+        </p>
+        <p>As all TSPs in the TLs of the Member States, its entry in the TL includes one or more "Services" entries which describe the Trust Services provided by the TSP.
+        </p>
+        <p>A TSP can have one Service issuing certificates for signatures, another service issuing certificates for seals, another service for timestamping, etc.
+        </p>
+        <p>The regulator approves or suspends each service from a TSP individually, and the services are the root anchor for a given trust environment.
+        </p>
+        <p>In our case, the entry for RealTruth in the TL includes a <code>&ltTSPService&gt</code> entry, and inside it the <code>&ltServiceDigitalIdentity&gt</code> entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
+        </p>
+
+<table style="width:100%;"><tr><td class="codecolor">
+<pre class='nohighlight precolor'>
+<span style="color:#008080">2.5.4.97</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">VATDE-170173453</span>
+<span style="color:#008080">CN</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">DRV QC 11 MA CA 2017ca</span>
+<span style="color:#008080">OU</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">QC 11 Mitarbeiter CA</span>
+<span style="color:#008080">O</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">Deutsche Rentenversicherung Westfalen</span>
+<span style="color:#008080">C</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">DE</span>
+</pre></td></tr></table>
+
+        <p>Which in the <code>organizationIdentifier</code> field (OID 2.5.4.97) specifies the unique organisation identifier assigned by the German regulatory authority to the TSP: VATDE-170173453.
+        </p>
+        <p>RealTruth provides <code>Legal Person Representative Certificates</code> which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
+        </p>
+        <p>The certification policies of RealTruth includes the following sentences:
+        </p>
+        <blockquote>
+            <p>The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
+            </p>
+            <ul>
+                <li>The data concerning the business name or corporate name of the organisation.
+                </li>
+                <li>The data relating to the constitution and legal status of the subscriber.
+                </li>
+                <li><b>The data concerning the extent and validity of the powers of representation of the applicant.</b>
+                </li>
+                <li>The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
+                </li>
+            </ul>
+        </blockquote>
+        <p>The TSP (RealTruth in this case) performs the verifications against <code>Authentic Sources</code>.
+        </p>
+        <blockquote>
+            <p>Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
+            </p>
+            <p>The Authentic Sources in scope of Annex VI of the [eIDAS2] legislative proposal are sources for attributes on address, age, gender, civil status, family composition, nationality, education and training qualifications titles and licences, professional qualifications titles and licences, public permits and licences, financial and company data.
+            </p>
+            <p>Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
+            </p>
+            <p>Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
+            </p>
+        </blockquote>
+        <p>In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
+        </p>
+    </section>
+    <section id='John Doe: an administrative employee of GoodAir'><h2>John Doe: an administrative employee of GoodAir</h2>
+
+        <p>This is an employee of the central administration department of GoodAir, who is going to be formally nominated to manage a specific set of processes on behalf of GoodAir in the Data Space. In particular, this employee is going to be nominated as a LEAR (Legal Entity Appointed Representative).
+        </p>
+        <p>As its name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decision. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating to him the capabilities to perform some processes in the DOME portal and some other tasks in other organisations. That means that John Doe will not be empowered to perform cation snot explicitly specified in the credential.
+        </p>
+        <p>To perform the nomination, the COO of GoodAir (a legal representative of GoodAir) will issue a special credential to John Doe and will sign the credential with his certificate for signatures as legal representative of GoodAir. The details are described later in this document.
+        </p>
+    </section>
+    <section id='DOME: an instance of a Data Space for Smart Cities'><h2>DOME: an instance of a Data Space for Smart Cities</h2>
+
+        <p>DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
+        </p>
+        <p>The DOME Data Space has an portal service that allows external entities to perform some processes in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
+        </p>
+        <p>In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
+        </p>
+    </section>
+</section>
+
+
+</body>
+</html>

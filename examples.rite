@@ -1,0 +1,257 @@
+---
+title: Examples for Authentication and authorization
+
+editors:
+    - name: "Jesus Ruiz"
+      email: "hesusruiz@gmail.com"
+      company: "JesusRuiz"
+      companyURL: "https://hesusruiz.github.io/"
+authors:
+    - name: "The DOME project participants"
+
+copyright: >
+   Copyright © 2023 the document editors/authors. Text is available under the
+   <a rel="license" href="https://creativecommons.org/licenses/by/4.0/legalcode">
+   Creative Commons Attribution 4.0 International Public License</a>
+
+latestVersion: "https://alastria.github.io/did-method-elsi/examples.html"
+edDraftURI: "https://alastria.github.io/did-method-elsi/examples.html"
+github: "https://github.com/alastria/did-method-elsi/blob/main/examples.html"
+og_description: >
+    Examples for Authentication and authorization
+og_site_name: Authn with Verifiable Credentials
+localBiblioFile: "localbiblio.yaml"
+---
+
+<section #abstract>
+
+    Detailed examples of several authentication scenarios
+
+<section id="conformance">
+
+<section>List of examples
+
+    <section>Access to DOME functions by DOME users
+
+        <section>Onboarding of organisations in DOME
+
+        <section>Assignment of relevant credentials to employee with App provider organisation
+
+        <section>Employee of App provider login in DOME
+
+        <section>Employee of App provider creating product specification and offering
+
+        <section>Assignment of relevant credentials to employee of Customer organization
+
+        <section>Employee of Customer organization logins in DOME
+
+        <section>Employee of Customer launching procurement order of a product
+
+
+    <section>Use of the DOME Trust and IAM framework by data/app service providers (Use case: Air Quality)
+
+        <section>Acquisition of rights to use Air Quality Monitoring app by customer means that customer becomes Trusted issuer of that app specific VCs
+
+        <section>Operations by Admin as well as End users and implication in access
+
+        
+
+<section>Example scenario: Participants in the ecosystem
+
+    Here we introduce the actors of the reference use case we are going to use. The main actors are marked in yellow in the following diagram.
+    
+    RealTruth is a Trust Service Provider operating under the eIDAS Trust Framework, which issues a certificate for seals to the company GoodAir. GoodAir is a business that provides some services using an Air Quality application operated by GoodAir.
+
+    RealTruth also provides a certificate for signatures to the COO of the GoodAir company, so the COO can use the certificate to sign documents on behalf of GoodAir (like contracts, invoices, financial reports, ...) in a way that is compliant with eIDAS.
+
+    The COO of GoodAir will issue a verifiable credential of type LEARCredential to an employee of GoodAir, signing the credential with his certificate for signatures.
+
+    <x-diagram .d2>
+        classes: {
+            participant: {
+                style: {
+                    fill: "aqua"
+                }
+            }
+            multiple: {
+                style: {
+                    multiple: true
+                }
+            }
+        }
+
+        eIDAS: eIDAS Trust Framework {
+            icon: /images/eu_trust_mark.jpg
+        }
+        eIDAS.style.fill: transparent
+
+        DE_TL: Germany Trusted List
+
+        RealTruth: RealTruth TSP {
+
+            Seal: Certificate\nfor seal
+            Seal.shape: oval
+
+            Sign: Certificate\nfor signature
+            Sign.shape: oval
+
+        }
+        RealTruth.class: participant
+
+        OtherG: Other TSPs {
+            S3.shape: circle
+            S3: Cert\nfor Sign
+            S4.shape: circle
+            S4: Cert\nfor Seal
+        }
+        OtherG.class: multiple
+
+        DE_TL -> RealTruth
+        DE_TL -> OtherG
+
+        Other_Countries: Other Trusted Lists
+        Other_Countries.style.fill: transparent
+        Other_Countries.class: multiple
+
+        TSP1 {
+            S1.shape: circle
+            S1: Cert\nfor Sign
+            S2.shape: circle
+            S2: Cert\nfor Seal
+        }
+
+        TSPn {
+            S3.shape: circle
+            S3: Cert\nfor Sign
+            S4.shape: circle
+            S4: Cert\nfor Seal
+        }
+
+        GoodAir {
+            COO
+            Employee
+        }
+        GoodAir.class: participant
+
+        eIDAS -> DE_TL
+        eIDAS -> Other_Countries
+
+
+        RealTruth.Seal -> GoodAir: Issue Cert for Seals {
+            style: {
+                font-size: 30
+            }
+        }
+        RealTruth.Sign -> GoodAir.COO: Issue Cert for Signatures {
+            style: {
+                font-size: 30            }
+        }
+
+        Other_Countries -> TSP1
+        Other_Countries -> TSPn
+
+        GoodAir.COO -> GoodAir.Employee: LEARCredential {
+            style: {
+                font-size: 30
+            }
+        }
+
+    <section #participant>GoodAir: the company that wants to perform the process
+
+        The new participant is a business providing an Air Quality Monitoring application as a service. The business is called GoodAir and it operates the application, which receives data from a set of sensors that may or may not be the property of GoodAir. The sensors must have received a certification to be able to operate and send data to the GoodAir application.
+
+        The company is registered in the tax agency and business registry of Spain with VAT number <b>VATES-12345678</b>.
+
+    <section>COO (Chief Operating Officer) of GoodAir
+
+        The GoodAir company is small and the only person that can sign contracts on behalf of the company is the COO (Chief Operating Officer). The COO is a legal representative of the company and she is registered as so in the business registry of Spain.
+
+        The COO has a certificate for electronic signatures issued by one of the TSPs in Spain enabling the COO to perform electronic qualified signatures as legal representative of GoodAir, instead of doing them manually.
+
+        The X.509 certificate of the COO has the following contents in the `Subject` field (the example below is derived from a real certificate but with the identifiers modified to be an example):
+
+        <x-code .ini>
+            cn = 56565656V Jesus Ruiz
+            serialNumber = 56565656V
+            givenName = Jesus
+            sn = Ruiz
+            2.5.4.97 = VATES-12345678
+            o = GoodAir
+            c = ES
+            2.5.4.13 = Notary:Juan Lopez/Protocol Num:7172/Date:07-06-2021
+
+        The above set of fields bind the legal identity of the COO with the identity of the business:
+
+        <ul>
+            - `serialNumber` is the unique number recognized by the Spanish Government for spanish citizens (called NIF).
+            - `2.5.4.97` is the <a href="https://oidref.com/2.5.4.97">official OID for `organizationIdentifier`</a>. The contents of this field in the example certificate is the unique identifier for the legal person GoodAir.
+
+        Before issuing a certificate like the above, the TSP has to perform some validations to ensure that in the official source of truth (the business registry of Spain in this case) there is already registered information that states that the COO has indeed powers to act on behalf of GoodAir as a legal representative.
+
+    <section>RealTruth: a Trust Service Provider
+
+        RealTruth is an EU TSP, which appears in the TL (Trusted List) maintained by the <a href="https://tl.bundesnetzagentur.de/TL-DE.XML">German Government</a>.
+        
+        RealTruth is a TSP based in Germany but operates in most of the countries of the EU and so being able to provide Trust Services across many countries, including Spain.
+
+        As all TSPs in the TLs of the Member States, its entry in the TL includes one or more "Services" entries which describe the Trust Services provided by the TSP.
+
+        A TSP can have one Service issuing certificates for signatures, another service issuing certificates for seals, another service for timestamping, etc.
+
+        The regulator approves or suspends each service from a TSP individually, and the services are the root anchor for a given trust environment.
+
+        In our case, the entry for RealTruth in the TL includes a `\<TSPService\>` entry, and inside it the `\<ServiceDigitalIdentity\>` entry includes a DER-encoded certificate specifying the digital identity of the root anchor for that trust domain. The certificate for the Service has in the Subject field:
+
+        <x-code .INI>
+            2.5.4.97 = VATDE-170173453
+            CN = DRV QC 11 MA CA 2017ca
+            OU = QC 11 Mitarbeiter CA
+            O = Deutsche Rentenversicherung Westfalen
+            C = DE
+
+        Which in the `organizationIdentifier` field (OID 2.5.4.97) specifies the unique organisation identifier assigned by the German regulatory authority to the TSP: VATDE-170173453.
+
+        RealTruth provides `Legal Person Representative Certificates` which are qualified in accordance with Regulation (EU) No. 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market.
+
+        The certification policies of RealTruth includes the following sentences:
+
+        <blockquote>
+            The Registration Authority must verify the following information in order to authenticate the identity of the organisation:
+
+            <ul>
+                - The data concerning the business name or corporate name of the organisation.
+                - The data relating to the constitution and legal status of the subscriber.
+                - <b>The data concerning the extent and validity of the powers of representation of the applicant.</b>
+                - The data concerning the tax identification code of the organisation or equivalent code used in the country to whose legislation the subscriber is subject.
+
+        The TSP (RealTruth in this case) performs the verifications against `Authentic Sources`.
+
+        <blockquote>
+            Authentic Sources are the public or private repositories or systems recognised or required by law containing attributes about a natural or legal persons.
+            
+            The Authentic Sources in scope of Annex VI of the [eIDAS2] legislative proposal are sources for attributes on address, age, gender, civil status, family composition, nationality, education and training qualifications titles and licences, professional qualifications titles and licences, public permits and licences, financial and company data.
+            
+            Authentic Sources in scope of Annex VI are required to provide interfaces to Qualified Electronic Attestation of Attributes  (QEAA) Providers to verify the authenticity of the above attributes, either directly or via designated intermediaries recognised at national level.
+            
+            Authentic Sources may also issue (Q)EAA-s themselves if they meet the requirements of the eIDAS Regulation. It is up to the Member States to define terms and conditions for the provisioning of these services, but according to the minimum technical specifications, standards, and procedures applicable to the verification procedures for qualified electronic attestations of attributes.
+
+        In accordance to the policies, RealTruth made those validations when issuing the certificate to the COO, in such a way that the Relying Parties verifying the certificate can have a high level of trust in the assertion that the natural person identified in the certificate (with Spanish ID of 56565656V) is a legal representative of he GoodAir company (organizationIdentifier VATES-12345678).
+
+    <section>John Doe: an administrative employee of GoodAir
+
+        This is an employee of the central administration department of GoodAir, who is going to be formally nominated to manage a specific set of processes on behalf of GoodAir in the Data Space. In particular, this employee is going to be nominated as a LEAR (Legal Entity Appointed Representative).
+
+        As its name implies, the LEAR has to be nominated by a <b>legal representative</b> of the GoodAir organisation with the necessary legal authority to commit the organisation for this type of decision. In our case, the COO of GoodAir will nominate John Doe as the LEAR of GoodAir, delegating to him the capabilities to perform some processes in the DOME portal and some other tasks in other organisations. That means that John Doe will not be empowered to perform cation snot explicitly specified in the credential.
+
+        To perform the nomination, the COO of GoodAir (a legal representative of GoodAir) will issue a special credential to John Doe and will sign the credential with his certificate for signatures as legal representative of GoodAir. The details are described later in this document.
+
+    <section>DOME: an instance of a Data Space for Smart Cities
+
+        DOME is a Data Space where local governments can procure data and services from other entities that act as service providers. At the same time, the local governments can also act as data and service providers for other entities in the Data Space.
+
+        The DOME Data Space has an portal service that allows external entities to perform some processes in an automated fashion by using Verifiable Credentials that have been issued by trusted entities. The complete Trust Framework used by DOME is composed from a series of Trust Frameworks, some managed internally using a governance model of DOME and some others managed externally but by trusted entities. At the root of the Trust Framework of DOME is the eIDAS Trust Framework and the pan-european recognized list of Trust Service Providers issuing the eIDAS compliant digital identities, in the form of certificates for signatures/seals.
+
+        In order to participate in DOME, every legal person requires a certificate for seals or that one of its legal representatives has a certificate for signatures (or both). The DOME entity is registered in France with VAT number <b>VATFR-99999999</b>.
+
+
+

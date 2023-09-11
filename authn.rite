@@ -113,9 +113,11 @@ localBiblioFile: "localbiblio.yaml"
 
         However, when interacting in the context of execution of the agreement, typically other entities are acting on behalf of the legal persons both for the consumer organisation and for the service provider organisation.
 
-        For example, an employee of the consumer organisation may start on behalf of his employer an interaction with the provider organisation to perform a process needed for the provision of a service. In this case, the provider organisation should authenticate the natural person and apply appropriate access control policies to ensure that the natural person is really entitled by the consumer organisation to perform the intended process.
+        For example, an employee of the consumer organisation may start, on behalf of his employer, an interaction with the provider organisation to perform a process needed for the procurement and provision of a service. In this case, the provider organisation should authenticate the natural person and apply appropriate access control policies to ensure that the natural person is really entitled by the consumer organisation to perform the intended process.
 
-        In the context of authentication and access management, the legal entity acting as consumer organisation will be named `Participant`. The digital representation of a natural person, acting on behalf of a Participant, is referred to as a `Principal`. However, when the context is clear and we need to refer to eIDAS legal terms, we will use the term `user` (defined in the Glossary) to denote a natural or legal person, or a natural person representing a legal person using a wallet to authenticate.
+        Another example is when a device, server machine or a service controlled by the consumer organisation interacts with a service provider in an automated way (“controlled” means in this context that the device, machine or service is operating under the responsibility of the legal person). Before allowing the entity to access protected resources, the provider organisation should authenticate the entity and apply appropriate access control policies to ensure that the entity is really entitled by the consumer organisation to perform the intended process.
+
+        In the context of authentication and access management, the legal person acting as consumer organisation will be named `Participant`. The digital representation of an entity acting on behalf of a Participant is referred to as a `Principal`. In Human-to-Machine (H2M) scenarios, the `Principal` is a natural person (typically an employee or contractor), while in Machine-to-Machine (M2M) scenarios the `Principal` can be a device, an application or any other automated entity without legal personality under eIDAS. However, when the context is clear and we need to refer to eIDAS legal terms, we will use the term `user` (defined in the Glossary) to denote a natural or legal person, or a natural person representing a legal person using a wallet to authenticate.
 
         The legal entity acting as service provider and performing authentication and access management will be called `Relying Party`.
 
@@ -1045,388 +1047,625 @@ localBiblioFile: "localbiblio.yaml"
 
         <section>Overview
 
-            Authentication requires a special type of Verifiable Credential called a VerifiableID. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a VerifiableId and a Verifiable Authorization.
+            We describe here how to perform authentication using Verifiable Credentials. Authentication requires a special type of Verifiable Credential called a `VerifiableID`. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a `VerifiableID` and a `Verifiable Authorization`.
 
-            For the explanation we will use the following figure which is based on [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve authentication and enforcement of the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
+            The LEARCredential is a powerful mechanism that can be used both for authentication and sophisticated access control. In this section we will focus only on authentication using the LEARCredential.
 
-            The diagram uses the logical concepts also used in the XACML reference architecture, but the description is agnostic to the actual policy language used in a concrete implementation.
+            The authentication mechanism supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but the H2M flows may be more interactive.
 
-            In this description we assume that the user is a natural person who wants to access a protected resource. However, the architecture supports machine-to-machine (M2M) interactions. The differences will be described in the description when they are relevant.
+            At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the `credentialSubject` object).
 
-            <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
 
-            The high level flow is the following:
+        <section>Authenticating with Verifiable Credentials, Human-To-Machine (H2M)
 
-            <ul .plain>
+            <section>Overview
 
-                -(1) The user sends a request to access a protected resource managed by the Relying Party.
+                Authentication requires a special type of Verifiable Credential called a VerifiableID. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a VerifiableId and a Verifiable Authorization.
+
+                For the explanation we will use the following figure which is based on [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve authentication and enforcement of the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
+
+                The diagram uses the logical concepts also used in the XACML reference architecture, but the description is agnostic to the actual policy language used in a concrete implementation.
+
+                In this description we assume that the user is a natural person who wants to access a protected resource. However, the architecture supports machine-to-machine (M2M) interactions. The differences will be described in the description when they are relevant.
+
+                <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
+
+                The high level flow is the following:
+
+                <ul .plain>
+
+                    -(1) The user sends a request to access a protected resource managed by the Relying Party.
+                    
+                    -(2) Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+
+                        <ul>
+                            - If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
+
+                            - If the user is a natural person using a browser for navigating the portal of the Relying Party, the typical approach is to redirect the browser to the authentication component using an HTTP Status of 302. The redirection includes enough information so the authentication component can send back the user to the original request if the user completes authentication successfully.
+                            
+                        Alternatively, the request can include authentication information which has been obtained before via an authentication process. If this is the case, the PEP goes directly into the authentication phase, described later in section <x-ref "accesscontrol">.
+
+                    -(3) The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
+
+                        An example flow with a natural person would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
+
+                    -(4) The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
+
+                        If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
+
+                    -(5) The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
+
+                    -(6) The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
+
+                        The Trust Framework is composed of one or more Trusted Lists where each list is specialised in some specific domain of trust.
+
+                        For example, the Trust Framework contains Trusted Lists with the schema definitions used for the well-known types of Verifiable Credentials in the ecosystem. In this way, if the Verifiable Registry used for the Trust Framework is based on a Blockchain network (or several federated networks), the schemas can be published in a trusted and resilient manner reducing the risk of malicious tampering and keeping a record of the history of modifications.
+
+                        But the most interesting Trusted Lists in the Trust Framework are the Trusted Issuers Lists, which provide the mechanism to efficiently and securely verify that the issuer of a given credential is a Trusted Issuer of that type of credentials.
+
+                        It has to be noticed that even though most Trusted Issuer Lists are global (used by all participants in the ecosystem) and have essentially public information, there may be some specialised lists that are private to one or more organisations and specialised in some specific requirement.
+
+                        In this way, there may be some lists that are specific to the products that one organisation provides to other participants in the ecosystem. For example, there may be a Trusted Issuer List private to one organisation which is updated with the identity of a participant when that participant acquires access to some product provided by that organisation.
+
+                        For example, this "product-specific" Trusted Issuer List is queried when performing authorization if the related policy rules specify that the issuer of the Verifiable Credential received in the request should have acquired the product that the request is trying to access.
+
+                        However, as mentioned before, the set of "internal" and "external" Trusted Lists to query is not hardcoded but it depends on the specific policy rules that should be applied to the request when computing the decision to grant access or not.
+
+                        In this way, the system provides a great deal of flexibility on how access control is performed.
+
+                        For simplicity, the diagram below shows the query of the Trusted Issuer Lists as a single interaction to a single box, but the actual interactions can be very complex if required. In addition, the diagram does not specify whether the list is "private" or "global".
+
+                The following sections elaborate in more detail in each of the interactions.
                 
-                -(2) Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
 
-                    <ul>
-                        - If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
+            <section>Starting the OpenID for Verifiable Presentations flow
 
-                        - If the user is a natural person using a browser for navigating the portal of the Relying Party, the typical approach is to redirect the browser to the authentication component using an HTTP Status of 302. The redirection includes enough information so the authentication component can send back the user to the original request if the user completes authentication successfully.
+                In this section we assume that the user tries to access a protected resource and that the user is not authenticated. The flow when the user is already authenticated is the same, just skipping the authentication phase (steps 1 to 6).
+
+                The authentication process starts an OpenID for Verifiable Presentations flow combined with the Self-Issued OP v2 specification [[OpenID.SIOP2]], where the VC Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP.
+                
+                In this step, the Verifier has to send an Authorization Request to the wallet. But as a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
+
+                We use a QR code to start the process and allow the wallet to receive the Authorization Request from the Verifier, and respond with an Authorization Response, sent to the Verifier in the body of an HTTP `POST` request.
+
+                <x-diagram .plantuml>Starting the authentication phase
+                    box "Company" #WhiteSmoke
+                        actor "User" as user
+                        participant "Wallet" as mobile
+                        participant "Laptop" as browser
+                    end box
+                    box "Relying Party" #WhiteSmoke
+                        participant "Portal" as portal
+                        participant "VC Verifier" as verifier
+                    end box
+
+                    user -> browser ++: **(1)** Access DOM portal
+                    # -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
+
+                        We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
+
+                    browser -> portal --++: **(2)** Access DOM portal
+                    # -(2) The browser sends a request to the Packet Delivery portal server.
+
+                    portal -> browser --++: **(3)** HTTP 302 (redirect)
+                    browser -> verifier --++: **(3 cont)** Access Login page
+                    # -(3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
+
+                    verifier -> verifier: **(4)** Generate QR code
+                    # -(4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
+
+                        A QR code is used because a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
+
+                        <x-code .ini>
+                            https://verifier.dome-marketplace.eu/authorization-requests?state=af0ifjsldkj
+
+                    # -(5) The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
+
+                        <figure #qr_code_authreq>
+                            <img src="images/qrcode-authreq.png" alt="" />
+
+                            <figcaption>QR code with the example Authorization Request endpoint inside
+
+                    verifier -> browser --: **(5)** Display QR code
+
+                    # -(6) The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
+                    user -> mobile ++: **(6)** Start QR scan
+                    browser --> mobile: Scan QR code
+
+                    mobile -> verifier --++: **(7)** GET /authorization-requests
+                    # -(7) After confirmation by the user, the wallet performs a `GET /authentication-requests` to the endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
+
+
+                    verifier -> verifier: **(8)** Create Authorization Request
+                    # -(8) The VC Verifier creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are described in detail in the next section
+
+                    verifier -> mobile --: **(9)** Reply with Authorization Request
+                    # -(9) The Verifier replies to the wallet with the Authorization Request
+
+
+            <section>Generating the Authorization Request
+
+                The Authorization Request travels in the response body of the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service and with the JAdES signature format.
+
+                The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular taking into account that this is a cross-device interaction:
+
+                <ul>
+
+                    -(response_type) (REQUIRED). Must be `vp_token`. This parameter is defined in [[RFC6749]]. The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type `vp_token`. This response type asks the Wallet to return only a VP Token in the Authorization Response, which is what we want in our case.
+
+                    -(scope) (REQUIRED). This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <x-ref "request_scope"> for more details. We use in this instance the value `dome.credentials.presentation.LEARCredential` which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type `LEARCredential`.
+
+                    -(response_mode) REQUIRED. MUST be `direct_post`. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter `redirect_uri` described below.
+
+                    -(redirect_uri) (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using `POST` and encoding `application/json`).
+
+                    -(client_id) REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
+
+                    -(client_id_scheme) REQUIRED. MUST have the value `did`. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[JAdES]] format, which defines the mechanism to identify the public key.
+                    
+                        All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
+
+                    -(nonce) REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
+
+                    -(state) REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
+
+                    -(presentation_definition) CONDITIONAL. A string containing a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because `scope` already specifies the credential type.
+
+                    -(presentation_definition_uri) CONDITIONAL. A string containing a URL pointing to a resource where a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because `scope` already specifies the credential type.
+
+
+                Note: A request MUST contain either a `presentation_definition` or a `presentation_definition_uri` or a single `scope` value representing a presentation definition, those three ways to request credential presentation are mutually exclusive. We use here the `scope` mechanism, which is simpler and fits our use case.
+
+                This is an example request object using the definitions above:
+
+                <x-code .ini>
+                    openid://?
+                    scope=dome.credentials.presentation.LEARCredential&
+                    response_type=vp_token&
+                    response_mode=direct_post&
+                    client_id=did:elsi:VATFR-99999999&
+                    redirect_uri=https://verifier.dome-marketplace.eu/api/authentication_response&
+                    state=af0ifjsldkj&
+                    nonce=n-0S6_WzA2Mj
+
+                (URL encoding removed, line breaks and leading spaces added for readability).
+
+                As mentioned above, the Authentication Request is returned to the wallet in the reply body of the GET request, as a JWT in JWS form [[RFC7515]]), signed with eIDAS certificate of the DOM onboarding legal person.
+
+                This is an example of the unencoded contents of the payload of the JWT:
+
+                <x-code .json>
+                    {
+                        "iss": "did:elsi:VATFR-99999999",   // Should correspond with the client_id in the AR
+                        "sub": "did:elsi:VATFR-99999999",   // Should correspond with the client_id in the AR
+                        "aud": "https://self-issued.me/v2", // As specified in section 5.5 of OIDC4VP
+                        "iat": 1667194901,
+                        "exp": 1667194961,                  // To avoid replays, here it expires in 60 secs
+                        "auth_request": "openid://?scope=...&amp;response_type=vp_token&amp;...",
+                    }
+
+                Where the claims `iss` and `sub` MUST be the DID of the RP (in this case DOME onboarding) and MUST correspond exactly with the `client_id` parameter in the Authorization Request. The claim `auth_request` contains the Authentication Request as a string. The expiration time in claim `exp` avoids replays and can be very short because it is used by the Wallet just on reception of the Authentication Request. The expiration time should be enough for the user to review the Authorization Request, decide the credential(s) to send to the RP and instruct the Wallet to send the Authorization Reply to the RP.
+
+
+            <section>Verification of the Authorization Request
+
+
+                Before sending the Authentication Response, the wallet should verify that the Authorization Request is correct. The most important verifications are described here:
+
+                <x-diagram .plantuml>Starting the authentication phase
+                    box "Company" #WhiteSmoke
+                        actor "User" as user
+                        participant "Wallet" as mobile
+                        participant "Laptop" as browser
+                    end box
+                    box "Relying Party" #WhiteSmoke
+                        participant "Portal" as portal
+                        participant "VC Verifier" as verifier
+                    end box
+
+
+                    verifier -> mobile --++: **(9)** Reply with Authorization Request
+
+                    mobile -> mobile: **(10)** Verification of signature of Authorization Request
+                    # -(10) Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
+
+                    mobile -> mobile: **(11)** Verification of the identity of the Relying Party
+                    # -(11) Verification that the DID in the `client_id` field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.
+
+                    mobile -> mobile: **(12)** Verification of the trusted nature of the RP
+                    # -(12) Verification that the entity identified in the `client_id` field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID in the `client_id` field.
+
+                        The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard.
                         
-                    Alternatively, the request can include authentication information which has been obtained before via an authentication process. If this is the case, the PEP goes directly into the authentication phase, described later in section <x-ref "accesscontrol">.
+                        If the Relying Party is a well known entity (like the DOME onboarding service in the case of DOME), it is easy to verify that the DID corresponds to the Relying Party.
 
-                -(3) The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
+                        In most other cases, for example when the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the onboarding service (meaning that the Wallet user trusts on the onboarding service, in the same way as all other participants).
+                        
+                        In this case, to check if the DID is a participant on the ecosystem, the wallet sends a `GET /api/did/v1/identifiers/{did-to-verify}` request to the endpoint of one of several trusted servers implementing the functionality to query the Trusted Participant Registry, where `{did-to-verify}` is the actual DID the Wallet wants to check (in our example it would be `did:elsi:VATFR-99999999`, corresponding to the RP) . The API returns a JSON document as a DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the Wallet user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the Wallet of the user, to facilitate the use of the wallet.
 
-                    An example flow with a natural person would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
+            <section>Creating and sending the Authorization Response 
 
-                -(4) The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
+                Once the Authorization Request has been validated, the Wallet creates an Authorization Response to be posted in the `redirect_uri` specified by the RP in the Authorization Request. For completeness, we describe in the following figure the complete process from reception of Authorization Request until sending the Authorization Response.
 
-                    If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
+                <x-diagram .plantuml>Starting the authentication phase
+                    box "Company" #WhiteSmoke
+                        actor "User" as user
+                        participant "Wallet" as mobile
+                        participant "Laptop" as browser
+                    end box
+                    box "Relying Party" #WhiteSmoke
+                        participant "Portal" as portal
+                        participant "VC Verifier" as verifier
+                    end box
 
-                -(5) The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
+                    verifier -> mobile --++: **(9)** Reply with Authorization Request
 
-                -(6) The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
+                    mobile -> mobile: **(10)** Verification of signature of Authorization Request
 
-                    The Trust Framework is composed of one or more Trusted Lists where each list is specialised in some specific domain of trust.
+                    mobile -> mobile: **(11)** Verification of the identity of the Relying Party
 
-                    For example, the Trust Framework contains Trusted Lists with the schema definitions used for the well-known types of Verifiable Credentials in the ecosystem. In this way, if the Verifiable Registry used for the Trust Framework is based on a Blockchain network (or several federated networks), the schemas can be published in a trusted and resilient manner reducing the risk of malicious tampering and keeping a record of the history of modifications.
+                    mobile -> mobile: **(12)** Verification of the trusted nature of the RP
 
-                    But the most interesting Trusted Lists in the Trust Framework are the Trusted Issuers Lists, which provide the mechanism to efficiently and securely verify that the issuer of a given credential is a Trusted Issuer of that type of credentials.
+                    mobile -> mobile: **(13)** Create Authorization Response
+                    # -(13) The wallet creates an Authorization Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authorization Response are described below.
 
-                    It has to be noticed that even though most Trusted Issuer Lists are global (used by all participants in the ecosystem) and have essentially public information, there may be some specialised lists that are private to one or more organisations and specialised in some specific requirement.
+                        The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only `vp_token` as the `response_type`, the VP Token is provided directly in the Authorization Response and a separate `id_token` is not needed.
 
-                    In this way, there may be some lists that are specific to the products that one organisation provides to other participants in the ecosystem. For example, there may be a Trusted Issuer List private to one organisation which is updated with the identity of a participant when that participant acquires access to some product provided by that organisation.
+                        The contents of the Authorization Response in our specific use case are:
 
-                    For example, this "product-specific" Trusted Issuer List is queried when performing authorization if the related policy rules specify that the issuer of the Verifiable Credential received in the request should have acquired the product that the request is trying to access.
+                        <x-code .ini>
+                            presentation_submission=[see definition below]
+                            &vp_token=[see definition below]
 
-                    However, as mentioned before, the set of "internal" and "external" Trusted Lists to query is not hardcoded but it depends on the specific policy rules that should be applied to the request when computing the decision to grant access or not.
+                        The content of the `presentation_submission` parameter in the above Authorization Response is:
 
-                    In this way, the system provides a great deal of flexibility on how access control is performed.
-
-                    For simplicity, the diagram below shows the query of the Trusted Issuer Lists as a single interaction to a single box, but the actual interactions can be very complex if required. In addition, the diagram does not specify whether the list is "private" or "global".
-
-            The following sections elaborate in more detail in each of the interactions.
-            
-
-        <section>Starting the OpenID for Verifiable Presentations flow
-
-            In this section we assume that the user tries to access a protected resource and that the user is not authenticated. The flow when the user is already authenticated is the same, just skipping the authentication phase (steps 1 to 6).
-
-            The authentication process starts an OpenID for Verifiable Presentations flow combined with the Self-Issued OP v2 specification [[OpenID.SIOP2]], where the VC Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP.
-            
-            In this step, the Verifier has to send an Authorization Request to the wallet. But as a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
-
-            We use a QR code to start the process and allow the wallet to receive the Authorization Request from the Verifier, and respond with an Authorization Response, sent to the Verifier in the body of an HTTP `POST` request.
-
-            <x-diagram .plantuml>Starting the authentication phase
-                box "Company" #WhiteSmoke
-                    actor "User" as user
-                    participant "Wallet" as mobile
-                    participant "Laptop" as browser
-                end box
-                box "Relying Party" #WhiteSmoke
-                    participant "Portal" as portal
-                    participant "VC Verifier" as verifier
-                end box
-
-                user -> browser ++: **(1)** Access DOM portal
-                # -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
-
-                    We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
-
-                browser -> portal --++: **(2)** Access DOM portal
-                # -(2) The browser sends a request to the Packet Delivery portal server.
-
-                portal -> browser --++: **(3)** HTTP 302 (redirect)
-                browser -> verifier --++: **(3 cont)** Access Login page
-                # -(3) The portal redirects the user to the login page of the Verifier component of DOME Onboarding. The page shows a button labelled “Login with Verifiable Credentials” or something similar.
-
-                verifier -> verifier: **(4)** Generate QR code
-                # -(4) The Verifier generates a QR code, containing inside the URL of the `/authentication-requests` endpoint of the Verifier component which will be used to start the [[OpenID.VP]] process.
-
-                    A QR code is used because a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
-
-                    <x-code .ini>
-                        https://verifier.dome-marketplace.eu/authorization-requests?state=af0ifjsldkj
-
-                # -(5) The QR code is displayed in the user browser with instructions to scan it and go to the URL inside it.
-
-                    <figure #qr_code_authreq>
-                        <img src="images/qrcode-authreq.png" alt="" />
-
-                        <figcaption>QR code with the example Authorization Request endpoint inside
-
-                verifier -> browser --: **(5)** Display QR code
-
-                # -(6) The user scans the QR with his wallet and tells the wallet to go to the URL in the QR.
-                user -> mobile ++: **(6)** Start QR scan
-                browser --> mobile: Scan QR code
-
-                mobile -> verifier --++: **(7)** GET /authorization-requests
-                # -(7) After confirmation by the user, the wallet performs a `GET /authentication-requests` to the endpoint that was inside the QR code. The reply to the GET request is an Authorization Request
-
-
-                verifier -> verifier: **(8)** Create Authorization Request
-                # -(8) The VC Verifier creates a SIOP Authentication Request. The parameters comprising a request for verifiable presentations are described in detail in the next section
-
-                verifier -> mobile --: **(9)** Reply with Authorization Request
-                # -(9) The Verifier replies to the wallet with the Authorization Request
-
-
-        <section>Generating the Authorization Request
-
-            The Authorization Request travels in the response body of the HTTP GET request performed in the previous point, as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service and with the JAdES signature format.
-
-            The parameters comprising a request for verifiable presentations are given in section 5 of [[OpenID.VP]] and in section 10.1 of [[OpenID.SIOP2]] and are reproduced here with the particularities of this use case, in particular taking into account that this is a cross-device interaction:
-
-            <ul>
-
-                -(response_type) (REQUIRED). Must be `vp_token`. This parameter is defined in [[RFC6749]]. The possible values are determined by the response type registry established by [[RFC6749]]. The [[OpenID.VP]] specification introduces the response type `vp_token`. This response type asks the Wallet to return only a VP Token in the Authorization Response, which is what we want in our case.
-
-                -(scope) (REQUIRED). This parameter is defined in [[RFC6749]] which allows it to be used by verifiers to request presentation of credentials by utilizing a pre-defined scope value designating the type of credential. See section <x-ref "request_scope"> for more details. We use in this instance the value `dome.credentials.presentation.LEARCredential` which means that the RP (DOME onboarding service) is asking the SIOP (user wallet) to send a credential of type `LEARCredential`.
-
-                -(response_mode) REQUIRED. MUST be `direct_post`. As this is a cross-device scenario, this response mode is used to instruct the Self-Issued OP to deliver the result of the authentication process to a certain endpoint using the HTTP POST method. This endpoint to which the SIOP shall deliver the authentication result is conveyed in the parameter `redirect_uri` described below.
-
-                -(redirect_uri) (REQUIRED). MUST be a valid RP endpoint. The Authentication Response is sent to this endpoint using `POST` and encoding `application/json`).
-
-                -(client_id) REQUIRED. MUST be the DID of the RP (DOM onboarding entity) so it can be resolved by the SIOP and checked against a Trusted List, or rejected if it does not pass validation. This provides a high level of assurance to the SIOP that the RP is really who it claims.
-
-                -(client_id_scheme) REQUIRED. MUST have the value `did`. This value indicates that the Client Identifier is a DID defined in [[DID-Core]]. The request MUST be signed with a private key associated with the DID. To obtain the corresponding private key, the Wallet MUST use DID Resolution defined by the DID method used by the Verifier. For most DID methods and since the associated DID Document may include multiple public keys, a particular public key used to sign the request in question MUST be identified by the kid in the JOSE Header. However, in our case the Verifier uses `did:elsi` and so the request MUST be signed with the eIDAS certificate according to the [[JAdES]] format, which defines the mechanism to identify the public key.
-                
-                    All Verifier metadata other than the public key MUST be obtained from the client_metadata or the `client_metadata_uri parameter` as defined in Section 5 of [[OpenID.VP]].
-
-                -(nonce) REQUIRED. This parameter follows the definition given in [[OpenID.Core]]. It is used to securely bind the verifiable presentation(s) provided by the wallet (SIOP) to the particular transaction managed by the RP.
-
-                -(state) REQUIRED. Used by the portal component of DOM onboarding to associate the start of an authentication session with the end of that session when the RP Verifier component notifies to the portal.
-
-                -(presentation_definition) CONDITIONAL. A string containing a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]]. We do not use this parameter because `scope` already specifies the credential type.
-
-                -(presentation_definition_uri) CONDITIONAL. A string containing a URL pointing to a resource where a `presentation_definition` JSON object as defined in Section 4 of [[DIF.PresentationExchange]] can be retrieved. We do not use this parameter because `scope` already specifies the credential type.
-
-
-            Note: A request MUST contain either a `presentation_definition` or a `presentation_definition_uri` or a single `scope` value representing a presentation definition, those three ways to request credential presentation are mutually exclusive. We use here the `scope` mechanism, which is simpler and fits our use case.
-
-            This is an example request object using the definitions above:
-
-            <x-code .ini>
-                openid://?
-                scope=dome.credentials.presentation.LEARCredential&
-                response_type=vp_token&
-                response_mode=direct_post&
-                client_id=did:elsi:VATFR-99999999&
-                redirect_uri=https://verifier.dome-marketplace.eu/api/authentication_response&
-                state=af0ifjsldkj&
-                nonce=n-0S6_WzA2Mj
-
-            (URL encoding removed, line breaks and leading spaces added for readability).
-
-            As mentioned above, the Authentication Request is returned to the wallet in the reply body of the GET request, as a JWT in JWS form [[RFC7515]]), signed with eIDAS certificate of the DOM onboarding legal person.
-
-            This is an example of the unencoded contents of the payload of the JWT:
-
-            <x-code .json>
-                {
-                    "iss": "did:elsi:VATFR-99999999",   // Should correspond with the client_id in the AR
-                    "sub": "did:elsi:VATFR-99999999",   // Should correspond with the client_id in the AR
-                    "aud": "https://self-issued.me/v2", // As specified in section 5.5 of OIDC4VP
-                    "iat": 1667194901,
-                    "exp": 1667194961,                  // To avoid replays, here it expires in 60 secs
-                    "auth_request": "openid://?scope=...&amp;response_type=vp_token&amp;...",
-                }
-
-            Where the claims `iss` and `sub` MUST be the DID of the RP (in this case DOME onboarding) and MUST correspond exactly with the `client_id` parameter in the Authorization Request. The claim `auth_request` contains the Authentication Request as a string. The expiration time in claim `exp` avoids replays and can be very short because it is used by the Wallet just on reception of the Authentication Request. The expiration time should be enough for the user to review the Authorization Request, decide the credential(s) to send to the RP and instruct the Wallet to send the Authorization Reply to the RP.
-
-
-        <section>Verification of the Authorization Request
-
-
-            Before sending the Authentication Response, the wallet should verify that the Authorization Request is correct. The most important verifications are described here:
-
-            <x-diagram .plantuml>Starting the authentication phase
-                box "Company" #WhiteSmoke
-                    actor "User" as user
-                    participant "Wallet" as mobile
-                    participant "Laptop" as browser
-                end box
-                box "Relying Party" #WhiteSmoke
-                    participant "Portal" as portal
-                    participant "VC Verifier" as verifier
-                end box
-
-
-                verifier -> mobile --++: **(9)** Reply with Authorization Request
-
-                mobile -> mobile: **(10)** Verification of signature of Authorization Request
-                # -(10) Verification of the signature. As mentioned in the previous section, the Authorization Request is received as a JWT signed by the DOME onboarding service, using the eIDAS certificate for seals that corresponds to the legal person operating the service. This allows the wallet to verify that the signature corresponds to a real-world entity.
-
-                mobile -> mobile: **(11)** Verification of the identity of the Relying Party
-                # -(11) Verification that the DID in the `client_id` field of the Authorization Request corresponds to the entity that signed the Authorization Request. This is easy in our case because we use the `did:elsi` method.
-
-                mobile -> mobile: **(12)** Verification of the trusted nature of the RP
-                # -(12) Verification that the entity identified in the `client_id` field of the Authorization Request is a trusted entity belonging to the ecosystem, by resolving the DID in the `client_id` field.
-
-                    The actual mechanism may vary depending on the DID method used and the ecosystem where the client wants to onboard.
-                    
-                    If the Relying Party is a well known entity (like the DOME onboarding service in the case of DOME), it is easy to verify that the DID corresponds to the Relying Party.
-
-                    In most other cases, for example when the Relying Party is a participant in the ecosystem, we assume that the ecosystem provides a Trusted Participants Registry with an API compatible with the EBSI Trusted Issuers Registry, and that the participants registry is managed in a trusted way by the onboarding service (meaning that the Wallet user trusts on the onboarding service, in the same way as all other participants).
-                    
-                    In this case, to check if the DID is a participant on the ecosystem, the wallet sends a `GET /api/did/v1/identifiers/{did-to-verify}` request to the endpoint of one of several trusted servers implementing the functionality to query the Trusted Participant Registry, where `{did-to-verify}` is the actual DID the Wallet wants to check (in our example it would be `did:elsi:VATFR-99999999`, corresponding to the RP) . The API returns a JSON document as a DID Document. The DID Document (as per W3C) contains relevant information about the entity owner of the DID. It contains its Public Key, used to verify the digital signature of the entity. It also contains the status of the entity in the ecosystem. It is extensible and can contain any public information which may be relevant for the use case. The API must be operated by a trusted entity for the Wallet user. There may be as many servers implementing the API as needed and operated by different entities. At least one of those trusted entities has to be configured in the Wallet of the user, to facilitate the use of the wallet.
-
-        <section>Creating and sending the Authorization Response 
-
-            Once the Authorization Request has been validated, the Wallet creates an Authorization Response to be posted in the `redirect_uri` specified by teh RP in the Authorization Request. For completeness, we describe in the following figure the complete process from reception of Authorization Request until sending the Authorization Response.
-
-            <x-diagram .plantuml>Starting the authentication phase
-                box "Company" #WhiteSmoke
-                    actor "User" as user
-                    participant "Wallet" as mobile
-                    participant "Laptop" as browser
-                end box
-                box "Relying Party" #WhiteSmoke
-                    participant "Portal" as portal
-                    participant "VC Verifier" as verifier
-                end box
-
-                verifier -> mobile --++: **(9)** Reply with Authorization Request
-
-                mobile -> mobile: **(10)** Verification of signature of Authorization Request
-
-                mobile -> mobile: **(11)** Verification of the identity of the Relying Party
-
-                mobile -> mobile: **(12)** Verification of the trusted nature of the RP
-
-                mobile -> mobile: **(13)** Create Authorization Response
-                # -(13) The wallet creates an Authorization Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authorization Response are described below.
-
-                    The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only `vp_token` as the `response_type`, the VP Token is provided directly in the Authorization Response and a separate `id_token` is not needed.
-
-                    The contents of the Authorization Response in our specific use case are:
-
-                    <x-code .ini>
-                        presentation_submission=[see definition below]
-                        &vp_token=[see definition below]
-
-                    The content of the `presentation_submission` parameter in the above Authorization Response is:
-
-                    <x-code .json>
-                        {
-                            "definition_id": "OnboardingPresentationDefinition",
-                            "id": "OnboardingPresentationSubmission",
-                            "descriptor_map": [
+                        <x-code .json>
                             {
-                                "id": "id_credential",
-                                "path": "$",
-                                "format": "ldp_vp",
-                                "path_nested": {
-                                    "format": "ldp_vc",
-                                    "path": "$.verifiableCredential[0]"
+                                "definition_id": "OnboardingPresentationDefinition",
+                                "id": "OnboardingPresentationSubmission",
+                                "descriptor_map": [
+                                {
+                                    "id": "id_credential",
+                                    "path": "$",
+                                    "format": "ldp_vp",
+                                    "path_nested": {
+                                        "format": "ldp_vc",
+                                        "path": "$.verifiableCredential[0]"
+                                    }
                                 }
+                                ]
                             }
-                            ]
-                        }
 
-                    Which complies with [[DIF.PresentationExchange]] and refers to the Verifiable Presentation in the `vp_token` parameter provided in the same response. In our example, the Verifiable Presentation includes the LEARCredential that was described in the previous sections.
+                        Which complies with [[DIF.PresentationExchange]] and refers to the Verifiable Presentation in the `vp_token` parameter provided in the same response. In our example, the Verifiable Presentation includes the LEARCredential that was described in the previous sections.
 
-                mobile -> verifier ++: **(14)** POST /api/siop/authorization_response
-                # -(14) The wallet sends the Authorization Response to the endpoint received in the `redirect_uri` parameter of the Authorization Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
+                    mobile -> verifier ++: **(14)** POST /api/siop/authorization_response
+                    # -(14) The wallet sends the Authorization Response to the endpoint received in the `redirect_uri` parameter of the Authorization Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
 
-                    <x-code .http>
-                        POST /api/siop/authorization_response HTTP/1.1
-                        Host: verifier.dome-onboarding.org
-                        Content-Type: application/x-www-form-urlencoded
+                        <x-code .http>
+                            POST /api/siop/authorization_response HTTP/1.1
+                            Host: verifier.dome-onboarding.org
+                            Content-Type: application/x-www-form-urlencoded
 
-                        presentation_submission=[see definition below]
-                        &vp_token=[see definition below]
+                            presentation_submission=[see definition below]
+                            &vp_token=[see definition below]
 
 
-        <section>Authenticating the user with the LEARCredential
+            <section>Authenticating the user with the LEARCredential
 
-            We should remember that inside the LEARCredential the `credentialSubject` object has an `id` field with value `did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK` which is the DID of the user. It was generated during the creation of the LEARCredential, and the Relying Party should trust that the credential was generated in the proper way binding cryptographically the DID with the LEARCredential, as described in a previous section. It is the same trust that should be put in the generation of any other signed document, like a contract or invoice.
+                We should remember that inside the LEARCredential the `credentialSubject` object has an `id` field with value `did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK` which is the DID of the user. It was generated during the creation of the LEARCredential, and the Relying Party should trust that the credential was generated in the proper way binding cryptographically the DID with the LEARCredential, as described in a previous section. It is the same trust that should be put in the generation of any other signed document, like a contract or invoice.
 
-            The process of verifying the Authorization Response and authenticating the user with the LEARCredential is the following:
+                The process of verifying the Authorization Response and authenticating the user with the LEARCredential is the following:
 
-            <x-diagram .plantuml>Starting the authentication phase
-                box "Company" #WhiteSmoke
-                    actor "User" as user
-                    participant "Wallet" as mobile
-                    participant "Laptop" as browser
-                end box
-                box "Relying Party" #WhiteSmoke
-                    participant "Portal" as portal
-                    participant "VC Verifier" as verifier
-                end box
+                <x-diagram .plantuml>Starting the authentication phase
+                    box "Company" #WhiteSmoke
+                        actor "User" as user
+                        participant "Wallet" as mobile
+                        participant "Laptop" as browser
+                    end box
+                    box "Relying Party" #WhiteSmoke
+                        participant "Portal" as portal
+                        participant "VC Verifier" as verifier
+                    end box
 
-                mobile -> verifier ++: (14) POST /api/siop/authorization_response
+                    mobile -> verifier ++: (14) POST /api/siop/authorization_response
 
-                verifier -> verifier: (15 and 16) Verify signature\nand issuer of\nLEARCredential
-                # -(15 and 16) The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
+                    verifier -> verifier: (15 and 16) Verify signature\nand issuer of\nLEARCredential
+                    # -(15 and 16) The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
 
-                    <ol>
-                        - That the DID of the entity which is the issuer of the VC is a trusted entity.
-                        - That the VC was signed by that participant.
+                        <ol>
+                            - That the DID of the entity which is the issuer of the VC is a trusted entity.
+                            - That the VC was signed by that participant.
 
-                    Both verifications can be done by performing DID resolution, checking that the resulting DID Document contains the public key corresponding to the one specified in the Verifiable Credential, and by verifying the digital signature of the credential against that public key.
+                        Both verifications can be done by performing DID resolution, checking that the resulting DID Document contains the public key corresponding to the one specified in the Verifiable Credential, and by verifying the digital signature of the credential against that public key.
 
-                    In our case the LEARCredential was issued using the `did:elsi` method, so resolution is very simple and is specified in [[DID-ELSI]].
+                        In our case the LEARCredential was issued using the `did:elsi` method, so resolution is very simple and is specified in [[DID-ELSI]].
 
-                verifier -> verifier: (17) Verify sender of the\nAuthorization Response
-                # -(17) After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
+                    verifier -> verifier: (17) Verify sender of the\nAuthorization Response
+                    # -(17) After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
 
-                verifier -> verifier: (18) Generate Access Token
-                # -(18) The Verifier creates an Access Token for the user so it can be used later for access services provided by the Relying Party (in the case of onboarding, those services would be the ones related to the onboarding process implemented by the Onboarding portal). The Access Token is generated in JWT format and signed by the VC Verifier. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
+                    verifier -> verifier: (18) Generate Access Token
+                    # -(18) The Verifier creates an Access Token for the user so it can be used later for access services provided by the Relying Party (in the case of onboarding, those services would be the ones related to the onboarding process implemented by the Onboarding portal). The Access Token is generated in JWT format and signed by the VC Verifier. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
 
-                    For our use case, the payload of the JWT access token looks like:
+                        For our use case, the payload of the JWT access token looks like:
 
-                    <x-code .json>
-                        {
-                            "iss": "did:elsi:VATFR-99999999",
-                            "sub": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
-                            "aud":   "https://dome-marketplace.eu/onboarding",
-                            "exp": 1639528912,
-                            "iat": 1618354090,
-                            "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
-                            "client_id": "did:elsi:VATFR-99999999",
-                            "scope": "vp_token",
-                            "verifiableCredential": ["the VC that was received inside the Verifiable Presentation"]
-                        }
+                        <x-code .json>
+                            {
+                                "iss": "did:elsi:VATFR-99999999",
+                                "sub": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+                                "aud":   "https://dome-marketplace.eu/onboarding",
+                                "exp": 1639528912,
+                                "iat": 1618354090,
+                                "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
+                                "client_id": "did:elsi:VATFR-99999999",
+                                "scope": "vp_token",
+                                "verifiableCredential": ["the VC that was received inside the Verifiable Presentation"]
+                            }
 
-                    Where, according to [[RFC9068]]:
+                        Where, according to [[RFC9068]]:
 
-                    <ul>
-                        - `iss` and `client_id` have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.
+                        <ul>
+                            - `iss` and `client_id` have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.
 
-                        - `sub` identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received
+                            - `sub` identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received
 
-                        - `aud` identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.
+                            - `aud` identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.
 
-                        - `kid` in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.
+                            - `kid` in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.
 
-                        - `scope` has the same value as the equivalent `scope` parameter in the initial Authorization Request.
+                            - `scope` has the same value as the equivalent `scope` parameter in the initial Authorization Request.
 
-                        - `verifiableCredential` contains the Verifiable Credential that was received, specifically the value of the first element of the field `verifiableCredential` of the Verifiable Presentation.
+                            - `verifiableCredential` contains the Verifiable Credential that was received, specifically the value of the first element of the field `verifiableCredential` of the Verifiable Presentation.
 
-                verifier -> mobile: (19) HTTP 200 with <access token>
-                # -(19) The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
+                    verifier -> mobile: (19) HTTP 200 with <access token>
+                    # -(19) The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
 
-                verifier -> portal --++: (20) Notify with\n<access token> and <state>
-                # -(20) The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
+                    verifier -> portal --++: (20) Notify with\n<access token> and <state>
+                    # -(20) The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
 
-                    <ul>
-                        - The `state` nonce that was generated by the portal when it generated the QR code. The portal uses the `state` nonce to know what login session is being notified.
+                        <ul>
+                            - The `state` nonce that was generated by the portal when it generated the QR code. The portal uses the `state` nonce to know what login session is being notified.
 
-                        - The access token generated before.
+                            - The access token generated before.
 
-                    The notification is a simple POST request with both parameters in the body:
+                        The notification is a simple POST request with both parameters in the body:
 
-                    <x-code .http>
-                        POST /api/notify HTTP/1.1
-                        Host: dome-marketplace.eu
-                        Content-Type: application/x-www-form-urlencoded
+                        <x-code .http>
+                            POST /api/notify HTTP/1.1
+                            Host: dome-marketplace.eu
+                            Content-Type: application/x-www-form-urlencoded
 
-                        access_token=[the access token]
-                        &state=af0ifjsldkj
+                            access_token=[the access token]
+                            &state=af0ifjsldkj
 
-                    The portal component replies immediately and continues processing.
+                        The portal component replies immediately and continues processing.
 
-                portal -> browser --: (21) Refresh screen\nwith services and include\n<access token>
-                # -(21) The portal of the Relying Party refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent back by the browser to the portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
+                    portal -> browser --: (21) Refresh screen\nwith services and include\n<access token>
+                    # -(21) The portal of the Relying Party refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent back by the browser to the portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
+                    
+
+
+        <section>Authenticating with Verifiable Credentials, Machine-To-Machine (M2M)
+
+            <section>Overview
+
+                The M2M flow for authentication shares many things with the flows for H2M authentication. We focus here on the differences.
                 
+                In this description we assume that the user is an application or service running in a server operated by a legal person, and the application wants to access a protected resource in an automated way. This is also applicable when the application or service is running in a constrained device like a sensor. Without loss of generality, we will use the term `application` interchangeably with `user` when the context is clear.
+
+                We assume, like in the H2M case, that the legal entity operating the application issues a LEARCredential to the application, and that the application uses a so-called `enterprise wallet` to store and manage Verifiable Credentials and their associated private keys.
+
+                <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
+
+                The high level flow is the following:
+
+                <ul .plain>
+
+                    -(1) The application sends a request to access a protected resource managed by the Relying Party.
+                    
+                    -(2) Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+
+                        <ul>
+                            - If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
+
+                            - If the user is a natural person using a browser for navigating the portal of the Relying Party, the typical approach is to redirect the browser to the authentication component using an HTTP Status of 302. The redirection includes enough information so the authentication component can send back the user to the original request if the user completes authentication successfully.
+                            
+                        Alternatively, the request can include authentication information which has been obtained before via an authentication process. If this is the case, the PEP goes directly into the authentication phase, described later in section <x-ref "accesscontrol">.
+
+                    -(3) The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
+
+                        An example flow with a natural person would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
+
+                    -(4) The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
+
+                        If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
+
+                    -(5) The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
+
+                    -(6) The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
+
+                        The Trust Framework is composed of one or more Trusted Lists where each list is specialised in some specific domain of trust.
+
+                        For example, the Trust Framework contains Trusted Lists with the schema definitions used for the well-known types of Verifiable Credentials in the ecosystem. In this way, if the Verifiable Registry used for the Trust Framework is based on a Blockchain network (or several federated networks), the schemas can be published in a trusted and resilient manner reducing the risk of malicious tampering and keeping a record of the history of modifications.
+
+                        But the most interesting Trusted Lists in the Trust Framework are the Trusted Issuers Lists, which provide the mechanism to efficiently and securely verify that the issuer of a given credential is a Trusted Issuer of that type of credentials.
+
+                        It has to be noticed that even though most Trusted Issuer Lists are global (used by all participants in the ecosystem) and have essentially public information, there may be some specialised lists that are private to one or more organisations and specialised in some specific requirement.
+
+                        In this way, there may be some lists that are specific to the products that one organisation provides to other participants in the ecosystem. For example, there may be a Trusted Issuer List private to one organisation which is updated with the identity of a participant when that participant acquires access to some product provided by that organisation.
+
+                        For example, this "product-specific" Trusted Issuer List is queried when performing authorization if the related policy rules specify that the issuer of the Verifiable Credential received in the request should have acquired the product that the request is trying to access.
+
+                        However, as mentioned before, the set of "internal" and "external" Trusted Lists to query is not hardcoded but it depends on the specific policy rules that should be applied to the request when computing the decision to grant access or not.
+
+                        In this way, the system provides a great deal of flexibility on how access control is performed.
+
+                        For simplicity, the diagram below shows the query of the Trusted Issuer Lists as a single interaction to a single box, but the actual interactions can be very complex if required. In addition, the diagram does not specify whether the list is "private" or "global".
+
+                The following sections elaborate in more detail in each of the interactions.
+                
+
+            <section>Exchanging a LEARCredential for an Access Token
+
+                In order to authenticate, the Wallet sends a `POST` request to a given endpoint specialised in M2M authentication. The contents of this POST request is very similar to the contents of the Authorization Response in the case of H2M flows. There are several reasons for having separate authentication endpoints for machines and humans, the most important being of legal responsibility nature: natural persons are completely different entities from the point of view of the legal system in the EU (for example, with specific laws like GDPR or Consumer Rights Directive). Having separate authentication endpoints helps reduce the risk of affecting natural persons when modifying the authentication of machines.
+
+                The
+                Once the Authorization Request has been validated, the Wallet creates an Authorization Response to be posted in the `redirect_uri` specified by the RP in the Authorization Request. For completeness, we describe in the following figure the complete process from reception of Authorization Request until sending the Authorization Response.
+
+                <x-diagram .plantuml>Starting the authentication phase
+                    box "Company" #WhiteSmoke
+                        actor "User" as user
+                        participant "Wallet" as mobile
+                        participant "Laptop" as browser
+                    end box
+                    box "Relying Party" #WhiteSmoke
+                        participant "Portal" as portal
+                        participant "VC Verifier" as verifier
+                    end box
+
+                    verifier -> mobile --++: **(9)** Reply with Authorization Request
+
+                    mobile -> mobile: **(10)** Verification of signature of Authorization Request
+
+                    mobile -> mobile: **(11)** Verification of the identity of the Relying Party
+
+                    mobile -> mobile: **(12)** Verification of the trusted nature of the RP
+
+                    mobile -> mobile: **(13)** Create Authorization Response
+                    # -(13) The wallet creates an Authorization Response to be posted in the `redirect_uri` specified by GoodAir in the Authorization Request that was sent to the wallet. The contents of the Authorization Response are described below.
+
+                        The response is constructed as defined in section 6.1 of [[OpenID.VP]]. In particular, because the Authorization Request included only `vp_token` as the `response_type`, the VP Token is provided directly in the Authorization Response and a separate `id_token` is not needed.
+
+                        The contents of the Authorization Response in our specific use case are:
+
+                        <x-code .ini>
+                            presentation_submission=[see definition below]
+                            &vp_token=[see definition below]
+
+                        The content of the `presentation_submission` parameter in the above Authorization Response is:
+
+                        <x-code .json>
+                            {
+                                "definition_id": "OnboardingPresentationDefinition",
+                                "id": "OnboardingPresentationSubmission",
+                                "descriptor_map": [
+                                {
+                                    "id": "id_credential",
+                                    "path": "$",
+                                    "format": "ldp_vp",
+                                    "path_nested": {
+                                        "format": "ldp_vc",
+                                        "path": "$.verifiableCredential[0]"
+                                    }
+                                }
+                                ]
+                            }
+
+                        Which complies with [[DIF.PresentationExchange]] and refers to the Verifiable Presentation in the `vp_token` parameter provided in the same response. In our example, the Verifiable Presentation includes the LEARCredential that was described in the previous sections.
+
+                    mobile -> verifier ++: **(14)** POST /api/siop/authorization_response
+                    # -(14) The wallet sends the Authorization Response to the endpoint received in the `redirect_uri` parameter of the Authorization Request, sending an HTTP `POST` request using the encoding `application/x-www-form-urlencoded`.
+
+                        <x-code .http>
+                            POST /api/siop/authorization_response HTTP/1.1
+                            Host: verifier.dome-onboarding.org
+                            Content-Type: application/x-www-form-urlencoded
+
+                            presentation_submission=[see definition below]
+                            &vp_token=[see definition below]
+
+
+            <section>Authenticating the user with the LEARCredential
+
+                We should remember that inside the LEARCredential the `credentialSubject` object has an `id` field with value `did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK` which is the DID of the user. It was generated during the creation of the LEARCredential, and the Relying Party should trust that the credential was generated in the proper way binding cryptographically the DID with the LEARCredential, as described in a previous section. It is the same trust that should be put in the generation of any other signed document, like a contract or invoice.
+
+                The process of verifying the Authorization Response and authenticating the user with the LEARCredential is the following:
+
+                <x-diagram .plantuml>Starting the authentication phase
+                    box "Company" #WhiteSmoke
+                        actor "User" as user
+                        participant "Wallet" as mobile
+                        participant "Laptop" as browser
+                    end box
+                    box "Relying Party" #WhiteSmoke
+                        participant "Portal" as portal
+                        participant "VC Verifier" as verifier
+                    end box
+
+                    mobile -> verifier ++: (14) POST /api/siop/authorization_response
+
+                    verifier -> verifier: (15 and 16) Verify signature\nand issuer of\nLEARCredential
+                    # -(15 and 16) The Verifier receives the Authorization Request and has to perform verifications, the standard ones being defined in [[DIF.PresentationExchange]]. In order to verify that the Verifiable Credential has been issued by a trusted entity, the Relying Party has to verify:
+
+                        <ol>
+                            - That the DID of the entity which is the issuer of the VC is a trusted entity.
+                            - That the VC was signed by that participant.
+
+                        Both verifications can be done by performing DID resolution, checking that the resulting DID Document contains the public key corresponding to the one specified in the Verifiable Credential, and by verifying the digital signature of the credential against that public key.
+
+                        In our case the LEARCredential was issued using the `did:elsi` method, so resolution is very simple and is specified in [[DID-ELSI]].
+
+                    verifier -> verifier: (17) Verify sender of the\nAuthorization Response
+                    # -(17) After verifying the credential, the Relying Party can also verify that the Verifiable Presentation including the Verifiable Credential is sent by the user and not by a malicious agent. To do so, it uses the public key associated to the `did:key` identifier `id` field inside the `credentialSubject` structure. That public key is cryptographically bound to the customer DID during the onboarding process that GoodAir performed with its employee.
+
+                    verifier -> verifier: (18) Generate Access Token
+                    # -(18) The Verifier creates an Access Token for the user so it can be used later for access services provided by the Relying Party (in the case of onboarding, those services would be the ones related to the onboarding process implemented by the Onboarding portal). The Access Token is generated in JWT format and signed by the VC Verifier. The access token is intended for use as bearer token over HTTP [[RFC2616]] using Transport Layer Security (TLS) [[RFC5246]] to access protected resources, and it should use the JWT Profile profile described in [[RFC9068]].
+
+                        For our use case, the payload of the JWT access token looks like:
+
+                        <x-code .json>
+                            {
+                                "iss": "did:elsi:VATFR-99999999",
+                                "sub": "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+                                "aud":   "https://dome-marketplace.eu/onboarding",
+                                "exp": 1639528912,
+                                "iat": 1618354090,
+                                "jti" : "dbe39bf3a3ba4238a513f51d6e1691c4",
+                                "client_id": "did:elsi:VATFR-99999999",
+                                "scope": "vp_token",
+                                "verifiableCredential": ["the VC that was received inside the Verifiable Presentation"]
+                            }
+
+                        Where, according to [[RFC9068]]:
+
+                        <ul>
+                            - `iss` and `client_id` have the same value because the access token has been generated by the Verifier component of the DOME onboarding service, acting as the DOME legal person.
+
+                            - `sub` identifies the user (employee of GoodAir acting as LEAR of the company) using the DID inside the Verifiable Credential received
+
+                            - `aud` identifies the RS (Resource Server) component in Packet Delivery. In this case we assume that it is internal and does not have a DID assigned, so we use the URI of the component.
+
+                            - `kid` in the header identifies the key that is used to sign the JWT and which must be configured up-front and known by the RS (Resource Server.
+
+                            - `scope` has the same value as the equivalent `scope` parameter in the initial Authorization Request.
+
+                            - `verifiableCredential` contains the Verifiable Credential that was received, specifically the value of the first element of the field `verifiableCredential` of the Verifiable Presentation.
+
+                    verifier -> mobile: (19) HTTP 200 with <access token>
+                    # -(19) The Verifier sends a successful response to the POST request from the wallet. The wallet receives the response to the POST indicating the success or failure of the process. The Verifier continues processing because the web portal of Packet Delivery has to be refreshed with the services that this specific user can access, based on the information received in the Verifiable Credential and the access control policies implemented by the DOME portal.
+
+                    verifier -> portal --++: (20) Notify with\n<access token> and <state>
+                    # -(20) The Verifier notifies the DOME portal to refresh the login page so it can present the services to the user. The notification includes the following:
+
+                        <ul>
+                            - The `state` nonce that was generated by the portal when it generated the QR code. The portal uses the `state` nonce to know what login session is being notified.
+
+                            - The access token generated before.
+
+                        The notification is a simple POST request with both parameters in the body:
+
+                        <x-code .http>
+                            POST /api/notify HTTP/1.1
+                            Host: dome-marketplace.eu
+                            Content-Type: application/x-www-form-urlencoded
+
+                            access_token=[the access token]
+                            &state=af0ifjsldkj
+
+                        The portal component replies immediately and continues processing.
+
+                    portal -> browser --: (21) Refresh screen\nwith services and include\n<access token>
+                    # -(21) The portal of the Relying Party refreshes the screen and displays the services available to users, sending the Access Token to the browser of the user. The Access Token will be sent back by the browser to the portal whenever the user tries to access a protected resource of the portal, and so access control can be performed using the data inside the token, in the same way as with any other access token in other authentication mechanisms.
+                    
 
 
     <section #accesscontrol>Access control with Verifiable Credentials
