@@ -1043,6 +1043,47 @@ localBiblioFile: "localbiblio.yaml"
                     }
 
 
+    <section>Reference architecture for authentication and access control
+
+        To describe the system we will use the following figure which is based on [[[NIST-AUTH]]] and describes a reference architecture with the required functional components to achieve authentication and enforcement of the authorization policies.
+
+        The diagram uses the logical concepts also used in the XACML reference architecture, but our description is agnostic to the actual policy language used in a concrete implementation.
+
+        At this moment, we are interested in the overall flows and the details will be explained later in the corresponding sections.
+
+        <x-img @images/login_in_DOME/authn_architecture-GeneralArchitecture.drawio.png>Architecture overview 
+
+        The system supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but the H2M flows may be more interactive.
+
+        <ul .plain>
+
+            -(1) In any of the scenarios (H2M or M2M), a request to access a protected resource managed by the Relying Party has to come with authentication information. Without authentication information, it is impossible to perform any type of access control to protect a resource from external entities (any entity acting on behalf of the Participant).
+
+                In addition to authentication information, the request may carry also information intended specifically for access control, like the type of entity (natural person, device, application, ...), the relationship with the Participant (employee, contractor, sensor operated by Participant, ...), and specific powers assigned to the entity by the legal representative. More on this in the section <x-ref "accesscontrol">.
+
+                The component in charge of **enforcing** that all requests come authenticated and that they comply with the access control policies of the Relying Party is the `PEP` (Policy Enforcement Point).
+            
+            -(2) Every request to a protected resource is intercepted by the `PEP`. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+
+
+
+         
+
+        We describe here how to perform authentication using Verifiable Credentials. Authentication requires a special type of Verifiable Credential called a `VerifiableID`. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a `VerifiableID` and a `Verifiable Authorization`.
+
+        The LEARCredential is a powerful mechanism that can be used both for authentication and sophisticated access control. In this section we will focus only on authentication using the LEARCredential.
+
+
+
+        At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the `credentialSubject` object).
+
+
+        
+
+
+
+
+
     <section>Authenticating with Verifiable Credentials
 
         <section>Overview
@@ -1054,6 +1095,13 @@ localBiblioFile: "localbiblio.yaml"
             The authentication mechanism supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but the H2M flows may be more interactive.
 
             At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the `credentialSubject` object).
+
+            To describe the system we will use the following figure which is based on [[[NIST-AUTH]]] and describes a reference architecture with the required functional components to achieve authentication and enforcement of the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
+
+            The diagram uses the logical concepts also used in the XACML reference architecture, but our description is agnostic to the actual policy language used in a concrete implementation.
+
+            <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
+        
 
 
         <section>Authenticating with Verifiable Credentials, Human-To-Machine (H2M)

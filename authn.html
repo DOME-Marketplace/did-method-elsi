@@ -1267,9 +1267,36 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
             </section>
         </section>
     </section>
+    <section id='Reference architecture for authentication and access control'><h2>Reference architecture for authentication and access control</h2>
+
+        <p>To describe the system we will use the following figure which is based on [[[NIST-AUTH]]] and describes a reference architecture with the required functional components to achieve authentication and enforcement of the authorization policies.
+        </p>
+        <p>The diagram uses the logical concepts also used in the XACML reference architecture, but our description is agnostic to the actual policy language used in a concrete implementation.
+        </p>
+        <p>At this moment, we are interested in the overall flows and the details will be explained later in the corresponding sections.
+        </p>
+        <figure><img src='images/login_in_DOME/authn_architecture-GeneralArchitecture.drawio.png'/>
+        <figcaption>Architecture overview</figcaption></figure>
+        <p>The system supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but the H2M flows may be more interactive.
+        </p>
+        <ul class='plain'>
+            <li id='1'><b>1</b> In any of the scenarios (H2M or M2M), a request to access a protected resource managed by the Relying Party has to come with authentication information. Without authentication information, it is impossible to perform any type of access control to protect a resource from external entities (any entity acting on behalf of the Participant).
+                <p>In addition to authentication information, the request may carry also information intended specifically for access control, like the type of entity (natural person, device, application, ...), the relationship with the Participant (employee, contractor, sensor operated by Participant, ...), and specific powers assigned to the entity by the legal representative. More on this in the section <a href="#accesscontrol" class="xref">Access control with Verifiable Credentials</a>
+                </p>
+            </li>
+            <li id='2'><b>2</b> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+            </li>
+        </ul>
+        <p>We describe here how to perform authentication using Verifiable Credentials. Authentication requires a special type of Verifiable Credential called a <code>VerifiableID</code>. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a <code>VerifiableID</code> and a <code>Verifiable Authorization</code>.
+        </p>
+        <p>The LEARCredential is a powerful mechanism that can be used both for authentication and sophisticated access control. In this section we will focus only on authentication using the LEARCredential.
+        </p>
+        <p>At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the <code>credentialSubject</code> object).
+        </p>
+    </section>
     <section id='Authenticating with Verifiable Credentials'><h2>Authenticating with Verifiable Credentials</h2>
 
-        <section id='Overview1048'><h2>Overview</h2>
+        <section id='Overview1087'><h2>Overview</h2>
 
             <p>We describe here how to perform authentication using Verifiable Credentials. Authentication requires a special type of Verifiable Credential called a <code>VerifiableID</code>. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a <code>VerifiableID</code> and a <code>Verifiable Authorization</code>.
             </p>
@@ -1279,10 +1306,16 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
             </p>
             <p>At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the <code>credentialSubject</code> object).
             </p>
+            <p>To describe the system we will use the following figure which is based on [[[NIST-AUTH]]] and describes a reference architecture with the required functional components to achieve authentication and enforcement of the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
+            </p>
+            <p>The diagram uses the logical concepts also used in the XACML reference architecture, but our description is agnostic to the actual policy language used in a concrete implementation.
+            </p>
+            <figure><img src='images/login_in_DOME/authn_architecture_numbered.drawio.png'/>
+            <figcaption>Architecture overview</figcaption></figure>
         </section>
         <section id='Authenticating with Verifiable Credentials, Human-To-Machine (H2M)'><h2>Authenticating with Verifiable Credentials, Human-To-Machine (H2M)</h2>
 
-            <section id='Overview1061'><h2>Overview</h2>
+            <section id='Overview1107'><h2>Overview</h2>
 
                 <p>Authentication requires a special type of Verifiable Credential called a VerifiableID. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a VerifiableId and a Verifiable Authorization.
                 </p>
@@ -1297,9 +1330,9 @@ Cache-Control<span style="color:#000;font-weight:bold">:</span> no-store
                 <p>The high level flow is the following:
                 </p>
                 <ul class='plain'>
-                    <li id='1'><b>1</b> The user sends a request to access a protected resource managed by the Relying Party.
+                    <li id='1_1123'><b>1</b> The user sends a request to access a protected resource managed by the Relying Party.
                     </li>
-                    <li id='2'><b>2</b> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+                    <li id='2_1125'><b>2</b> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
                         <ul>
                             <li>If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
                             </li>
@@ -1698,7 +1731,7 @@ access_token=[the access token]
         </section>
         <section id='Authenticating with Verifiable Credentials, Machine-To-Machine (M2M)'><h2>Authenticating with Verifiable Credentials, Machine-To-Machine (M2M)</h2>
 
-            <section id='Overview1449'><h2>Overview</h2>
+            <section id='Overview1495'><h2>Overview</h2>
 
                 <p>The M2M flow for authentication shares many things with the flows for H2M authentication. We focus here on the differences.
                 </p>
@@ -1711,9 +1744,9 @@ access_token=[the access token]
                 <p>The high level flow is the following:
                 </p>
                 <ul class='plain'>
-                    <li id='1_1463'><b>1</b> The application sends a request to access a protected resource managed by the Relying Party.
+                    <li id='1_1509'><b>1</b> The application sends a request to access a protected resource managed by the Relying Party.
                     </li>
-                    <li id='2_1465'><b>2</b> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+                    <li id='2_1511'><b>2</b> Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
                         <ul>
                             <li>If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
                             </li>
@@ -1723,17 +1756,17 @@ access_token=[the access token]
                         <p>Alternatively, the request can include authentication information which has been obtained before via an authentication process. If this is the case, the PEP goes directly into the authentication phase, described later in section <a href="#accesscontrol" class="xref">Access control with Verifiable Credentials</a>.
                         </p>
                     </li>
-                    <li id='3_1474'><b>3</b> The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
+                    <li id='3_1520'><b>3</b> The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
                         <p>An example flow with a natural person would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
                         </p>
                     </li>
-                    <li id='4_1478'><b>4</b> The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
+                    <li id='4_1524'><b>4</b> The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
                         <p>If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
                         </p>
                     </li>
-                    <li id='5_1482'><b>5</b> The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
+                    <li id='5_1528'><b>5</b> The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
                     </li>
-                    <li id='6_1484'><b>6</b> The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
+                    <li id='6_1530'><b>6</b> The authorization mechanism uses the Trust Framework to query different Trusted Lists that are needed to evaluate the policy rules applicable to the request and compute a decision.
                         <p>The Trust Framework is composed of one or more Trusted Lists where each list is specialised in some specific domain of trust.
                         </p>
                         <p>For example, the Trust Framework contains Trusted Lists with the schema definitions used for the well-known types of Verifiable Credentials in the ecosystem. In this way, if the Verifiable Registry used for the Trust Framework is based on a Blockchain network (or several federated networks), the schemas can be published in a trusted and resilient manner reducing the risk of malicious tampering and keeping a record of the history of modifications.
@@ -1836,7 +1869,7 @@ presentation_submission=[see definition below]
                     </li>
                 </ul>
             </section>
-            <section id='Authenticating the user with the LEARCredential1577'><h2>Authenticating the user with the LEARCredential</h2>
+            <section id='Authenticating the user with the LEARCredential1623'><h2>Authenticating the user with the LEARCredential</h2>
 
                 <p>We should remember that inside the LEARCredential the <code>credentialSubject</code> object has an <code>id</code> field with value <code>did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK</code> which is the DID of the user. It was generated during the creation of the LEARCredential, and the Relying Party should trust that the credential was generated in the proper way binding cryptographically the DID with the LEARCredential, as described in a previous section. It is the same trust that should be put in the generation of any other signed document, like a contract or invoice.
                 </p>
@@ -1953,7 +1986,7 @@ access_token=[the access token]
     </section>
     <section id='accesscontrol'><h2>Access control with Verifiable Credentials</h2>
 
-        <section id='Overview1673'><h2>Overview</h2>
+        <section id='Overview1719'><h2>Overview</h2>
 
             <p>This section assumes that authentication has already been performed and that the Relying Party receives a request to a protected resource, with a proper access token inside the request. If the request does not come with an access token, the request is rejected immediately (or the user is redirected to the Authentication service of the Relying Party, depending on the use case).
             </p>
