@@ -99,6 +99,10 @@
     title: "REPORT on the proposal for a regulation of the European Parliament and of the Council amending Regulation (EU) No 910/2014 as regards establishing a framework for a European Digital Identity"
     href: "https://www.europarl.europa.eu/doceo/document/A-9-2023-0038_EN.html"
     date: "March 2023"
+"EDIW.ARF":
+    title: "EUDI Wallet Architecture and Reference Framework 1.1.0"
+    href: "https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework/blob/main/docs/arf.md"
+    date: "20 April 2023"
 "eIDAS-SAML_V1.2":
     title: "eIDAS SAML Attribute Profile. Version 1.2"
     href: "https://ec.europa.eu/digital-building-blocks/wikis/download/attachments/467109280/eIDAS%20SAML%20Attribute%20Profile%20v1.2%20Final.pdf"

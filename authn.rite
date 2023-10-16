@@ -31,7 +31,7 @@ localBiblioFile: "localbiblio.yaml"
 
     The mechanism is aligned with the upcoming EDIW (European Digital Identity Wallet) and its supporting eIDAS2 regulation, but it advances the state of the art by focusing entirely on **legal persons** with an implementation that can be used today without the need to wait for future supporting regulation.
     
-    The mechanism is **not recommended for natural persons**, even if technically could be adapted. For natural persons we recommend to wait for eIDAS2 and EDIW.
+    In particular, we support natural persons acting on behalf of legal entities (e.g., employees or contractors of a business), interacting with other legal entities. The mechanism is **not recommended for natural persons acting as citizens**, even if technically the mechanism could be adapted. For citizens we recommend to wait for eIDAS2 and EDIW.
     
     The mechanism leverages Verifiable Credentials and the existing eIDAS framework by:
     
@@ -42,7 +42,7 @@ localBiblioFile: "localbiblio.yaml"
     
     In this way, the credential is a **legally binding machine-readable document where the issuer attests that it delegates the set of powers specified in the credential to the user identified as the subject of the credential**.
     
-    The subject can then **use the credential to authenticate to a Relying Party** because the identities of holder and subject are bound.
+    The subject can then **use the credential to authenticate to a Relying Party** because the identities of holder and subject of the credential are bound.
 
     This mechanism leverages the eIDAS trust framework using advanced or qualified signatures and seals to provide a **high level of legal certainty and enjoying the presumption of non-repudiation in the courts**, something that does not happen when using other types of basic signatures.
 
@@ -65,11 +65,11 @@ localBiblioFile: "localbiblio.yaml"
 
         Standard eIDAS certificates of representation can help (see an example QTSP <a href="https://eadtrust.eu/en/electronic-certificates/legal-entity-representative/">Certificate of Legal Entity Representative</a>), but they tend to be for natural persons with full powers or for very standard use cases.
 
-        For a more granular specification of the powers of a natural person when acting on behalf of a legal person, other solutions have been implemented in different Member States, but typically centralised, non-interoperable among them and limited to the services provided by the Public Administration. In the private sector there is not any standardised solution and basically every company does it their own way.
+        For a more granular specification of the powers of a natural person when acting on behalf of a legal person, other solutions have been implemented in different Member States, but they are typically centralised, non-interoperable among them and limited to the services provided by the Public Administration. In the private sector there is not any standardised solution and basically every company does it their own way.
 
         **Verifiable Credentials** can become a good instrument to implement a machine-readable and legally-binding e-mandate with much more descriptive power and flexibility than trying to use just certificates of representation, while maintaining the same level of compliance and legal risk than with traditional processes, and this is the reason why it is included in the objectives of the upcoming eIDAS2 regulation.
 
-        However, currently there are important barriers that hinder the adoption of an EU wide solution for cross-border transfer of representation information, being one of the most relevant the **lack of a common semantic framework**. 
+        However, currently there are important barriers that hinder the adoption of an EU-wide solution for cross-border transfer of representation information, being one of the most relevant the **lack of a common semantic framework**. 
         
         Representation is complex, and electronic mandates schemes and policies are basically national and usually do not contemplate the possibility to use those mandates in cross-border scenarios. The problem of mandates when accessing services from a Public Administration is extremely complex, so **we will focus here on the private sector**: when both the Relying Party and the Participant are legal persons from the private sector.
 
@@ -83,13 +83,13 @@ localBiblioFile: "localbiblio.yaml"
 
             -(REQ-02): **The Relying Party does not have to know in advance the Principal** accessing its services on behalf of a Participant.
 
-                However, the Relying Party should have an easy authentication mechanism based on Verifiable Credentials to ensure that the entity accessing the services is the same entity identified in the e-mandate, and so that it has the required powers to access.
+                However, the Relying Party should have an easy authentication mechanism based on Verifiable Credentials to ensure that the entity accessing the services is the same entity identified in the e-mandate, and so that it has the required powers to access the service.
 
-                Ideally, to simplify the authentication and authorisation process for the Relying Party, the same credential that is a mandate (we call it a Verifiable Authorisation) can enable authentication (we call it a VerifiableID). Of course, we could use different credentials and even a "traditional" authentication mechanism, but having a single credential that can be used both for authentication and authorisation (using the powers specified in the mandate) is what we describe here.
+                Ideally, to simplify the authentication and authorisation process for the Relying Party, the same credential that is a mandate (we call it a Verifiable Authorisation) can be used for authentication (we call it a VerifiableID). Of course, we could use different credentials and even a "traditional" authentication mechanism, but having a single credential that can be used both for authentication and authorisation (using the powers specified in the mandate) is what we describe here.
 
-            -(REQ-03): There may be several Principals accessing the services of a Relying Party on behalf of the same Participant, and each Principal may have different powers that enable them to access different (possibly overlapping) sets of services.
+            -(REQ-03): There may be several Principals accessing the services of a Relying Party on behalf of the same Participant, and each Principal may have different powers assigned by the Participant that enable them to access different (possibly overlapping) sets of services with different privileges.
 
-                The Relying Party specifies the powers that need to be validated for each service (the scope the access is requested on and the type of representation that the Service provider allows). Each individual service may require different sets of powers, at the sole discretion of the Relying Partly (of course always in synch with the agreement formalised with the Participant).
+                The Relying Party specifies the powers that need to be validated for each service (the scope the access is requested on, and the type of representation that the Service provider allows). Each individual service may require different sets of powers, at the sole discretion of the Relying Partly (of course always in synch with the agreement formalised with the Participant).
                 
                 The Participant grants the authorisations to the Principals at its own discretion. Only the Principals that have the powers required by an individual service can access that service. The Participant may have more powers than strictly required (for example, full representation of the legal entity).
 
@@ -1045,78 +1045,90 @@ localBiblioFile: "localbiblio.yaml"
 
     <section>Reference architecture for authentication and access control
 
+        According to the [[[EDIW.ARF]]], there are four types of flows when using the wallet with Verifiable Credentials:
+
+        <ol>
+            - Proximity supervised flow.
+            - Proximity unsupervised flow.
+            - Remote cross-device flow.
+            - Remote same-device flow.
+
+        Flows 1 and 2 are used when the Wallet User is physically close to a Relying Party and the credential exchange should happen using proximity protocols (NFC, Bluetooth, QR-Code, etc.), not using the Internet.
+        
+        Flows 3 and 4 are used when credential exchange should happen over the Internet. These are the flows that are used for online interactions between the user and the Relying Party.
+        
+        We focus here on the remote/online flows, which have the following characteristics:
+
+            - The remote cross-device flow is typically used when the user consumes information from the Relying Party on a web browser in a laptop/PC and uses the Wallet in a mobile to authenticate the session. We describe here a mechanism using a QR code displayed in the laptop/PC screen which is scanned by the Wallet running in a mobile.
+            
+            - In the remote same-device flow, the Wallet and the consumption device are the same, typically a mobile device.
+
+        The User journeys described here focus on the cross-device flow, which is the most complex, involving two different devices.
+
         To describe the system we will use the following figure which is based on [[[NIST-AUTH]]] and describes a reference architecture with the required functional components to achieve authentication and enforcement of the authorization policies.
 
         The diagram uses the logical concepts also used in the XACML reference architecture, but our description is agnostic to the actual policy language used in a concrete implementation.
 
         At this moment, we are interested in the overall flows and the details will be explained later in the corresponding sections.
 
-        <x-img @images/login_in_DOME/authn_architecture-GeneralArchitecture.drawio.png>Architecture overview 
+        <figure #fig-general-architecture>
+            <img src="images/login_in_DOME/authn_architecture-GeneralArchitecture.drawio.png" alt="" />
+
+            <figcaption>General architecture, remote cross-device flow
+
 
         The system supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but the H2M flows may be more interactive.
 
         <ul .plain>
 
-            -(1) In any of the scenarios (H2M or M2M), a request to access a protected resource managed by the Relying Party has to come with authentication information. Without authentication information, it is impossible to perform any type of access control to protect a resource from external entities (any entity acting on behalf of the Participant).
+            -(1. Request protected resource.) In any of the scenarios (H2M or M2M), a request to access a protected resource managed by the Relying Party has to come with authentication information. Without authentication information, it is impossible to perform any type of access control to protect a resource from external entities (any entity acting on behalf of the Participant).
 
                 In addition to authentication information, the request may carry also information intended specifically for access control, like the type of entity (natural person, device, application, ...), the relationship with the Participant (employee, contractor, sensor operated by Participant, ...), and specific powers assigned to the entity by the legal representative. More on this in the section <x-ref "accesscontrol">.
 
                 The component in charge of **enforcing** that all requests come authenticated and that they comply with the access control policies of the Relying Party is the `PEP` (Policy Enforcement Point).
             
-            -(2) Every request to a protected resource is intercepted by the `PEP`. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+            -(2 & 3. Check if authenticated.) Every request to a protected resource is intercepted by the `PEP`. The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded to the resource server only if they are accepted.
+            
+                If the request does not come with authentication information, there are two main scenarios which are possible:
 
+                    -(M2M). If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
 
+                    -(H2M). If the user is a natural person using a browser for navigating the portal of the Relying Party, the typical approach is to redirect the browser to the authentication component (<strong>step 3</strong> in the figure) using an HTTP Status of `302 Found`. The redirection may include enough information so the authentication component can send back the user to the original request if the user completes authentication successfully.
+                    
+                If the request includes authentication information which has been obtained before via an authentication process, the PEP goes directly into the authorisation phase, described later in section <x-ref "accesscontrol">.
 
-         
+            -(4. Authentication.) The result of the authentication phase is to exchange a long-term VerifiableID (and possibly additional Verifiable Attestations) for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the `credentialSubject` object). In addition, the authentication component enforces the compliance with the <b>authentication policies</b> defined in the Relying Party.
 
-        We describe here how to perform authentication using Verifiable Credentials. Authentication requires a special type of Verifiable Credential called a `VerifiableID`. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a `VerifiableID` and a `Verifiable Authorization`.
+                These authentication policies should not be confused with the authorisation policies that will be used in the access control phase (though they may be related). One example of authentication policy could be: "we do not allow anyone to authenticate from 22:00 to 6:00". Authentication policies can also provide useful information to the user (especially a natural person) during the authentication phase about which credentials are required for a given service, before the user tries to access the service.
 
-        The LEARCredential is a powerful mechanism that can be used both for authentication and sophisticated access control. In this section we will focus only on authentication using the LEARCredential.
+            -(5. Authorization.) When the PEP intercepts an authenticated request, it enforces access control policies by requesting a decision from the PDP (Policy Decision Point). The PDP uses information from the request to retrieve the applicable policies, evaluates those policies and returns its decision, either `Accept` or `Reject`. More detail on this process later in the document.
 
+                The PEP (Policy <b>Enforcement</b> Point) enforces the decision taken by the PDP (Policy <b>Decision</b> Point):
 
+                    - If the decision is `Reject` the PDP returns an error to the caller (it may be `401 Unauthorized` or any other depending on security considerations).
 
-        At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the `credentialSubject` object).
+                    - If the decision is `Accept` the PEP forwards the request to the Resource Server for execution, and returns to the caller whatever result the Resource Server send back to the PEP.
 
-
-        
-
-
-
+            -(6. Trust Framework.) During authentication and access control the system queries the Trust Framework to retrieve information required for execution of those phases. For example, authentication fails if any of the credentials presented by the user is revoked. Also, the policies for authentication and for access control may specify a set of Trusted Lists to query, and the process fails if the issuer of a credential is not in that list (for example, if the issuer is not in the Trusted Participants List because it does not belong to a given ecosystem, like a Data Space). More details later.
 
 
     <section>Authenticating with Verifiable Credentials
 
-        <section>Overview
-
-            We describe here how to perform authentication using Verifiable Credentials. Authentication requires a special type of Verifiable Credential called a `VerifiableID`. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a `VerifiableID` and a `Verifiable Authorization`.
-
-            The LEARCredential is a powerful mechanism that can be used both for authentication and sophisticated access control. In this section we will focus only on authentication using the LEARCredential.
-
-            The authentication mechanism supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but the H2M flows may be more interactive.
-
-            At a very high level, the objective of the authentication phase is to exchange a long-term VerifiableID for a shorter-term Access Token issued by the Relying Party, which can be used later to invoke protected services. In order to do so, the Relying Party should make sure that the holder of the VerifiableID (the entity presenting the credential to the Relying Party) is the same entity as the one identified in the VerifiableID (the subject of the claims in the `credentialSubject` object).
-
-            To describe the system we will use the following figure which is based on [[[NIST-AUTH]]] and describes a reference architecture with the required functional components to achieve authentication and enforcement of the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
-
-            The diagram uses the logical concepts also used in the XACML reference architecture, but our description is agnostic to the actual policy language used in a concrete implementation.
-
-            <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
+        We focus here on how to perform authentication using Verifiable Credentials. Access control is the subject of another section.
         
+        Authentication requires a special type of Verifiable Credential called a `VerifiableID`. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a `VerifiableID` and a `Verifiable Authorization`. The LEARCredential is a powerful mechanism that can be used both for authentication and sophisticated access control. In this section we will focus only on authentication using the LEARCredential.
 
+        The authentication mechanism supports both Human-To-Machine (H2M) and Machine-To-Machine (M2M) flows. They share a lot of things, but we describe each one separately.
 
-        <section>Authenticating with Verifiable Credentials, Human-To-Machine (H2M)
+        <section>Authentication in Human-To-Machine scenarios
 
             <section>Overview
 
-                Authentication requires a special type of Verifiable Credential called a VerifiableID. For the examples illustrating the mechanism we will use a LEARCredential, which is at the same time a VerifiableId and a Verifiable Authorization.
+                For the explanation we will use an expanded version of [[[#fig-general-architecture]]], which can be seen in [[[#fig-authentication]]].
+                
+                <x-img #fig-authentication src="images/login_in_DOME/authn_architecture_authentication.drawio.png">Authentication, H2M flow
 
-                For the explanation we will use the following figure which is based on [[[NIST-AUTH]]] which describes a reference architecture with necessary functional components to achieve authentication and enforcement of the authorization policies. The authorization process depends on four layers of functionality: <b>Enforcement</b>, <b>Decision</b>, <b>Access Control Data</b>, and <b>Administration</b>.
-
-                The diagram uses the logical concepts also used in the XACML reference architecture, but the description is agnostic to the actual policy language used in a concrete implementation.
-
-                In this description we assume that the user is a natural person who wants to access a protected resource. However, the architecture supports machine-to-machine (M2M) interactions. The differences will be described in the description when they are relevant.
-
-                <x-img @images/login_in_DOME/authn_architecture_numbered.drawio.png>Architecture overview 
+                
 
                 The high level flow is the following:
 
@@ -1124,22 +1136,28 @@ localBiblioFile: "localbiblio.yaml"
 
                     -(1) The user sends a request to access a protected resource managed by the Relying Party.
                     
-                    -(2) Every request to a protected resource is intercepted by the PEP (Policy Enforcement Point). The PEP is normally implemented as a reverse proxy or API gateway, so all calls to protected resources entering the organisation are intercepted and forwarded only if they are accepted. If the request does not come with authentication information, there are several high level scenarios which are possible:
+                    -(2) The request is intercepted by the PEP which checks if the request is authenticated.
 
-                        <ul>
-                            - If the user is a machine using an API, the request is rejected with an error. The caller is responsible for authenticating before retrying, which can be done using the metadata about the Relying Party available at the standard OpenID endpoints.
+                    -(3) If the request is not authenticated, the user is redirected to the authentication component (VC Verifier) by returning an HTTP Status of `302 Found`.
+                    
+                        Alternatively, the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports both scenarios.
 
-                            - If the user is a natural person using a browser for navigating the portal of the Relying Party, the typical approach is to redirect the browser to the authentication component using an HTTP Status of 302. The redirection includes enough information so the authentication component can send back the user to the original request if the user completes authentication successfully.
-                            
-                        Alternatively, the request can include authentication information which has been obtained before via an authentication process. If this is the case, the PEP goes directly into the authentication phase, described later in section <x-ref "accesscontrol">.
+                        An example flow would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
 
-                    -(3) The user is redirected to the authentication component. As mentioned before, alternatively the authorization component can be accessed directly by the user before trying to access the protected resource. This would be the expected behaviour of a user who knows that authentication is required. The mechanism described here supports all possible scenarios both for natural persons and machines.
-
-                        An example flow with a natural person would be: The user navigates first to a general Login page in the portal of the Relying Party and authenticates. After authentication the portal presents a collection of services that the user can access. The user selects one of the services/operations and the Relying Party executes the operation if the user is authorised to do so.
-
-                    -(4) The Verifiable Credentials verifier component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
+                    -(4) The Verifiable Credentials verifier (VC Verifier) component of the Relying Party retrieves the credentials that are required for authentication. If the user has been redirected when trying to access a protected resource, the redirection provides information about the operation and protected resource that was trying to access, so there may be more credentials required than just a VerifiableID.
 
                         If the user accessed the Login page directly, the VC Verifier component does not have information about the resource that the user intends to access, so it can request just a VerifiableID.
+
+                        The VC Verifier component retrieves the applicable policies from the Policy Retrieval Point (PRP) storing the authentication policies (do not confuse with the PRP for authorization, they could be the same in a given deployment but for more generality we have depicted separate logical components). The PRP is just the repository of policies. The Policy Administration Point is the component responsible for the management of the authentication policies in the PRP.
+
+                        The authentication policies specify, among other things:
+
+                            - The type of VerifiableID that the user should present in order to be authenticated
+                            - If the user was redirected to the VC Verifier when trying to access a specific protected resource, the VC Component has received with the redirection the information about the service that the user intended to access. The VC Component passes this information to the PRP, and the PRP replies with the Verifiable Credentials (additional to the VerifiableID) that the user must present in order to have access to the service.
+
+                        This information will be used by the VC Verifier to request from the Wallet those credentials. Please note that this is not performing authorization, only requesting the credentials that are know to be required for the service that the user intends to call. There may be additional authorization policies that implement more granular authorization checks when actually accessing the service.
+
+                        However, in most common cases it may be enough with just one credential of type LEARCredential if it includes enough authorization information to determine if access to the service can be allowed or not.
 
                     -(5) The VC Verifier component of the Relying Party and the Wallet of the user engage in a Verifiable Presentation Exchange flow, where the result is that the VC Verifier receives a VerifiableID and possibly additional Verifiable Credentials as determined in step 4.
 
@@ -1168,11 +1186,11 @@ localBiblioFile: "localbiblio.yaml"
 
             <section>Starting the OpenID for Verifiable Presentations flow
 
-                In this section we assume that the user tries to access a protected resource and that the user is not authenticated. The flow when the user is already authenticated is the same, just skipping the authentication phase (steps 1 to 6).
+                In this section we assume that the user starts the authentication process interacting with the VC Verifier component of the Relying Party. The user can direct its browser directly to the VC Component or may have been redirected after trying to access a service without being authenticated previously.
 
-                The authentication process starts an OpenID for Verifiable Presentations flow combined with the Self-Issued OP v2 specification [[OpenID.SIOP2]], where the VC Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP.
+                The authentication process starts an OpenID for Verifiable Presentations flow [[OpenID.VP]] combined with the Self-Issued OP v2 specification [[OpenID.SIOP2]], where the VC Verifier component of the portal plays the role of a Relying Party (RP in Open ID Connect terminology) and the wallet of the user is a Self-Issued IdP.
                 
-                In this step, the Verifier has to send an Authorization Request to the wallet. But as a Self-Issued OP may be running locally as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
+                In this step, the VC Verifier has to send an Authorization Request to the wallet. But as a Self-Issued OP may be running as a native application or progressive web application (PWA), the RP may not have a network-addressable endpoint to communicate directly with the OP. We have to leverage the implicit flow of OpenID Connect to communicate with such locally-running Ops, as described in [[OpenID.SIOP2]].
 
                 We use a QR code to start the process and allow the wallet to receive the Authorization Request from the Verifier, and respond with an Authorization Response, sent to the Verifier in the body of an HTTP `POST` request.
 
@@ -1188,7 +1206,7 @@ localBiblioFile: "localbiblio.yaml"
                     end box
 
                     user -> browser ++: **(1)** Access DOM portal
-                    # -(1) The user (GoodAir employee) uses his Laptop browser to access the DOME portal to perform the onboarding process.
+                    # -(1) The User navigates with his Laptop browser to access the portal Of the  to perform the onboarding process.
 
                         We assume in this scenario a cross-device interaction, that is, the user accesses the portal services with a PC browser, but authentication is performed with a mobile using Verifiable Credentials, as in typical 2-factor authentication.
 

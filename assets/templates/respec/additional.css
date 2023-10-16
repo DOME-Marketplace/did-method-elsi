@@ -52,6 +52,11 @@ pre.nohighlight {
 div.nohighlight {
     padding: 0.5em
 }
+
+ul>li {
+    text-indent: 0em;
+}
+
 ul.plain {
     list-style: none;
 }
@@ -63,4 +68,9 @@ ul.plain>li>div {
 }
 ul.plain>li>p {
     text-indent:0;
+}
+
+.bullet{
+    font-size: large;
+    color: blue;
 }
