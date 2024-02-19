@@ -10,13 +10,13 @@
     <meta property="og:type" content="website">
     <meta property="og:description" content="A DID method for legal persons, maximising at the same time regulatory compliance, decentralisation and privacy for W3C Verifiable Credentials in the European Union.">
     <meta property="og:site_name" content="DID:ELSI Method">
-    <meta property="og:url" content="https://alastria.github.io/did-method-elsi/">
+    <meta property="og:url" content="https://DOME-Marketplace.github.io/did-method-elsi/">
 
     <script src="https://www.w3.org/Tools/respec/respec-w3c" async="" class="remove"></script>
     <script class="remove">
         var respecConfig = {
-            latestVersion: "https://alastria.github.io/did-method-elsi/",
-            github: "https://github.com/alastria/did-method-elsi",
+            latestVersion: "https://DOME-Marketplace.github.io/did-method-elsi/",
+            github: "https://github.com/in the form of delegation of powers/did-method-elsi",
             editors: [
                 {
                     company: "JesusRuiz",
@@ -101,6 +101,11 @@
                 "DIF.PresentationExchange": {
                         href: "https://identity.foundation/presentation-exchange/spec/v2.0.0/",
                         title: "Presentation Exchange 2.0.0",
+                },
+                "EDIW.ARF": {
+                        date: "20 April 2023",
+                        href: "https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework/blob/main/docs/arf.md",
+                        title: "EUDI Wallet Architecture and Reference Framework 1.1.0",
                 },
                 "ENISA-Qualified Electronic Seals": {
                         date: "June 2017",
@@ -232,7 +237,6 @@
     <p>The <code>did:elsi</code> method facilitates the use of <a href="https://www.etsi.org/deliver/etsi_ts/119100_119199/11918201/01.01.01_60/ts_11918201v010101p.pdf">JAdES digital signatures</a> with Verifiable Credentials, and so it can be used to meet the requirements of <b>electronic signatures, advanced electronic signatures, qualified electronic signatures, electronic seals, advanced electronic seals, and qualified electronic seals</b> as defined in Regulation (EU) No 910/2014 (eIDAS).
     </p>
     <table style='width:100%;'><tr><td class='xwarnt'><aside class='xwarna'>
-
         <p><b>Natural persons MUST NOT</b> use this DID method, or for that matter, any DID method that registers anything related to personal information in any type of Verifiable Registry or shared data store.
         </p>
         <p>A good DID method for natural persons is <code>did:key</code> which is a perfect complement to <code>did:elsi</code> to build ecosystems that maximise privacy, regulatory compliance, safety, scalability, and decentralisation.
@@ -519,7 +523,7 @@ information using the following structure in the presented order:
     </ul>
     <p>This enables the person presenting the LEARCredential to start the onboarding process and also to provide any additional required documentation, preferably as additional Verifiable Credentials to enable automatic verification of compliance with the onboarding requirements (including Gaia-X credentials issued by the Compliance Service of Gaia-X).
     </p>
-    <table style='width:100%;'><tr><td class='xnotet'><aside class='xnotea'><p class='xnotep'>NOTE: Detailed example of onboarding with the LEARCredential</p>
+    <table style='width:100%;margin:1em 0;'><tr><td class='xnotet'><aside class='xnotea'><p class='xnotep'>NOTE: Detailed example of onboarding with the LEARCredential</p>
         <p>To see a much more <code>detailed</code> description of the LEARCredential, its issuance process and its usage for authenticating in an onboarding portal, see <b>[[[DID-ONBOARDING]]]</b>.
         </p>
     </aside></td></tr></table>
