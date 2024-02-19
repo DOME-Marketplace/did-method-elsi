@@ -35,8 +35,8 @@ copyright: >
    <a rel="license" href="https://creativecommons.org/licenses/by/4.0/legalcode">
    Creative Commons Attribution 4.0 International Public License</a>
 
-latestVersion: "https://alastria.github.io/did-method-elsi/"
-github: "https://github.com/alastria/did-method-elsi"
+latestVersion: "https://DOME-Marketplace.github.io/did-method-elsi/"
+github: "https://github.com/in the form of delegation of powers/did-method-elsi"
 og_description: >
     A DID method for legal persons, maximising at the same time regulatory compliance, decentralisation and privacy for W3C Verifiable Credentials in the European Union.
 og_site_name: DID:ELSI Method
